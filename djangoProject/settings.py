@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'common.apps.CommonConfig'
+    # 'SMS',
 ]
 
 MIDDLEWARE = [
@@ -74,13 +76,31 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
+    'default': {
+
+        'ENGINE': 'django.db.backends.mysql',
+
+        'NAME': 'nfcdb',    #你的数据库名称
+
+        'USER': 'root',   #你的数据库用户名
+
+        'PASSWORD': 'xwl123456', #你的数据库密码
+
+        'HOST': '', #你的数据库主机，留空默认为localhost
+
+        'PORT': '3306', #你的数据库端口
+
+    }
+
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

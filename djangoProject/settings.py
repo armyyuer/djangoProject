@@ -9,12 +9,11 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os.path
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-lu^hd7ci)8!7*li(ogq%p86wy!o9clq+w56k!ykbwl4mjzw!i!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -56,7 +54,8 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
+        # 'DIRS': [BASE_DIR / 'templates']
+        'DIRS': [os.path.join(BASE_DIR, 'templates'.replace('\\', '/'))]
         ,
         'APP_DIRS': True,
         'OPTIONS': {
@@ -71,7 +70,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djangoProject.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -88,15 +86,15 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'nfcdb',    #你的数据库名称
+        'NAME': 'nfcdb',  # 你的数据库名称
 
-        'USER': 'root',   #你的数据库用户名
+        'USER': 'root',  # 你的数据库用户名
 
-        'PASSWORD': 'xwl123456', #你的数据库密码
+        'PASSWORD': 'xwl123456',  # 你的数据库密码
 
-        'HOST': '', #你的数据库主机，留空默认为localhost
+        'HOST': '',  # 你的数据库主机，留空默认为localhost
 
-        'PORT': '3306', #你的数据库端口
+        'PORT': '3306',  # 你的数据库端口
 
     }
 
@@ -120,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
 
@@ -131,7 +128,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

@@ -8,7 +8,7 @@ def index(request):
 
 def tologin_views(request):
     # return HttpResponse('登录系统！')
-    return render(request,'login/login.html')
+    return render(request,'login/index.html')
 
 def login_views(request):
     return HttpResponse('登录系统信息！')

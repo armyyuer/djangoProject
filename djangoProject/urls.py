@@ -20,8 +20,9 @@ from SMS.views import index
 
 urlpatterns = [
     path('', index),
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('sms/', include('SMS.urls')),
     path('login/', include('login.urls')),
     path('task/', include('task.urls')),
+    path('usermanage/', include('UserManage.urls')),
 ]

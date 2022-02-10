@@ -15,7 +15,8 @@ class Att(models.Model):
     fileurl = models.CharField(db_column='FileUrl', max_length=255, blank=True, null=True)  # Field name made lowercase.
     ext = models.CharField(db_column='Ext', max_length=255, blank=True, null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     des = models.CharField(db_column='Des', max_length=255, blank=True, null=True)  # Field name made lowercase.
     tag = models.CharField(db_column='Tag', max_length=255, blank=True, null=True)  # Field name made lowercase.
     size = models.IntegerField(db_column='Size', blank=True, null=True)  # Field name made lowercase.
@@ -66,6 +67,17 @@ class AuthUser(models.Model):
     is_staff = models.IntegerField()
     is_active = models.IntegerField()
     date_joined = models.DateTimeField()
+    corporate_name = models.CharField(max_length=254)  # 企业名称
+    corporate_code = models.CharField(max_length=254)  # 统一社会信用代码
+    corporate_charge = models.CharField(max_length=254)  # 负责人
+    corporate_contacts = models.CharField(max_length=254)  # 联系人
+    corporate_phone = models.CharField(max_length=254)  # 联系电话
+    corporate_tel = models.CharField(max_length=254)  # 企业电话
+    corporate_start_date = models.CharField(max_length=254)  # 成立日期
+    corporate_end_date = models.CharField(max_length=254)  # 营业期限至
+    corporate_address = models.CharField(max_length=254)  # 地址
+    corporate_range = models.CharField(max_length=254)  # 经营范围
+    corporate_capital = models.CharField(max_length=254)  # 注册资本
 
     class Meta:
         managed = False
@@ -95,10 +107,12 @@ class AuthUserUserPermissions(models.Model):
 
 
 class Calendar(models.Model):
-    calendarid = models.CharField(db_column='CalendarID', primary_key=True, max_length=255)  # Field name made lowercase.
+    calendarid = models.CharField(db_column='CalendarID', primary_key=True,
+                                  max_length=255)  # Field name made lowercase.
     title = models.CharField(db_column='Title', max_length=255, blank=True, null=True)  # Field name made lowercase.
     type = models.IntegerField(db_column='Type', blank=True, null=True)  # Field name made lowercase.
-    parentid = models.CharField(db_column='ParentID', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    parentid = models.CharField(db_column='ParentID', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     addtime = models.DateTimeField(db_column='AddTime', blank=True, null=True)  # Field name made lowercase.
     starttime = models.DateTimeField(db_column='StartTime', blank=True, null=True)  # Field name made lowercase.
     endtime = models.DateTimeField(db_column='EndTime', blank=True, null=True)  # Field name made lowercase.
@@ -108,7 +122,8 @@ class Calendar(models.Model):
     state = models.CharField(db_column='State', max_length=255, blank=True, null=True)  # Field name made lowercase.
     reply = models.TextField(db_column='Reply', blank=True, null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     update = models.DateTimeField(db_column='Update', blank=True, null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
 
@@ -118,11 +133,13 @@ class Calendar(models.Model):
 
 
 class Calendarreply(models.Model):
-    calendarreplyid = models.CharField(db_column='CalendarReplyID', primary_key=True, max_length=255)  # Field name made lowercase.
+    calendarreplyid = models.CharField(db_column='CalendarReplyID', primary_key=True,
+                                       max_length=255)  # Field name made lowercase.
     calendarid = models.CharField(db_column='CalendarID', max_length=255)  # Field name made lowercase.
     addtime = models.DateTimeField(db_column='AddTime', blank=True, null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     describe = models.TextField(db_column='Describe', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -131,13 +148,17 @@ class Calendarreply(models.Model):
 
 
 class Concurrentpost(models.Model):
-    concurrentpostid = models.CharField(db_column='ConcurrentPostID', primary_key=True, max_length=255)  # Field name made lowercase.
+    concurrentpostid = models.CharField(db_column='ConcurrentPostID', primary_key=True,
+                                        max_length=255)  # Field name made lowercase.
     postid = models.IntegerField(db_column='PostID', blank=True, null=True)  # Field name made lowercase.
-    postname = models.CharField(db_column='PostName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    postname = models.CharField(db_column='PostName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     positionid = models.IntegerField(db_column='PositionID', blank=True, null=True)  # Field name made lowercase.
-    positionname = models.CharField(db_column='PositionName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    positionname = models.CharField(db_column='PositionName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -146,10 +167,14 @@ class Concurrentpost(models.Model):
 
 
 class Contacts(models.Model):
-    contactsid = models.CharField(db_column='ContactsID', primary_key=True, max_length=100)  # Field name made lowercase.
-    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    contactsname = models.CharField(db_column='ContactsName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    contactsid = models.CharField(db_column='ContactsID', primary_key=True,
+                                  max_length=100)  # Field name made lowercase.
+    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True,
+                                  null=True)  # Field name made lowercase.
+    contactsname = models.CharField(db_column='ContactsName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     qq = models.CharField(db_column='QQ', max_length=255, blank=True, null=True)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
     tel = models.CharField(db_column='Tel', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -160,19 +185,26 @@ class Contacts(models.Model):
 
 
 class Customer(models.Model):
-    customerid = models.CharField(db_column='CustomerID', primary_key=True, max_length=255)  # Field name made lowercase.
-    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    customerid = models.CharField(db_column='CustomerID', primary_key=True,
+                                  max_length=255)  # Field name made lowercase.
+    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
     addtime = models.DateTimeField(db_column='AddTime', blank=True, null=True)  # Field name made lowercase.
     degree = models.CharField(db_column='Degree', max_length=255, blank=True, null=True)  # Field name made lowercase.
     followuptime = models.DateTimeField(db_column='FollowUpTime', blank=True, null=True)  # Field name made lowercase.
-    followupnumber = models.IntegerField(db_column='FollowUpNumber', blank=True, null=True)  # Field name made lowercase.
+    followupnumber = models.IntegerField(db_column='FollowUpNumber', blank=True,
+                                         null=True)  # Field name made lowercase.
     followupcontent = models.TextField(db_column='FollowUpContent', blank=True, null=True)  # Field name made lowercase.
     sharetime = models.DateTimeField(db_column='ShareTime', blank=True, null=True)  # Field name made lowercase.
-    lastfollowup = models.CharField(db_column='LastFollowUp', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customertype = models.CharField(db_column='CustomerType', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customertypeid = models.CharField(db_column='CustomerTypeID', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    lastfollowup = models.CharField(db_column='LastFollowUp', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customertype = models.CharField(db_column='CustomerType', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customertypeid = models.CharField(db_column='CustomerTypeID', max_length=255, blank=True,
+                                      null=True)  # Field name made lowercase.
     sharetrue = models.IntegerField(db_column='ShareTrue', blank=True, null=True)  # Field name made lowercase.
     state = models.IntegerField(db_column='State', blank=True, null=True)  # Field name made lowercase.
 
@@ -183,11 +215,15 @@ class Customer(models.Model):
 
 class Customershare(models.Model):
     customershareid = models.CharField(db_column='CustomerShareID', max_length=100)  # Field name made lowercase.
-    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    shareuser = models.CharField(db_column='ShareUser', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True,
+                                  null=True)  # Field name made lowercase.
+    shareuser = models.CharField(db_column='ShareUser', max_length=255, blank=True,
+                                 null=True)  # Field name made lowercase.
     datetime = models.DateTimeField(db_column='DateTime', blank=True, null=True)  # Field name made lowercase.
-    operation = models.CharField(db_column='Operation', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    operation = models.CharField(db_column='Operation', max_length=255, blank=True,
+                                 null=True)  # Field name made lowercase.
     operator = models.CharField(db_column='Operator', max_length=255)  # Field name made lowercase.
 
     class Meta:
@@ -197,8 +233,10 @@ class Customershare(models.Model):
 
 class Deptment(models.Model):
     deptid = models.AutoField(db_column='DeptID', primary_key=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    describe = models.CharField(db_column='Describe', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    describe = models.CharField(db_column='Describe', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     parentid = models.IntegerField(db_column='ParentID', blank=True, null=True)  # Field name made lowercase.
     od = models.IntegerField(db_column='OD', blank=True, null=True)  # Field name made lowercase.
     master = models.CharField(db_column='Master', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -255,8 +293,10 @@ class DjangoSession(models.Model):
 
 class Menu(models.Model):
     menuid = models.AutoField(db_column='MenuID', primary_key=True)  # Field name made lowercase.
-    menuname = models.CharField(db_column='MenuName', max_length=45, blank=True, null=True)  # Field name made lowercase.
-    menupath = models.CharField(db_column='MenuPath', max_length=200, blank=True, null=True)  # Field name made lowercase.
+    menuname = models.CharField(db_column='MenuName', max_length=45, blank=True,
+                                null=True)  # Field name made lowercase.
+    menupath = models.CharField(db_column='MenuPath', max_length=200, blank=True,
+                                null=True)  # Field name made lowercase.
     od = models.IntegerField(db_column='OD', blank=True, null=True)  # Field name made lowercase.
     parentid = models.IntegerField(db_column='ParentID', blank=True, null=True)  # Field name made lowercase.
     img = models.CharField(db_column='Img', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -269,10 +309,13 @@ class Menu(models.Model):
 
 class Position(models.Model):
     positionid = models.AutoField(db_column='PositionID', primary_key=True)  # Field name made lowercase.
-    positionname = models.CharField(db_column='PositionName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    positionname = models.CharField(db_column='PositionName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    describe = models.CharField(db_column='Describe', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    describe = models.CharField(db_column='Describe', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     menuid = models.IntegerField(db_column='MenuID', blank=True, null=True)  # Field name made lowercase.
     od = models.IntegerField(db_column='OD', blank=True, null=True)  # Field name made lowercase.
 
@@ -293,7 +336,8 @@ class Positionmenuinfo(models.Model):
 
 class Post(models.Model):
     postid = models.AutoField(db_column='PostID', primary_key=True)  # Field name made lowercase.
-    postname = models.CharField(db_column='PostName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    postname = models.CharField(db_column='PostName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     describe = models.TextField(db_column='Describe', blank=True, null=True)  # Field name made lowercase.
     od = models.IntegerField(db_column='OD', blank=True, null=True)  # Field name made lowercase.
 
@@ -304,20 +348,26 @@ class Post(models.Model):
 
 class Project(models.Model):
     projectid = models.AutoField(db_column='ProjectID', primary_key=True)  # Field name made lowercase.
-    projectnumber = models.CharField(db_column='ProjectNumber', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    projectname = models.CharField(db_column='ProjectName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    projectnumber = models.CharField(db_column='ProjectNumber', max_length=100, blank=True,
+                                     null=True)  # Field name made lowercase.
+    projectname = models.CharField(db_column='ProjectName', max_length=255, blank=True,
+                                   null=True)  # Field name made lowercase.
     starttime = models.DateTimeField(db_column='StartTime', blank=True, null=True)  # Field name made lowercase.
     endtime = models.DateTimeField(db_column='EndTime', blank=True, null=True)  # Field name made lowercase.
     plannedhours = models.IntegerField(db_column='PlannedHours', blank=True, null=True)  # Field name made lowercase.
     actualhours = models.IntegerField(db_column='ActualHours', blank=True, null=True)  # Field name made lowercase.
     typeid = models.IntegerField(db_column='TypeID', blank=True, null=True)  # Field name made lowercase.
-    typename = models.CharField(db_column='TypeName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    approved = models.CharField(db_column='Approved', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    typename = models.CharField(db_column='TypeName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    approved = models.CharField(db_column='Approved', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     founder = models.CharField(db_column='Founder', max_length=255, blank=True, null=True)  # Field name made lowercase.
     classifyid = models.IntegerField(db_column='ClassifyID', blank=True, null=True)  # Field name made lowercase.
-    classifyname = models.CharField(db_column='ClassifyName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    classifyname = models.CharField(db_column='ClassifyName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     viewer = models.CharField(db_column='Viewer', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    describe = models.CharField(db_column='Describe', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    describe = models.CharField(db_column='Describe', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     state = models.CharField(db_column='State', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -326,15 +376,21 @@ class Project(models.Model):
 
 
 class Returnvisit(models.Model):
-    returnvisitid = models.CharField(db_column='ReturnVisitID', primary_key=True, max_length=100)  # Field name made lowercase.
-    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    returnvisitid = models.CharField(db_column='ReturnVisitID', primary_key=True,
+                                     max_length=100)  # Field name made lowercase.
+    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True,
+                                  null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    followupmode = models.CharField(db_column='FollowUpMode', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    followupmode = models.CharField(db_column='FollowUpMode', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     followuptime = models.DateTimeField(db_column='FollowUpTime', blank=True, null=True)  # Field name made lowercase.
     followupcontent = models.TextField(db_column='FollowUpContent', blank=True, null=True)  # Field name made lowercase.
-    followupnexttime = models.DateTimeField(db_column='FollowUpNextTime', blank=True, null=True)  # Field name made lowercase.
+    followupnexttime = models.DateTimeField(db_column='FollowUpNextTime', blank=True,
+                                            null=True)  # Field name made lowercase.
     remind = models.IntegerField(db_column='Remind', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
@@ -344,7 +400,8 @@ class Returnvisit(models.Model):
 
 class Role(models.Model):
     roleid = models.AutoField(db_column='RoleID', primary_key=True)  # Field name made lowercase.
-    rolename = models.CharField(db_column='RoleName', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    rolename = models.CharField(db_column='RoleName', max_length=45, blank=True,
+                                null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -354,8 +411,10 @@ class Role(models.Model):
 class Seal(models.Model):
     sealid = models.AutoField(db_column='SealID', primary_key=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    sealname = models.CharField(db_column='SealName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    sealname = models.CharField(db_column='SealName', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     passtrue = models.IntegerField(db_column='PassTrue', blank=True, null=True)  # Field name made lowercase.
     sealurl = models.CharField(db_column='SealUrl', max_length=255, blank=True, null=True)  # Field name made lowercase.
 
@@ -382,11 +441,15 @@ class Syslog(models.Model):
 class Task(models.Model):
     taskid = models.AutoField(db_column='TaskID', primary_key=True)  # Field name made lowercase.
     type = models.CharField(db_column='Type', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    serialnumber = models.CharField(db_column='SerialNumber', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    tasktitle = models.CharField(db_column='TaskTitle', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    serialnumber = models.CharField(db_column='SerialNumber', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    tasktitle = models.CharField(db_column='TaskTitle', max_length=255, blank=True,
+                                 null=True)  # Field name made lowercase.
     prepositionid = models.IntegerField(db_column='PrepositionID', blank=True, null=True)  # Field name made lowercase.
-    preposition = models.CharField(db_column='Preposition', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    executor = models.CharField(db_column='Executor', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    preposition = models.CharField(db_column='Preposition', max_length=255, blank=True,
+                                   null=True)  # Field name made lowercase.
+    executor = models.CharField(db_column='Executor', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
     starttime = models.DateTimeField(db_column='StartTime', blank=True, null=True)  # Field name made lowercase.
     endtime = models.DateTimeField(db_column='EndTime', blank=True, null=True)  # Field name made lowercase.
     level = models.CharField(db_column='Level', max_length=255, blank=True, null=True)  # Field name made lowercase.
@@ -404,17 +467,24 @@ class Task(models.Model):
 
 class Track(models.Model):
     trackid = models.CharField(db_column='TrackID', primary_key=True, max_length=100)  # Field name made lowercase.
-    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    customertype = models.CharField(db_column='CustomerType', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    customertypeid = models.CharField(db_column='CustomerTypeID', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    customername = models.CharField(db_column='CustomerName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customerid = models.CharField(db_column='CustomerID', max_length=100, blank=True,
+                                  null=True)  # Field name made lowercase.
+    customertype = models.CharField(db_column='CustomerType', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    customertypeid = models.CharField(db_column='CustomerTypeID', max_length=100, blank=True,
+                                      null=True)  # Field name made lowercase.
     degree = models.CharField(db_column='Degree', max_length=100, blank=True, null=True)  # Field name made lowercase.
-    contactsname = models.CharField(db_column='ContactsName', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    followupmode = models.CharField(db_column='FollowUpMode', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    contactsname = models.CharField(db_column='ContactsName', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
+    followupmode = models.CharField(db_column='FollowUpMode', max_length=255, blank=True,
+                                    null=True)  # Field name made lowercase.
     followuptime = models.DateTimeField(db_column='FollowUpTime', blank=True, null=True)  # Field name made lowercase.
     followupcontent = models.TextField(db_column='FollowUpContent', blank=True, null=True)  # Field name made lowercase.
     followupresult = models.TextField(db_column='FollowUpResult', blank=True, null=True)  # Field name made lowercase.
-    followupnexttime = models.DateTimeField(db_column='FollowUpNextTime', blank=True, null=True)  # Field name made lowercase.
+    followupnexttime = models.DateTimeField(db_column='FollowUpNextTime', blank=True,
+                                            null=True)  # Field name made lowercase.
     remind = models.IntegerField(db_column='Remind', blank=True, null=True)  # Field name made lowercase.
     cycleremind = models.IntegerField(db_column='CycleRemind', blank=True, null=True)  # Field name made lowercase.
 
@@ -427,7 +497,8 @@ class Useraccount(models.Model):
     accountid = models.AutoField(db_column='AccountID', primary_key=True)  # Field name made lowercase.
     userid = models.IntegerField(db_column='UserID', blank=True, null=True)  # Field name made lowercase.
     account = models.CharField(db_column='Account', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    password = models.CharField(db_column='PassWord', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    password = models.CharField(db_column='PassWord', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -435,24 +506,33 @@ class Useraccount(models.Model):
 
 
 class Userinfo(models.Model):
-    dduserid = models.CharField(db_column='DDUserid', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    dduserid = models.CharField(db_column='DDUserid', max_length=100, blank=True,
+                                null=True)  # Field name made lowercase.
     userid = models.AutoField(db_column='UserID', primary_key=True)  # Field name made lowercase.
-    username = models.CharField(db_column='UserName', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    username = models.CharField(db_column='UserName', max_length=100, blank=True,
+                                null=True)  # Field name made lowercase.
     deptid = models.IntegerField(db_column='DeptID', blank=True, null=True)  # Field name made lowercase.
-    deptname = models.CharField(db_column='DeptName', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    deptname = models.CharField(db_column='DeptName', max_length=45, blank=True,
+                                null=True)  # Field name made lowercase.
     tel = models.CharField(db_column='Tel', max_length=45, blank=True, null=True)  # Field name made lowercase.
     postid = models.IntegerField(db_column='PostID', blank=True, null=True)  # Field name made lowercase.
-    postname = models.CharField(db_column='PostName', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    postname = models.CharField(db_column='PostName', max_length=45, blank=True,
+                                null=True)  # Field name made lowercase.
     positionid = models.IntegerField(db_column='PositionID', blank=True, null=True)  # Field name made lowercase.
-    positionname = models.CharField(db_column='PositionName', max_length=45, blank=True, null=True)  # Field name made lowercase.
+    positionname = models.CharField(db_column='PositionName', max_length=45, blank=True,
+                                    null=True)  # Field name made lowercase.
     gender = models.CharField(db_column='Gender', max_length=45, blank=True, null=True)  # Field name made lowercase.
     state = models.IntegerField(db_column='State', blank=True, null=True)  # Field name made lowercase.
-    birthday = models.CharField(db_column='Birthday', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    officetelephone = models.CharField(db_column='OfficeTelephone', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    birthday = models.CharField(db_column='Birthday', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    officetelephone = models.CharField(db_column='OfficeTelephone', max_length=255, blank=True,
+                                       null=True)  # Field name made lowercase.
     email = models.CharField(db_column='Email', max_length=255, blank=True, null=True)  # Field name made lowercase.
     address = models.CharField(db_column='Address', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    idnumber = models.CharField(db_column='IDNumber', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    concurrentpost = models.IntegerField(db_column='ConcurrentPost', blank=True, null=True)  # Field name made lowercase.
+    idnumber = models.CharField(db_column='IDNumber', max_length=255, blank=True,
+                                null=True)  # Field name made lowercase.
+    concurrentpost = models.IntegerField(db_column='ConcurrentPost', blank=True,
+                                         null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False

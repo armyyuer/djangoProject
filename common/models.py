@@ -69,7 +69,6 @@ class AuthUser(models.Model):
     date_joined = models.DateTimeField()
     corporate_name = models.CharField(max_length=254)  # 企业名称
     corporate_code = models.CharField(max_length=254)  # 统一社会信用代码
-    corporate_email = models.CharField(max_length=254)  # 企业名称
     corporate_charge = models.CharField(max_length=254)  # 负责人
     corporate_contacts = models.CharField(max_length=254)  # 联系人
     corporate_phone = models.CharField(max_length=254)  # 联系电话
@@ -549,3 +548,23 @@ class Usermenu(models.Model):
     class Meta:
         managed = False
         db_table = 'usermenu'
+
+
+class Users(models.Model):
+    userid = models.AutoField(db_column='UserID', primary_key=True)  # Field name made lowercase.
+
+    corporate_name = models.CharField(max_length=254)  # 企业名称
+    corporate_code = models.CharField(max_length=254)  # 统一社会信用代码
+    corporate_charge = models.CharField(max_length=254)  # 负责人
+    corporate_contacts = models.CharField(max_length=254)  # 联系人
+    corporate_phone = models.CharField(max_length=254)  # 联系电话
+    corporate_tel = models.CharField(max_length=254)  # 企业电话
+    corporate_start_date = models.CharField(max_length=254)  # 成立日期
+    corporate_end_date = models.CharField(max_length=254)  # 营业期限至
+    corporate_address = models.CharField(max_length=254)  # 地址
+    corporate_range = models.CharField(max_length=254)  # 经营范围
+    corporate_capital = models.CharField(max_length=254)  # 注册资本
+
+    class Meta:
+        managed = False
+        db_table = 'users'

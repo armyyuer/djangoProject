@@ -69,6 +69,7 @@ class AuthUser(models.Model):
     date_joined = models.DateTimeField()
     corporate_name = models.CharField(max_length=254)  # 企业名称
     corporate_code = models.CharField(max_length=254)  # 统一社会信用代码
+    corporate_email = models.CharField(max_length=254)  # 企业名称
     corporate_charge = models.CharField(max_length=254)  # 负责人
     corporate_contacts = models.CharField(max_length=254)  # 联系人
     corporate_phone = models.CharField(max_length=254)  # 联系电话

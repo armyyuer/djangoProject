@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>企业注册</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico"> <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+    <link href="{% static 'css/plugins/iCheck/custom.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <script>if(window.top !== window.self){ window.top.location = window.location;}</script>
+
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen   animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">NFC</h1>
+
+            </div>
+            <h3>欢迎注册 新未来物资采购平台</h3>
+            <p>创建一个新账户</p>
+            <form class="m-t" role="form" action="/users/reg/" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" id="corporate_name" name="corporate_name" class="form-control" placeholder="请输入企业名称" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="corporate_code" name="corporate_code"  class="form-control" placeholder="请输入统一信用代码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="password" name="password"  class="form-control" placeholder="请输入密码" required="">
+                </div>
+                <div class="form-group">
+                    <input type="password" id="cpassword" name="cpassword"  class="form-control" placeholder="请再次输入密码" required="">
+                </div>
+            <hr/>
+                <div class="form-group">
+                    <input type="text" id="corporate_contacts" name="corporate_contacts"  class="form-control" placeholder="请输入联系人" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="corporate_phone" name="corporate_phone"  class="form-control" placeholder="请输入联系电话" required="">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="corporate_email" name="corporate_email"  class="form-control" placeholder="请输入联系邮箱" required="">
+                </div>
+                <button type="submit" class="btn btn-primary block full-width m-b">注 册</button>
+
+                <p class="text-muted text-center"><small>已经有账户了？</small><a href="/login/">点此登录11111</a>
+                </p>
+            </form>
+{{ message }}
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+    <!-- iCheck -->
+    <script src="{% static 'js/plugins/iCheck/icheck.min.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+<script>
+    $(function () {
+        {# ajax验证用户名是否已存在 #}
+        $('#corporate_code').blur(function () {
+            var url = 'users/reg/';
+            data = 'username=' + $(this).val();
+            $.get(url,data,function (resp) {
+                console.log(resp);
+                $('#resp').html('');
+                $('#resp').html(resp)
+            },'html')
+        });
+
+        {# from表单提交前的验证 #}
+        $('form').submit(function () {
+            var name = $('#corporate_code').val();
+            var pwd1 = $('#password').val();
+            var pwd2 = $('#cpassword').val();
+            if(pwd1 != pwd2){
+                alert('两次密码不一致');
+                return false
+            }else if (name==''){
+                alert('请输入统一信用代码');
+                return false
+            }
+        })
+    })
+</script>
+</body>
+
+</html>

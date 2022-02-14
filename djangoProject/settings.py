@@ -87,7 +87,7 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.mysql',
 
-        'NAME': 'nfcdb',  # 你的数据库名称
+        'NAME': 'gxnfc',  # 你的数据库名称
 
         'USER': 'root',  # 你的数据库用户名
 

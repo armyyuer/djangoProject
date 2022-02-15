@@ -26,6 +26,8 @@ def adduser(request):
     corporate_phone = request.POST.get("corporate_phone", '')
     corporate_email = request.POST.get("corporate_email", '')
     is_superuser = 0
+    is_staff = 0
+    is_active = 0
     d1 = timezone.now()
     # date_joined = d1.strftime("%Y-%m-%d")
     date_joined = d1
@@ -44,6 +46,8 @@ def adduser(request):
                                      email=corporate_email,
                                      password=password,
                                      is_superuser=is_superuser,
+                                     is_staff=is_staff,
+                                     is_active=is_active,
                                      date_joined=date_joined)
 
         Companyrecord = models.Company.objects.create(userId=record.id,

@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 
-from SMS.views import index
+from main.views import index
 
 urlpatterns = [
     path('', index),
     path('admin/', admin.site.urls),
-    path('sms/', include('SMS.urls')),
+    path('main/', include('main.urls')),
     path('login/', include('login.urls')),
     path('task/', include('task.urls')),
     path('users/', include('UserManage.urls')),

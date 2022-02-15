@@ -128,3 +128,7 @@ def reg(request):
             # # 将注册用户对象加入request中，对应键值为:user
             # auth.login(request, User)
             return redirect('/')
+
+
+def userlist(request):
+    return render(request, 'users/userlist.html')

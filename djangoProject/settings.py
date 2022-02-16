@@ -24,8 +24,10 @@ SECRET_KEY = 'django-insecure-lu^hd7ci)8!7*li(ogq%p86wy!o9clq+w56k!ykbwl4mjzw!i!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
+X_FRAME_OPTIONS = 'ALLOWALL'
 # Application definition
 
 INSTALLED_APPS = [
@@ -36,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'common.apps.CommonConfig',
-    'SMS',
     'UserManage',
 ]
 

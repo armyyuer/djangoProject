@@ -21,7 +21,8 @@ from main.views import index
 urlpatterns = [
     path('', index),
     path('admin/', admin.site.urls),
-    path('main/', include('main.urls')),
+    path('main/', include(('main.urls','main'),namespace='main')),
+    # path('main/', include('main.urls')),
     path('login/', include('login.urls')),
     path('task/', include('task.urls')),
     path('users/', include('UserManage.urls')),

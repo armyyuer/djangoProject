@@ -1,9 +1,11 @@
 import os.path
-
+from django.http import JsonResponse
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 from common import models
+from common.models import Company
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -28,6 +30,7 @@ def adduser(request):
     is_superuser = 0
     is_staff = 0
     is_active = 0
+    is_luck = 0
     d1 = timezone.now()
     # date_joined = d1.strftime("%Y-%m-%d")
     date_joined = d1
@@ -55,6 +58,7 @@ def adduser(request):
                                                       companyName=corporate_name,
                                                       code=corporate_code,
                                                       contacts=corporate_contacts,
+                                                      is_luck=is_luck,
                                                       phone=corporate_phone)
 
         print("新增用户：" + Companyrecord.companyName + ",统一信用代码：" + Companyrecord.code)
@@ -132,3 +136,27 @@ def reg(request):
 
 def userlist(request):
     return render(request, 'users/userlist.html')
+
+
+def listcompany(request):
+    # 返回一个 QuerySet 对象 ，包含所有的表记录
+    # 每条表记录都是是一个dict对象，
+    # key 是字段名，value 是 字段值
+    qs = Company.objects.values()
+
+    # # 检查url中是否有参数phonenumber
+    # ph =  request.GET.get('is_luck',None)
+    # # 如果有，添加过滤条件
+    # if ph:
+    #     qs = qs.filter(is_luck=ph)
+
+    # 定义返回字符串
+    retStr = ''
+    for company in qs:
+        for name, value in company.items():
+            retStr += f'{name} : {value} | '
+
+        # <br> 表示换行
+        retStr += '<br>'
+
+    return HttpResponse(retStr)

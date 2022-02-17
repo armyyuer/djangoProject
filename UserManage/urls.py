@@ -1,6 +1,6 @@
 # 菜鸟程序员：阿米
 from django.urls import path
-from UserManage.views import index_views, register_views, adduser, reg, userlist
+from UserManage.views import index_views, register_views, adduser, reg, userlist,listcompany
 
 urlpatterns = [
     path('', index_views, name='index'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('reg/', reg, name='reg'),
     path('adduser/', adduser, name='adduser'),
     path('userlist/', userlist, name='adduser'),
+    path('managelist/', listcompany, name='adduser'),
 ]

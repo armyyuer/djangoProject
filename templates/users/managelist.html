@@ -36,30 +36,24 @@
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
-                                    <th>企业名称</th>
-                                    <th>统一信用代码（用户名）</th>
-                                    <th>联系人</th>
-                                    <th>联系电话</th>
+                                    <th>用户名</th>
+                                    <th>最后登录</th>
                                     <th>管理</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for foo in userlist %}
+                            {% for foo in managelist %}
                                 <tr class="gradeU">
-                                    <td>{{ foo.companyName }}</td>
-                                    <td>{{ foo.code }}</td>
-                                    <td>{{ foo.contacts }}</td>
-                                    <td class="center">{{ foo.phone }}</td>
+                                    <td>{{ foo.username }}</td>
+                                    <td>{{ foo.last_login }}</td>
                                     <td class="center">编辑 | 重置密码 | 删除</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th>企业名称</th>
-                                    <th>统一信用代码（用户名）</th>
-                                    <th>联系人</th>
-                                    <th>联系电话</th>
+                                    <th>用户名</th>
+                                    <th>最后登录</th>
                                     <th>管理</th>
                                 </tr>
                             </tfoot>

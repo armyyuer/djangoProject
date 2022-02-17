@@ -134,15 +134,18 @@ def reg(request):
             return redirect('/')
 
 
-def userlist(request):
-    return render(request, 'users/userlist.html')
+def listmanage(request):
+    qs = User.objects.filter(is_superuser=1)
+
+    return render(request, 'users/managelist.html', {'managelist': qs})
 
 
 def listcompany(request):
     # 返回一个 QuerySet 对象 ，包含所有的表记录
     # 每条表记录都是是一个dict对象，
     # key 是字段名，value 是 字段值
-    qs = Company.objects.values()
+    # qs = Company.objects.values()
+    qs = Company.objects.all()
 
     # # 检查url中是否有参数phonenumber
     # ph =  request.GET.get('is_luck',None)
@@ -151,12 +154,13 @@ def listcompany(request):
     #     qs = qs.filter(is_luck=ph)
 
     # 定义返回字符串
-    retStr = ''
-    for company in qs:
-        for name, value in company.items():
-            retStr += f'{name} : {value} | '
-
-        # <br> 表示换行
-        retStr += '<br>'
-
-    return HttpResponse(retStr)
+    # retStr = ''
+    # for company in qs:
+    #     for name, value in company.items():
+    #         retStr += f'{name} : {value} | '
+    #
+    #     # <br> 表示换行
+    #     retStr += '<br>'
+    # print(qs)
+    # return HttpResponse(retStr)
+    return render(request, 'users/userlist.html', {'userlist': qs})

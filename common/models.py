@@ -23,4 +23,4 @@ class Company(models.Model):
     address = models.CharField(max_length=254, null=True)  # 地址
     range = models.CharField(max_length=254, null=True)  # 经营范围
     capital = models.CharField(max_length=254, null=True)  # 注册资本
-    is_luck = models.IntegerField(max_length=11, null=True, default=0)
+    is_luck = models.IntegerField()

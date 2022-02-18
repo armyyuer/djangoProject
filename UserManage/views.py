@@ -164,3 +164,47 @@ def listcompany(request):
     # print(qs)
     # return HttpResponse(retStr)
     return render(request, 'users/userlist.html', {'userlist': qs})
+
+
+def editmanage(request):
+    uid = request.GET.get('id')
+    print(uid)
+    qs = User.objects.get(id=uid)
+    print(qs)
+    return render(request, 'users/manageedit.html', {'manageinfo': qs})
+
+
+def manageReset(request):
+    uid = request.GET.get('id')
+    qs = User.objects.get(id=uid)
+    password = make_password('123456')
+    qs.password = password
+    qs.save()
+    print(uid, password)
+    return render(request, 'users/managelist.html', {'manageid': uid})
+
+#
+# def userReset(request):
+#     uid = request.GET.get('id')
+#     qs = User.objects.get(id=uid)
+#     password = make_password('123456')
+#     qs.password = password
+#     qs.save()
+#     print(uid, password)
+#     return render(request, 'users/userlist.html', {'manageid': uid})
+
+
+def deletemanage(request):
+    uid = request.GET.get('id')
+    qs = User.objects.get(id=uid).delete()
+    print(qs)
+    return render(request, 'users/managelist.html', {'manageid': uid})
+
+
+def deleteuser(request):
+    uid = request.GET.get('id')
+    us = Company.objects.get(companyId=uid)
+    print(us.userId)
+    du = User.objects.get(id=us.userId).delete()
+    dc = Company.objects.get(companyId=uid).delete()
+    return render(request, 'users/userlist.html', {'manageid': uid})

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title> - 企业管理</title>
+    <title> - 后台用户管理</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
 
@@ -30,10 +30,11 @@
             <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>企业管理 </h5>
+                        <h5>后台用户管理 </h5>
                     </div>
                     <div class="ibox-content">
 
+                        <a href="/users/manageadd" class="btn btn-w-m btn-success">新增账号</a>
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
@@ -72,7 +73,7 @@
 
 
 
-    <script src="{% static 'js/plug ins/jeditable/jquery.jeditable.js' %}"></script>
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
 
     <!-- Data Tables -->
     <script src="{% static 'js/plugins/dataTables/jquery.dataTables.js' %}"></script>
@@ -99,7 +100,7 @@
                     type: 'get',
                     url: '/users/manageReset/?id='+id,
                 })
-                swal("密码重置成功！", "重置后密码：123456", "success");
+                swal("密码重置成功！", "重置后密码：nfc!@#123$%", "success");
             });
         }
         function deleteRecord(id) {

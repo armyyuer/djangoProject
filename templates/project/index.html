@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title> - 后台用户管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <link href="{% static 'css/plugins/toastr/toastr.min.css' %}" rel="stylesheet">
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+
+                                        <button type="button" class="btn btn-white" id="showsimple">显示简单设置</button>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+
+
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
+
+
+    <!-- 自定义js -->
+    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+
+    <!-- Toastr script -->
+    <script src="{% static 'js/plugins/toastr/toastr.min.js' %}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            var i = -1;
+            var toastCount = 0;
+            var $toastlast;
+            var getMessage = function () {
+                var msg = 'Hi, welcome to Inspinia. This is example of Toastr notification box.';
+                return msg;
+            };
+
+            $('#showsimple').click(function () {
+                // Display a success toast, with a title
+                toastr.success('显示内容', '显示标题')
+            });
+            $('#showtoast').click(function () {
+                var shortCutFunction = $("#toastTypeGroup input:radio:checked").val();
+                var msg = "显示内容";
+                var title = "显示标题" || '';
+                var $showDuration = "400";
+                var $hideDuration = "1000";
+                var $timeOut = "7000";
+                var $extendedTimeOut = "1000";
+                var $showEasing = "swing";
+                var $hideEasing = "linear";
+                var $showMethod = "fadeIn";
+                var $hideMethod = "fadeOut";
+                var toastIndex = toastCount++;
+                toastr.options = {
+                    closeButton: true,
+                    debug: false,
+                    progressBar: true,
+                    positionClass: "toast-top-center",
+                    onclick: null
+                };
+                if ($('#addBehaviorOnToastClick').prop('checked')) {
+                    toastr.options.onclick = function () {
+                        alert('You can perform some custom action after a toast goes away');
+                    };
+                }
+                if ($showDuration.val().length) {
+                    toastr.options.showDuration = $showDuration.val();
+                }
+                if ($hideDuration.val().length) {
+                    toastr.options.hideDuration = $hideDuration.val();
+                }
+                if ($timeOut.val().length) {
+                    toastr.options.timeOut = $timeOut.val();
+                }
+                if ($extendedTimeOut.val().length) {
+                    toastr.options.extendedTimeOut = $extendedTimeOut.val();
+                }
+                if ($showEasing.val().length) {
+                    toastr.options.showEasing = $showEasing.val();
+                }
+                if ($hideEasing.val().length) {
+                    toastr.options.hideEasing = $hideEasing.val();
+                }
+                if ($showMethod.val().length) {
+                    toastr.options.showMethod = $showMethod.val();
+                }
+                if ($hideMethod.val().length) {
+                    toastr.options.hideMethod = $hideMethod.val();
+                }
+                if (!msg) {
+                    msg = getMessage();
+                }
+                $("#toastrOptions").text("Command: toastr[" + shortCutFunction + "](\"" + msg + (title ? "\", \"" + title : '') + "\")\n\ntoastr.options = " + JSON.stringify(toastr.options, null, 2));
+                var $toast = toastr[shortCutFunction](msg, title); // Wire up an event handler to a button in the toast, if it exists
+                $toastlast = $toast;
+                if ($toast.find('#okBtn').length) {
+                    $toast.delegate('#okBtn', 'click', function () {
+                        alert('you clicked me. i was toast #' + toastIndex + '. goodbye!');
+                        $toast.remove();
+                    });
+                }
+                if ($toast.find('#surpriseBtn').length) {
+                    $toast.delegate('#surpriseBtn', 'click', function () {
+                        alert('Surprise! you clicked me. i was toast #' + toastIndex + '. You could perform an action here.');
+                    });
+                }
+            });
+
+            function getLastToast() {
+                return $toastlast;
+            }
+            $('#clearlasttoast').click(function () {
+                toastr.clear(getLastToast());
+            });
+            $('#cleartoasts').click(function () {
+                toastr.clear();
+            });
+        })
+    </script>
+
+</body>
+</html>

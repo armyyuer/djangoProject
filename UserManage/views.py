@@ -2,6 +2,7 @@ import os.path
 from django.http import JsonResponse
 import json
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from common import models
@@ -9,6 +10,7 @@ from common.models import Company
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 
 def index_views(request):
@@ -177,21 +179,21 @@ def editmanage(request):
 def manageReset(request):
     uid = request.GET.get('id')
     qs = User.objects.get(id=uid)
-    password = make_password('123456')
+    password = make_password('nfc!@#123$%')
     qs.password = password
     qs.save()
     print(uid, password)
     return render(request, 'users/managelist.html', {'manageid': uid})
 
-#
-# def userReset(request):
-#     uid = request.GET.get('id')
-#     qs = User.objects.get(id=uid)
-#     password = make_password('123456')
-#     qs.password = password
-#     qs.save()
-#     print(uid, password)
-#     return render(request, 'users/userlist.html', {'manageid': uid})
+
+def userReset(request):
+    uid = request.GET.get('id')
+    qs = User.objects.get(id=uid)
+    password = make_password('nfc!@#123')
+    qs.password = password
+    qs.save()
+    print(uid, password)
+    return render(request, 'users/userlist.html', {'manageid': uid})
 
 
 def deletemanage(request):
@@ -201,10 +203,57 @@ def deletemanage(request):
     return render(request, 'users/managelist.html', {'manageid': uid})
 
 
+@csrf_exempt
 def deleteuser(request):
     uid = request.GET.get('id')
     us = Company.objects.get(companyId=uid)
-    print(us.userId)
+    print(uid)
     du = User.objects.get(id=us.userId).delete()
     dc = Company.objects.get(companyId=uid).delete()
     return render(request, 'users/userlist.html', {'manageid': uid})
+    #
+    # qs = Company.objects.all()
+    # return render(request, 'users/userlist.html', {'userlist': qs})
+
+
+def manageadd_views(request):
+    # return render(request, 'users/register.html')
+    return render(request, 'users/manageadd.html')
+
+
+def manageaddsave(request):
+    username = request.POST.get("username", '')
+    corporate_code = request.POST.get("corporate_code", '')
+    password = make_password(request.POST.get("password", ''))
+    is_superuser = request.POST.get("is_superuser", '')
+    is_staff = 1
+    is_active = 0
+    d1 = timezone.now()
+    # date_joined = d1.strftime("%Y-%m-%d")
+    date_joined = d1
+    # print(corporate_name)
+    # print(corporate_code)
+    # 从请求消息中 获取要添加的信息
+    # 并且插入到数据库中
+    # 返回值 就是对应插入记录的对象
+    users = User.objects.filter(username=username)
+    # 如果能找到用户
+    if len(users) > 0:
+        print("用户[" + username + "]已存在，无法新增。")
+        response = HttpResponse()
+        response.write("<script>alert('账号已存在！');window.location.href='/users/manageadd/';</script>")
+        return response
+        # return HttpResponse('账号已存在！')
+    else:
+        record = User.objects.create(username=username,
+                                     password=password,
+                                     is_superuser=is_superuser,
+                                     is_staff=is_staff,
+                                     is_active=is_active,
+                                     first_name='',
+                                     last_name='',
+                                     email='',
+                                     date_joined=date_joined)
+        print("新增用户：" + record.username)
+        # return render(request, 'users/register.html')
+    return HttpResponseRedirect('/users/managelist/')

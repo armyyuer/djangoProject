@@ -26,4 +26,5 @@ urlpatterns = [
     path('login/', include('login.urls')),
     path('task/', include('task.urls')),
     path('users/', include('UserManage.urls')),
+    path('project/', include('project.urls')),
 ]

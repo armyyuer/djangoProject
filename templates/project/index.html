@@ -13,6 +13,9 @@
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
     <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
     <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+    <!-- Data Tables -->
+    <link href="{% static 'css/plugins/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
 
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
@@ -48,6 +51,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+
                             {% for foo in projectlist %}
                                 <tr class="gradeU">
                                     <td>{{ foo.projectNo }}</td>
@@ -104,6 +108,9 @@
 
     <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
 
+    <!-- Data Tables -->
+    <script src="{% static 'js/plugins/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap.js' %}"></script>
 
     <!-- 自定义js -->
     <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
@@ -205,5 +212,34 @@
         })
     </script>
 
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('.dataTables-example').dataTable();
+
+            /* Init DataTables */
+            var oTable = $('#editable').dataTable();
+
+            /* Apply the jEditable handlers to the table */
+            oTable.$('td').editable('../example_ajax.php', {
+                "callback": function (sValue, y) {
+                    var aPos = oTable.fnGetPosition(this);
+                    oTable.fnUpdate(sValue, aPos[0], aPos[1]);
+                },
+                "submitdata": function (value, settings) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition(this)[2]
+                    };
+                },
+
+                "width": "90%",
+                "height": "100%"
+            });
+
+
+        });
+
+    </script>
 </body>
 </html>

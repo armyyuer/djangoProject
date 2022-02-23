@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from common import models
 from common.models import Project
 
+
 # Create your views here.
 
 def index_views(request):

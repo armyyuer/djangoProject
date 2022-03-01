@@ -27,4 +27,5 @@ urlpatterns = [
     path('task/', include('task.urls')),
     path('users/', include('UserManage.urls')),
     path('project/', include('project.urls')),
+    path('att/', include('Att.urls')),
 ]

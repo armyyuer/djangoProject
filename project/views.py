@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 
+import common.models
+from Att.views import wrdb, upload
 from common import models
-from common.models import Project
+from common.models import Project, Att
+from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
 
@@ -17,6 +20,7 @@ def projectadd(request):
     return render(request, 'project/add.html')
 
 
+@csrf_exempt
 def projectaddsave(request):
     response = HttpResponse()
     projectName = request.POST.get("projectName", '')
@@ -42,16 +46,23 @@ def projectaddsave(request):
         # response.write("<script>alert('项目编号已存在！');window.location.href='/project/index/';</script>")
         return response
     else:
-        record = Project.objects.create(projectName=projectName,
-                                        projectNo=projectNo,
-                                        contacts=contacts,
-                                        phone=phone,
-                                        start_date=start_date,
-                                        end_date=end_date,
-                                        state=state,
-                                        notes=notes,
-                                        add_date=add_date)
-
-        print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
+        # record = Project.objects.create(projectName=projectName,
+        #                                 projectNo=projectNo,
+        #                                 contacts=contacts,
+        #                                 phone=phone,
+        #                                 start_date=start_date,
+        #                                 end_date=end_date,
+        #                                 state=state,
+        #                                 notes=notes,
+        #                                 add_date=add_date)
+        # print(request.FILES.get('up_file'))
+        furl = upload(request.FILES.get("up_file"))
+        print("返回附件路径："+furl)
+        # wrdb(furl, record.id)
+        # print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
         response.write("<script>alert('项目成功！');window.location.href='/project/index/';</script>")
         return response
+
+
+def upfile(request):
+    return render(request, 'project/upload.html')

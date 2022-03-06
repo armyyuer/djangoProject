@@ -46,7 +46,7 @@ class Project(models.Model):
 class ProjectItem(models.Model):
     itemID = models.AutoField(db_column='itemID', primary_key=True)  #
     projectId = models.IntegerField(null=True, default=0)  # 项目ID
-    itemName = models.IntegerField(null=True, default=0)  # 材料（设备）名称
+    itemName = models.CharField(max_length=254, null=True)  # 材料（设备）名称
     Count = models.CharField(max_length=254, null=True)  # 计数
     Unit = models.IntegerField(null=True, default=0)  # 单位
     Specs = models.CharField(max_length=254, null=True)  # 规格型号

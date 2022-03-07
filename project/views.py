@@ -46,19 +46,20 @@ def projectaddsave(request):
         # response.write("<script>alert('项目编号已存在！');window.location.href='/project/index/';</script>")
         return response
     else:
-        # record = Project.objects.create(projectName=projectName,
-        #                                 projectNo=projectNo,
-        #                                 contacts=contacts,
-        #                                 phone=phone,
-        #                                 start_date=start_date,
-        #                                 end_date=end_date,
-        #                                 state=state,
-        #                                 notes=notes,
-        #                                 add_date=add_date)
+        record = Project.objects.create(projectName=projectName,
+                                        projectNo=projectNo,
+                                        contacts=contacts,
+                                        phone=phone,
+                                        start_date=start_date,
+                                        end_date=end_date,
+                                        state=state,
+                                        notes=notes,
+                                        add_date=add_date)
         # print(request.FILES.get('up_file'))
         furl = upload(request.FILES.get("up_file"))
-        print("返回附件路径："+furl)
-        # wrdb(furl, record.id)
+        print("返回附件路径：" + furl)
+        print("项目ID：" + str(record.id))
+        wrdb(furl, record.id)
         # print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
         response.write("<script>alert('项目成功！');window.location.href='/project/index/';</script>")
         return response

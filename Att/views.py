@@ -1,7 +1,7 @@
 import os
 
-import xlrd
 import uuid
+import xlrd
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import FileResponse
@@ -14,6 +14,7 @@ from common.models import Project, Att, ProjectItem
 # Create your views here.
 from djangoProject import settings
 from django.utils import timezone
+from openpyxl import load_workbook
 
 
 # def __init__(self, itemName):
@@ -49,48 +50,70 @@ def up_file_excel(file):
 # 将excel数据写入mysql
 # @staticmethod  #静态方法
 # @classmethod#类方法
-def wrdb(file):
-    # print(myform)
-    print(file)
-
-    # 开始解析上传的excel表格
-    wb = xlrd.open_workbook(filename=None, file_contents=file.read())  # 关键点在于这里
-    table = wb.sheets()[0]
-    nrows = table.nrows  # 行数
-    ncole = table.ncols  # 列数
-    print("row :%s, cole: %s" % (nrows, ncole))
-
+def wrdb(file, projectId):
     d1 = timezone.now()
-    add_date = d1
-    for i in range(1, nrows):
-        rowValues = table.row_values(i)  # 一行的数据
+    # print(myform)
+    print("file:" + file)
 
-        print(type(rowValues[10]))
-        itemName = rowValues[1]
+    # 删除projectId明细
+    # df = Att.objects.get(projectId=projectId)
+    # df.delete()
+    # 打开上传 excel 表格
+    # readboot = xlrd.open_workbook(settings.UPLOAD_ROOT + file)
+    # sheet = readboot.sheet_by_index(0)
+    # # 获取excel的行和列
+    # nrows = sheet.nrows
+    # ncols = sheet.ncols
+    # print(ncols, nrows)
+    # for i in range(1, nrows):
+    #     row = sheet.row_values(i)
+    #     itemName = row[1]
+    #     Specs = row[2]
+    #     Brand = row[3]
+    #     Unit = row[4]
+    #     Count = row[5]
+    #     Tax = 0
+    #     add_date = d1
+    #     up_date = d1
+    #
+    #     record = ProjectItem.objects.create(projectId=projectId,
+    #                                         itemName=itemName,
+    #                                         Specs=Specs,
+    #                                         Brand=Brand,
+    #                                         Unit=Unit,
+    #                                         Count=Count,
+    #                                         Tax=Tax,
+    #                                         add_date=add_date,
+    #                                         up_date=up_date)
+    #     print("插入明细:" + itemName + ",ID：" + record.itemID)
 
-        print('rowValues-->{}'.format(itemName))
-
-        pf = ProjectItem.objects.filter(projectId=file)
-        # pf = PhoneMsg.objects.all()
-        if not pf.exists():  # 空值
-            # return render(request, 'rc_test/upFileFail.html',
-            #               context={'error': u'R_projectname 不存在,联系管理员进行添加!'})
-
-            return HttpResponse('项目添加失败！表格无法插入数据库！  [ <a href="javascript:history.go(-1)">返回</a> ]')
-
-        print(pf)
-
-        record = ProjectItem.objects.create(projectId=0,
-                                            itemName=rowValues[2],
-                                            Count=rowValues[3],
-                                            Unit=rowValues[4],
-                                            Specs=rowValues[5],
-                                            Brand=rowValues[6],
-                                            Tax=0,
+    wb = load_workbook(filename=settings.UPLOAD_ROOT + file)  # 打开文件,默认可读写，若有需要可以指定write_only和read_only为True
+    ws = wb.active  # 拿到默认的sheet工作表
+    max_row = ws.max_row  # 拿到总行数
+    max_column = ws.max_column  # 拿到总列数
+    print("sheet:" + str(max_row))
+    print("sheetvalue:" + str(ws[2].value))
+    for i in range(1, max_row):
+        row = ws[i]
+        # print("sheetvalue:" + str(ws.rows(i)))
+        itemName = row[1]
+        Specs = row[2]
+        Brand = row[3]
+        Unit = row[4]
+        Count = row[5]
+        Tax = 0
+        add_date = d1
+        up_date = d1
+        record = ProjectItem.objects.create(projectId=projectId,
+                                            itemName=itemName,
+                                            Specs=Specs,
+                                            Brand=Brand,
+                                            Unit=Unit,
+                                            Count=Count,
+                                            Tax=Tax,
                                             add_date=add_date,
-                                            up_date=add_date)
-        print('id:' + record.itemID)
-
+                                            up_date=up_date)
+        print("插入明细:" + itemName + ",ID：" + str(record.itemID))
     return 1
 
 

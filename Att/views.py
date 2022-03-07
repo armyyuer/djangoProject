@@ -88,33 +88,57 @@ def wrdb(file, projectId):
     #     print("插入明细:" + itemName + ",ID：" + record.itemID)
 
     wb = load_workbook(filename=settings.UPLOAD_ROOT + file)  # 打开文件,默认可读写，若有需要可以指定write_only和read_only为True
-    ws = wb.active  # 拿到默认的sheet工作表
-    max_row = ws.max_row  # 拿到总行数
-    max_column = ws.max_column  # 拿到总列数
-    print("sheet:" + str(max_row))
-    print("sheetvalue:" + str(ws[2].value))
-    for i in range(1, max_row):
-        row = ws[i]
-        # print("sheetvalue:" + str(ws.rows(i)))
-        itemName = row[1]
-        Specs = row[2]
-        Brand = row[3]
-        Unit = row[4]
-        Count = row[5]
-        Tax = 0
-        add_date = d1
-        up_date = d1
-        record = ProjectItem.objects.create(projectId=projectId,
-                                            itemName=itemName,
-                                            Specs=Specs,
-                                            Brand=Brand,
-                                            Unit=Unit,
-                                            Count=Count,
-                                            Tax=Tax,
-                                            add_date=add_date,
-                                            up_date=up_date)
-        print("插入明细:" + itemName + ",ID：" + str(record.itemID))
-    return 1
+    ws = wb[wb.sheetnames[0]]  # 选择第一张sheet表
+    rows = ws.max_row  # 获取表的最大行数
+    columns = ws.max_column  # 获取表的最大列数
+
+    column_heading = [ws.cell(row=1, column=x).value for x in range(1, columns + 1)]  # 读取excel第一行的值，写入list
+
+    column_name = ['材料（设备）名称', '规格型号', '品牌', '单位', '数量']  # 数据库必需字段
+
+    print(column_heading)         # 文件第一行title
+
+    if len([name for name in column_name if name not in column_heading]) == 0:  # 返回字段组成的list为空，则说明文件列标题包含MySQL需要的字段
+        print(' - 检查完成，执行写入')
+        # 判断Excel中各字段所在列号
+        itemName = column_heading.index(column_name[0])  # 材料（设备）名称 - 位置
+        Specs = column_heading.index(column_name[1])  # 规格型号 - 位置
+        Brand = column_heading.index(column_name[2])  # 品牌 - 位置
+        Unit = column_heading.index(column_name[3])  # 单位 - 位置
+        Count = column_heading.index(column_name[4])  # 数量 - 位置
+
+        if ws.cell(row=2, column=1).value == None:
+            table_start_line = 3
+        else:
+            table_start_line = 2
+        data = []
+        itemList = []
+        for row in range(table_start_line, rows + 1):
+            for column in range(1, columns + 1):  # 因为从第1列开始，所以此处从1开始
+                data.append(str(ws.cell(row=row, column=column).value))  # 以字符串形式保存数据到MySQL
+            print("sss:"+str(data))
+            print(data[projectId], data[itemName], data[Specs], data[Brand], data[Unit], data[Count])
+            itemList.append(ProjectItem(projectId=data[projectId],
+                                        itemName=data[itemName],
+                                        Specs=data[Specs],
+                                        Brand=data[Brand],
+                                        Unit=data[Unit],
+                                        Count=data[Count]))
+            data = []
+        print('itemList ', itemList)
+
+        try:
+            ProjectItem.objects.bulk_create(itemList)  # 使用bulk_create批量导入
+            msg = '导入成功'
+        except Exception as e:
+            print('异常', e)
+            msg = '导入失败'
+    else:
+        print('文件列标题不完全包含数据库需要的字段，请检查文件。')
+        msg = '文件列标题不完全包含数据库需要的字段，请检查文件。'
+    wb.close()  # 关闭excel
+
+    return msg
 
 
 # @csrf_exempt

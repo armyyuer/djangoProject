@@ -45,6 +45,25 @@
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
     <script src="{% static 'js/jquery.min.js' %}"></script>
+
+    <script>
+        $(function() {
+            //隐藏div
+
+            $("#clist").hide();
+            //给div添加change事件
+            $("#type").change(function() {
+                if($(this).val() == 0 ) {
+                    $("#clist").show();
+                } else if($(this).val() == 1 ) {
+                    $("#clist").hide();
+                }
+                else if($(this).val() == null ) {
+                    $("#clist").hide();
+                }
+            })
+        })
+    </script>
 </head>
 <body class="gray-bg">
 
@@ -61,50 +80,25 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">询价类型：</label>
                                 <div class="col-sm-6">
-                                     <div class="radio radio-info radio-inline">
-                                        <input type="radio" id="inlineRadio1" value="1" name="type" checked="" >
-                                        <label for="inlineRadio1"> 公开询价 </label>
+                                <select name="type" id="type" class="chosen-select" style="width:350px;" required="" aria-required="true">
+                                    <option value="1">公开询价</option>
+                                    <option value="0">邀请报价</option>
+                                </select>
+                            <div class="panel-group" id="clist">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                               选择企业（可多选）
+                                            </h4>
                                     </div>
-                                    <div class="radio radio-inline">
-                                        <input type="radio" id="inlineRadio2" value="0" name="type">
-                                        <label for="inlineRadio2"> 邀请报价 </label>
-                                    </div>
+                                            <select  id="cid" name="cid" data-placeholder="选择邀请企业" class="chosen-select" multiple style="width:100%;" tabindex="4">
+                                                <option value="110000" hassubinfo="true">北京</option>
+                                                <option value="120000" hassubinfo="true">天津</option>
+                                                <option value="130000" hassubinfo="true">河北省</option>
+                                                <option value="140000" hassubinfo="true">山西省</option>
+                                                <option value="150000" hassubinfo="true">内蒙古自治区</option>
+                                            </select>
 
-                                        <select disabled id="ccid" name="cid" data-placeholder="选择邀请企业" class="chosen-control" multiple style="width:100%;" tabindex="4">
-                                            <option value="">选择邀请企业</option>
-                                            <option value="110000" hassubinfo="true">北京</option>
-                                            <option value="120000" hassubinfo="true">天津</option>
-                                            <option value="130000" hassubinfo="true">河北省</option>
-                                            <option value="140000" hassubinfo="true">山西省</option>
-                                            <option value="150000" hassubinfo="true">内蒙古自治区</option>
-                                        </select>
-
-    <input id="cid" placeholder="请输入" disabled  class="chosen-control"/>
-    <script type="text/javascript">
-        /*
-         * 为启用/禁用按钮添加 click 事件
-         */
-        $('#inlineRadio2').click(enableInput);
-        $('#inlineRadio1').click(disableInput);
-
-
-        /*
-         * 启用编辑
-         */
-        function enableInput() {
-            $('#cid').removeAttr('disabled');
-        }
-
-
-        /*
-         * 禁用编辑
-         */
-        function disableInput() {
-            $('#cid').attr('disabled', true);
-        }
-    </script>
-
-                                </div>
+                                </div></div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">项目名称：</label>

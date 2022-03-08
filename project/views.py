@@ -31,6 +31,12 @@ def projectaddsave(request):
     end_date = request.POST.get("end_date", '')
     state = request.POST.get("state", '')
     notes = request.POST.get("notes", '')
+    type = request.POST.get("type", '')
+    cid = request.POST.get("cid", '')
+    print("type：" + str(type))
+    print("cid：" + str(cid))
+    response.write("<script>alert('"+type+"---"+cid+"！');window.location.href='/project/index/';</script>")
+    return response
     d1 = timezone.now()
     add_date = d1
 
@@ -50,6 +56,7 @@ def projectaddsave(request):
                                         projectNo=projectNo,
                                         contacts=contacts,
                                         phone=phone,
+                                        type=type,
                                         start_date=start_date,
                                         end_date=end_date,
                                         state=state,

@@ -76,7 +76,7 @@
                                     </td>
                                     <td>{{ foo.add_date }}</td>
                                     <td class="center">
-                                        <a href="#" data-toggle="modal" data-target="#myModal{{ foo.id }}">编辑</a> | <a href="#" data-toggle="modal" data-target="#myModal{{ foo.id }}">询价明细</a> | <a href="javascript:userReset({{ foo.id }})" >结果公示</a> | <a href="javascript:deleteUser({{ foo.id }})" >删除</a></td>
+                                        <a href="/project/edit/?id={{ foo.id }}" data-toggle="modal">编辑</a> | <a href="/project/edititem/?projectid={{ foo.id }}" data-toggle="modal">询价明细</a> | <a href="javascript:userReset({{ foo.id }})" >结果公示</a> | <a href="javascript:deleteUser({{ foo.id }})" >删除</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>

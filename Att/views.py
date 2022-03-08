@@ -56,8 +56,8 @@ def wrdb(file, projectId):
     print("file:" + file)
 
     # 删除projectId明细
-    # df = Att.objects.get(projectId=projectId)
-    # df.delete()
+    df = ProjectItem.objects.get(projectId=projectId)
+    df.delete()
     # 打开上传 excel 表格
     # readboot = xlrd.open_workbook(settings.UPLOAD_ROOT + file)
     # sheet = readboot.sheet_by_index(0)
@@ -96,7 +96,7 @@ def wrdb(file, projectId):
 
     column_name = ['材料（设备）名称', '规格型号', '品牌', '单位', '数量']  # 数据库必需字段
 
-    print(column_heading)         # 文件第一行title
+    print("文件第一行title:" + str(column_heading))  # 文件第一行title
 
     if len([name for name in column_name if name not in column_heading]) == 0:  # 返回字段组成的list为空，则说明文件列标题包含MySQL需要的字段
         print(' - 检查完成，执行写入')
@@ -116,14 +116,11 @@ def wrdb(file, projectId):
         for row in range(table_start_line, rows + 1):
             for column in range(1, columns + 1):  # 因为从第1列开始，所以此处从1开始
                 data.append(str(ws.cell(row=row, column=column).value))  # 以字符串形式保存数据到MySQL
-            print("sss:"+str(data))
-            print(data[projectId], data[itemName], data[Specs], data[Brand], data[Unit], data[Count])
-            itemList.append(ProjectItem(projectId=data[projectId],
-                                        itemName=data[itemName],
-                                        Specs=data[Specs],
-                                        Brand=data[Brand],
-                                        Unit=data[Unit],
-                                        Count=data[Count]))
+            print("sss:" + str(data))
+            print(data[itemName], data[Specs], data[Brand], data[Unit], data[Count])
+            itemList.append(
+                ProjectItem(projectId=projectId, itemName=data[itemName], Specs=data[Specs], Brand=data[Brand],
+                            Unit=data[Unit], Count=data[Count], add_date=d1, up_date=d1))
             data = []
         print('itemList ', itemList)
 

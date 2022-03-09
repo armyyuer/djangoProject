@@ -27,7 +27,7 @@ class Company(models.Model):
 
 
 class Project(models.Model):
-    id = models.AutoField(db_column='projectId', primary_key=True)  # Field name made lowercase.
+    projectId = models.AutoField(db_column='projectId', primary_key=True)  # Field name made lowercase.
     type = models.IntegerField(null=True, default=0)  # 项目类型，邀请or公开
     projectName = models.CharField(max_length=254, null=True)  # 项目名称
     projectNo = models.CharField(max_length=254, null=True)  # 项目编号

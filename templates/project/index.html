@@ -62,8 +62,8 @@
                                         公开询价
                                     {% endif %}
                                     </td>
-                                    <td>{{ foo.start_date }}</td>
-                                    <td>{{ foo.end_date }}</td>
+                                    <td>{{ foo.start_date.isoformat }}</td>
+                                    <td>{{ foo.end_date.isoformat }}</td>
                                     <td class="center">
                                        {% if foo.state == 0 %}
                                           询价中
@@ -208,6 +208,45 @@
                 toastr.clear();
             });
         })
+    </script>
+
+    <script type="text/javascript">
+
+        function userReset(id) {
+            swal({
+                title: "重置密码",
+                text: "您确定要重置密码吗？",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dd6b55",
+                confirmButtonText: "确认重置",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: 'get',
+                    url: '/users/manageReset/?id='+id,
+                })
+                swal("密码重置成功！", "重置后密码：nfc!@#123", "success");
+            });
+        }
+        function deleteUser(id) {
+            swal({
+                title: "您确定要删除这条信息吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dd6b55",
+                confirmButtonText: "确认删除",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: 'get',
+                    url: '/project/delete/?id='+id,
+                })
+                swal("删除成功！", " ", "success");
+                     window.location.reload()
+            });
+        }
     </script>
 
     <!-- Page-Level Scripts -->

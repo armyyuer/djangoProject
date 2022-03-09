@@ -12,7 +12,7 @@ from django.utils import timezone
 # Create your views here.
 
 def index_views(request):
-    qs = Project.objects.all()
+    qs = Project.objects.all().order_by('-projectId')
     return render(request, 'project/index.html', {'projectlist': qs})
 
 

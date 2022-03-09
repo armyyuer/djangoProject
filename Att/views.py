@@ -55,9 +55,11 @@ def wrdb(file, projectId):
     # print(myform)
     print("file:" + file)
 
-    # 删除projectId明细
-    df = ProjectItem.objects.get(projectId=projectId)
-    df.delete()
+    fdate = ProjectItem.objects.filter(projectId=projectId)
+    if fdate:
+        # 删除projectId明细
+        df = ProjectItem.objects.get(projectId=projectId)
+        df.delete()
     # 打开上传 excel 表格
     # readboot = xlrd.open_workbook(settings.UPLOAD_ROOT + file)
     # sheet = readboot.sheet_by_index(0)

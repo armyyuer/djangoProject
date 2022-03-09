@@ -84,6 +84,15 @@ class OrderItem(models.Model):
     up_date = models.DateTimeField(max_length=254, null=True)  # 更新日期
 
 
+class OrderCompany(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    companyCode = models.CharField(max_length=254, null=True)  # 企业统一社会信用代码
+    companyName = models.CharField(max_length=254, null=True)  # 企业名称
+    projectId = models.IntegerField(null=True, default=0)  # 项目ID
+    state = models.IntegerField(null=True, default=0)  # 报价状态0=未报价，1=已报价
+    up_date = models.DateTimeField(max_length=254, null=True)  # 更新日期
+
+
 class Att(models.Model):
     AttID = models.AutoField(db_column='AttID', primary_key=True)  # Field name made lowercase.
     TypeID = models.IntegerField(null=True, default=0)  # 类型ID

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 import common.models
 from Att.views import wrdb, upload
 from common import models
-from common.models import Project, Att, Company, OrderCompany
+from common.models import Project, Att, Company, OrderCompany, ProjectItem
 from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 
@@ -66,7 +66,7 @@ def projectaddsave(request):
         # print(request.FILES.get('up_file'))
         furl = upload(request.FILES.get("up_file"))
         print("返回附件路径：" + furl)
-        print("项目ID：" + str(record.id))
+        print("项目ID：" + str(record.projectId))
         # 判断询价类型，如果是邀请报价则添加询价企业
         if type == "0":
             print("询价类型：" + type)
@@ -75,7 +75,8 @@ def projectaddsave(request):
                 print("企业信息循环：" + name)
                 companyDB = Company.objects.get(code=name)
                 orderCompanyList.append(
-                    OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.id, state=0,
+                    OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.projectId,
+                                 state=0,
                                  up_date=d1)
                 )
                 print('orderCompanyList数据 ', orderCompanyList)
@@ -87,7 +88,7 @@ def projectaddsave(request):
                     print('orderCompanyList数据异常', e)
                     # msg = 'orderCompanyList数据失败'
         # 判断询价类型，如果是邀请报价则添加询价企业
-        wrdb(furl, record.id)  # 附件明细插入数据库
+        wrdb(furl, record.projectId)  # 附件明细插入数据库
         # print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
         response.write("<script>alert('项目成功！');window.location.href='/project/index/';</script>")
         return response
@@ -95,3 +96,92 @@ def projectaddsave(request):
 
 def upfile(request):
     return render(request, 'project/upload.html')
+
+
+def delete(request):
+    pid = request.GET.get('id')
+    us = Project.objects.get(projectId=pid)
+    us.delete()
+    du = ProjectItem.objects.filter(projectId=pid)
+    du.delete()
+
+    return render(request, 'project/index.html', {'projectid': pid})
+
+
+def edit_views(request):
+    pid = request.GET.get('id')
+    qs = Company.objects.all()
+    oc = OrderCompany.objects.filter(projectId=pid)
+    pdb = Project.objects.filter(projectId=pid)
+    pidb = ProjectItem.objects.filter(projectId=pid)
+    return render(request, 'project/edit.html',
+                  {'companylist': qs, 'OClist': oc, 'Projectdb': pdb, 'Itemdb': pidb})
+
+
+def editsave(request):
+    response = HttpResponse()
+    projectId = request.POST.get("projectId", '')
+    projectName = request.POST.get("projectName", '')
+    projectNo = request.POST.get("projectNo", '')
+    contacts = request.POST.get("contacts", '')
+    phone = request.POST.get("phone", '')
+    start_date = request.POST.get("start_date", '')
+    end_date = request.POST.get("end_date", '')
+    state = request.POST.get("state", '')
+    notes = request.POST.get("notes", '')
+    ptype = request.POST.get("ptype", '')
+    cid = request.POST.getlist("cid", '')
+    print("type：" + str(ptype))
+    print("cid：" + str(cid))
+    # return HttpResponse(str(cid[0]))
+
+    d1 = timezone.now()
+    add_date = d1
+
+    if start_date > end_date:
+        return HttpResponse('错误配置！！！开始时间不能大于结束时间 ！！   [ <a href="javascript:history.go(-1)">返回</a> ]')
+    try:
+        # 根据 id 从数据库中找到相应的户记录
+        record = Project.objects.get(projectId=projectId)
+    except Project.DoesNotExist:
+        print("Project不存在" + str(ptype))
+    record.projectName = projectName
+    record.projectNo = projectNo,
+    record.contacts = contacts,
+    record.phone = phone,
+    record.type = ptype,
+    record.start_date = start_date,
+    record.end_date = end_date,
+    record.state = state,
+    record.notes = notes,
+    record.up_date = add_date
+    record.save()
+
+    print("项目ID：" + str(record.projectId))
+    # 判断询价类型，如果是邀请报价则添加询价企业
+    if ptype == "0":
+        print("询价类型：" + ptype)
+
+        companyDB = OrderCompany.objects.filter(projectId=projectId)
+        if companyDB:
+            OrderCompany.objects.get(projectId=projectId).delete()
+
+        for name in cid:
+            orderCompanyList = []
+            print("企业信息循环：" + name)
+            companyDB = Company.objects.get(code=name)
+            orderCompanyList.append(
+                OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.projectId,
+                             state=0,
+                             up_date=d1)
+            )
+            print('orderCompanyList数据 ', orderCompanyList)
+
+            try:
+                OrderCompany.objects.bulk_create(orderCompanyList)  # 使用bulk_create批量导入
+                # msg = 'orderCompanyList数据成功'
+            except Exception as e:
+                print('orderCompanyList数据异常', e)
+                # msg = 'orderCompanyList数据失败'
+        response.write("<script>alert('提交成功！');window.location.href='/project/index/';</script>")
+        return response

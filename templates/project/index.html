@@ -54,10 +54,10 @@
                             {% for foo in projectlist %}
                                 <tr class="gradeU">
                                     <td>{{ foo.projectNo }}</td>
-                                    <td><a href="#" data-toggle="modal" data-target="#myModal{{ foo.id }}">{{ foo.projectName }}</a> </td>
+                                    <td><a href="/project/edit/?id={{ foo.projectId }}" data-toggle="modal">{{ foo.projectName }}</a> </td>
                                     <td>
                                     {% if foo.type == 0 %}
-                                        邀请报价
+                                        邀请报价<a href="add.html"><i class="fa fa-edit"></i></a>
                                     {% elif  foo.type == 1 %}
                                         公开询价
                                     {% endif %}
@@ -74,7 +74,7 @@
                                        {% endif %}
                                     </td>
                                     <td class="center">
-                                        <a href="/project/edit/?id={{ foo.id }}" data-toggle="modal">编辑</a> | <a href="/project/edititem/?projectid={{ foo.id }}" data-toggle="modal">询价明细</a> | <a href="javascript:userReset({{ foo.id }})" >结果公示</a> | <a href="javascript:deleteUser({{ foo.id }})" >删除</a></td>
+                                        <a href="/project/edit/?id={{ foo.projectId }}" data-toggle="modal">编辑</a> | <a href="/project/edititem/?projectid={{ foo.projectId }}" data-toggle="modal">询价明细</a> | <a href="javascript:userReset({{ foo.projectId }})" >结果公示</a> | <a href="javascript:deleteproject({{ foo.projectId }})" >删除</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -86,7 +86,6 @@
                                     <th>开始时间</th>
                                     <th>结束时间</th>
                                     <th>状态</th>
-                                    <th>发布日期</th>
                                     <th>管理</th>
                                 </tr>
                             </tfoot>
@@ -112,6 +111,8 @@
 
     <!-- 自定义js -->
     <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+    <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
 
     <!-- Toastr script -->
     <script src="{% static 'js/plugins/toastr/toastr.min.js' %}"></script>
@@ -229,7 +230,7 @@
                 swal("密码重置成功！", "重置后密码：nfc!@#123", "success");
             });
         }
-        function deleteUser(id) {
+        function deleteproject(id) {
             swal({
                 title: "您确定要删除这条信息吗",
                 text: "删除后将无法恢复，请谨慎操作！",

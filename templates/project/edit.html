@@ -61,14 +61,14 @@
                         <h5>编辑项目</h5>
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="commentForm" action="/project/editsave/"  method="post">
+                        <form class="form-horizontal m-t" id="commentForm" action="/project/editsave/"  enctype="multipart/form-data"  method="post">
                             {% csrf_token %}
                         {% for foo in Projectdb %}
                              <div class="form-group">
                                 <label class="col-sm-3 control-label">询价类型：</label>
                                 <div class="col-sm-6">
 
-                                    <select name="ptype" id="ptype" class="chosen-select" style="width:350px;" required="" aria-required="true">
+                                    <select name="type" id="type" class="chosen-select" style="width:350px;" required="" aria-required="true">
                                         <option value="1" {% if foo.type == 1 %}selected{% endif %}>公开询价</option>
                                         <option value="0" {% if foo.type == 0 %}selected{% endif %}>邀请报价</option>
                                     </select>
@@ -187,13 +187,31 @@
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <h5 class="panel-title">
-                                                <a data-toggle="collapse" data-parent="#accordion" href="tabs_panels.html#collapseOne">询价明细(点击展开)</a>
+                                                <a data-toggle="collapse" data-parent="#accordion" href="tabs_panels.html#collapseOne">询价明细(点击 缩进/展开)</a>
                                             </h5>
                                     </div>
-                                    <div id="collapseOne" class="panel-collapse collapse">
+                                    <div id="collapseOne" class="panel-collapse collapse in">
                                         <div class="panel-body">
 
-<a href="/project/projectadd" class="btn btn-w-m btn-success">单个插入</a>
+
+                        <form class="form-horizontal m-t" id="commentForm" action="/project/projectItemadd/" enctype="multipart/form-data" method="post">
+                            {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">导入询价明细表：</label>
+                                    <div class="col-sm-8">
+                                        <table width="100%">
+                                            <tr>
+                                                <td>
+                                                    <input id="pid" type="hidden" value="{{ pid }}" class="form-control" name="pid" >
+                                                    <input type="file" id="up_file" name="up_file" class="form-control"></td>
+                                                <td> <button class="btn btn-primary" type="submit">上传导入</button> </td>
+                                                <td width="120"> 【 导入模板下载 】 </td>
+                                                <td> <a href="#" class="btn btn-w-m btn-success"  data-toggle="modal" data-target="#addItem">单个插入</a></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                        </form>
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
@@ -208,28 +226,38 @@
                             <tbody>
                              {% for foo in Itemdb %}
                                 <tr class="gradeU">
+                            <form class="form-horizontal m-t" id="commentForm" action="/project/edititemsave/" method="post">
+                                {% csrf_token %}
                                     <td>
-                                        {{ foo.itemName }}
+                                    <input id="itemName" value="{{ foo.itemName }}" type="text" class="form-control" name="itemName" required="" aria-required="true">
                                     </td>
-                                    <td>{{ foo.Specs }}</td>
-                                    <td>{{ foo.Brand }}</td>
-                                    <td>{{ foo.Unit }}</td>
-                                    <td>{{ foo.Count }}</td>
+                                    <td>
+                                    <input id="Specs" value="{{ foo.Specs }}" type="text" class="form-control" name="Specs" required="" aria-required="true">
+                                    </td>
+                                    <td>
+                                    <input id="Brand" value="{{ foo.Brand }}" type="text" class="form-control" name="Brand" required="" aria-required="true">
+                                    </td>
+                                    <td>
+                                    <select id="Unit" data-placeholder="选择单位..." class="chosen-select" name="Unit" style="width:150px;" tabindex="2">
+                                        {% for fo in unitList %}
+                                        <option value="{{ fo.unitName }}" hassubinfo="true" {% if fo.unitName == foo.Unit %} selected{% endif %}>{{ fo.unitName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    </td>
+                                    <td>
+                                    <input id="Count" value="{{ foo.Count }}" type="text"  name="Count" required="" aria-required="true">
+                                    </td>
                                     <td class="center">
-                                        <a href="/project/edit/?id={{ foo.itemID }}" data-toggle="modal">编辑</a> | <a href="/project/edititem/?projectid={{ foo.itemID }}" data-toggle="modal">询价明细</a> | <a href="javascript:userReset({{ foo.itemID }})" >结果公示</a> | <a href="javascript:deleteproject({{ foo.itemID }})" >删除</a></td>
+                                    <input id="itemID" value="{{ foo.itemID }}" type="hidden"  name="itemID">
+                                    <input id="projectId" value="{{ foo.projectId }}" type="hidden"  name="projectId">
+
+                                    <button type="submit" class="btn btn-primary btn-xs">修改</button>
+                                        <a class="btn btn-danger btn-xs" href="/project/deleteitem/?id={{ foo.itemID }}" >删除</a>
+                                    </td>
+                            </form>
                                 </tr>
                             {% endfor %}
                             </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>材料（设备）名称</th>
-                                    <th>规格型号</th>
-                                    <th>品牌</th>
-                                    <th>单位</th>
-                                    <th>数量</th>
-                                    <th>管理</th>
-                                </tr>
-                            </tfoot>
                         </table>
 
                                         </div>
@@ -242,6 +270,33 @@
             </div>
         </div>
     </div>
+
+    <div class="modal inmodal fade" id="myModal{{ foo.companyId }}" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content animated flipInY">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">{{ foo.companyName }}</h4>
+                        <small class="font-bold"></small>
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group"><label>统一社会信用代码</label><p>{{ foo.code }}</p></div>
+                            <div class="form-group"><label>企业负责人</label><p>{{ foo.charge }}</p></div>
+                            <div class="form-group"><label>企业联系人</label><p>{{ foo.contacts }}</p></div>
+                            <div class="form-group"><label>联系电话</label><p>{{ foo.phone }}</p></div>
+                            <div class="form-group"><label>联系邮箱</label><p>{{ foo.email }}</p> </div>
+                            <div class="form-group"><label>企业成立日期</label><p>{{ foo.start_date }}</p></div>
+                            <div class="form-group"><label>企业营业期限</label><p>{{ foo.end_date }}</p></div>
+                            <div class="form-group"><label>企业注册资本</label><p>{{ foo.capital }}</p></div>
+                            <div class="form-group"><label>企业地址</label><p>{{ foo.address }}</p></div>
+                            <div class="form-group"><label>经营范围</label><p>{{ foo.range }}</p></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+    </div>
     <!-- 全局js -->
     <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
     <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
@@ -249,11 +304,6 @@
     <!-- 自定义js -->
     <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
 
-    <!-- jQuery Validation plugin javascript-->
-    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
-    <script src="{% static 'js/plugins/validate/messages_zh.min.js' %}"></script>
-
-    <script src="{% static 'js/demo/form-validate-demo.js' %}"></script>
 
 
     <!-- Chosen -->
@@ -359,6 +409,10 @@
 
     </script>
 
+    <!-- jQuery Validation plugin javascript-->
+    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/plugins/validate/messages_zh.min.js' %}"></script>
+    <script src="{% static 'js/demo/form-validate-demo.js' %}"></script>
     <script src="{% static 'js/demo/form-advanced-demo.js' %}"></script>
 
 </body>

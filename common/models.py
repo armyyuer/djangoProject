@@ -47,8 +47,8 @@ class ProjectItem(models.Model):
     itemID = models.AutoField(db_column='itemID', primary_key=True)  #
     projectId = models.IntegerField(null=True, default=0)  # 项目ID
     itemName = models.CharField(max_length=254, null=True)  # 材料（设备）名称
-    Count = models.CharField(max_length=254, null=True)  # 计数
-    Unit = models.IntegerField(null=True, default=0)  # 单位
+    Count = models.IntegerField(null=True, default=0)  # 计数
+    Unit = models.CharField(max_length=254, default=0)  # 单位
     Specs = models.CharField(max_length=254, null=True)  # 规格型号
     Brand = models.CharField(max_length=254, null=True)  # 品牌
     Tax = models.IntegerField(null=True, default=0)  # 税点
@@ -73,9 +73,9 @@ class Order(models.Model):
 class OrderItem(models.Model):
     itemID = models.AutoField(db_column='itemID', primary_key=True)  #
     orderId = models.IntegerField(null=True, default=0)  # 报价ID
-    itemName = models.IntegerField(null=True, default=0)  # 材料（设备）名称
-    Count = models.CharField(max_length=254, null=True)  # 计数
-    Unit = models.IntegerField(null=True, default=0)  # 单位
+    itemName = models.CharField(max_length=254, default=0)  # 材料（设备）名称
+    Count = models.IntegerField(null=True, default=0)  # 计数
+    Unit = models.CharField(max_length=254, default=0)  # 单位
     Specs = models.CharField(max_length=254, null=True)  # 规格型号
     Brand = models.CharField(max_length=254, null=True)  # 品牌
     total = models.DecimalField(max_digits=4, decimal_places=4, null=True, default=0)  # 单价
@@ -105,3 +105,8 @@ class Att(models.Model):
     Tag = models.CharField(max_length=254, null=True)  # 标签
     Size = models.IntegerField(null=True, default=0)  # 大小，KB
     Ip = models.CharField(max_length=254, null=True)  # 标签
+
+
+class Unit(models.Model):
+    unitID = models.AutoField(db_column='unitID', primary_key=True)  #
+    unitName = models.CharField(max_length=254, default=0)  # 单位名称

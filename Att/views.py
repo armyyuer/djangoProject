@@ -58,37 +58,8 @@ def wrdb(file, projectId):
     fdate = ProjectItem.objects.filter(projectId=projectId)
     if fdate:
         # 删除projectId明细
-        df = ProjectItem.objects.get(projectId=projectId)
+        df = ProjectItem.objects.filter(projectId=projectId)
         df.delete()
-    # 打开上传 excel 表格
-    # readboot = xlrd.open_workbook(settings.UPLOAD_ROOT + file)
-    # sheet = readboot.sheet_by_index(0)
-    # # 获取excel的行和列
-    # nrows = sheet.nrows
-    # ncols = sheet.ncols
-    # print(ncols, nrows)
-    # for i in range(1, nrows):
-    #     row = sheet.row_values(i)
-    #     itemName = row[1]
-    #     Specs = row[2]
-    #     Brand = row[3]
-    #     Unit = row[4]
-    #     Count = row[5]
-    #     Tax = 0
-    #     add_date = d1
-    #     up_date = d1
-    #
-    #     record = ProjectItem.objects.create(projectId=projectId,
-    #                                         itemName=itemName,
-    #                                         Specs=Specs,
-    #                                         Brand=Brand,
-    #                                         Unit=Unit,
-    #                                         Count=Count,
-    #                                         Tax=Tax,
-    #                                         add_date=add_date,
-    #                                         up_date=up_date)
-    #     print("插入明细:" + itemName + ",ID：" + record.itemID)
-
     wb = load_workbook(filename=settings.UPLOAD_ROOT + file)  # 打开文件,默认可读写，若有需要可以指定write_only和read_only为True
     ws = wb[wb.sheetnames[0]]  # 选择第一张sheet表
     rows = ws.max_row  # 获取表的最大行数

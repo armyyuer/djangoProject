@@ -1,6 +1,6 @@
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
+#   * Rearrange models' orders
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
@@ -110,3 +110,17 @@ class Att(models.Model):
 class Unit(models.Model):
     unitID = models.AutoField(db_column='unitID', primary_key=True)  #
     unitName = models.CharField(max_length=254, default=0)  # 单位名称
+
+
+class Items(models.Model):
+    itemID = models.AutoField(db_column='itemID', primary_key=True)  #
+    companyId = models.IntegerField(null=True, default=0)  # 企业ID
+    itemType = models.IntegerField(null=True, default=0)  # 类型0=系统
+    itemName = models.CharField(max_length=254, default=0)  # 材料（设备）名称
+    Unit = models.CharField(max_length=254, default=0)  # 单位
+    Specs = models.CharField(max_length=254, null=True)  # 规格型号
+    Brand = models.CharField(max_length=254, null=True)  # 品牌
+    Total = models.DecimalField(max_digits=4, decimal_places=4, null=True, default=0)  # 单价
+    Notes = models.TextField(null=True)  # 备注
+    add_date = models.DateTimeField(max_length=254, null=True)  # 添加日期
+    up_date = models.DateTimeField(max_length=254, null=True)  # 更新日期

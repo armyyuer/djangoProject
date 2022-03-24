@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 
-    <title> - 后台用户管理</title>
+    <title> - 项目管理</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
 
@@ -66,11 +66,11 @@
                                     <td>{{ foo.end_date.isoformat }}</td>
                                     <td class="center">
                                        {% if foo.state == 0 %}
-                                          询价中
+                                          <span class="badge badge-info">询价中</span>
                                        {% elif  foo.state == 1 %}
-                                           比价中
+                                           <span class="badge badge-warning">比价中</span>
                                        {% elif foo.state == 2 %}
-                                           结果公示
+                                           <span class="badge badge-primary">结果公示</span>
                                        {% endif %}
                                     </td>
                                     <td class="center">

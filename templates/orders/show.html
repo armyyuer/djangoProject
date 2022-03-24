@@ -2,8 +2,8 @@
 {% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title> - 编辑项目</title>
+<meta charset="UTF-8">
+    <title> - 询价项目明细</title>
     <meta name="keywords" content="">
     <meta name="description" content="">
 
@@ -58,118 +58,70 @@
              <div class="col-sm-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>编辑项目</h5>
+                        <h5>询价项目明细</h5>
                     </div>
                     <div class="ibox-content">
-                        <form class="form-horizontal m-t" id="commentForm" action="/project/editsave/"  enctype="multipart/form-data"  method="post">
+                        <form class="form-horizontal m-t" id="commentForm" action="#"  method="post">
                             {% csrf_token %}
                         {% for foo in Projectdb %}
                              <div class="form-group">
                                 <label class="col-sm-3 control-label">询价类型：</label>
                                 <div class="col-sm-6">
-
-                                    <select name="type" id="type" class="chosen-select" style="width:350px;" required="" aria-required="true">
-                                        <option value="1" {% if foo.type == 1 %}selected{% endif %}>公开询价</option>
-                                        <option value="0" {% if foo.type == 0 %}selected{% endif %}>邀请报价</option>
-                                    </select>
-
-    <script>
-        $(function() {
-            //隐藏div
-            {% if foo.type == 1 %}
-                $("#clist").hide();
-            {% else %}
-                $("#clist").show();
-            {% endif %}
-            //给div添加change事件
-            $("#type").change(function() {
-                if($(this).val() == 0 ) {
-                    $("#clist").show();
-                } else if($(this).val() == 1 ) {
-                    $("#clist").hide();
-                }
-                else if($(this).val() == null ) {
-                    $("#clist").hide();
-                }
-            })
-        })
-    </script>
-                                    <div class="panel-group" id="clist">
-                                        <div class="panel-heading">
-                                            <h4 class="panel-title">
-                                                   选择企业（可多选）
-                                                </h4>
-                                        </div>
-                                                <select  id="cid" name="cid" data-placeholder="选择邀请企业" class="chosen-select" multiple style="width:100%;" tabindex="4">
-                                                    {% for fo in companylist %}
-                                                        <option value="{{ fo.code }}" hassubinfo="true"
-                                                        {% for oc in OClist %}
-                                                            {% if oc.companyCode == fo.code %}
-                                                                selected
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                        >{{ fo.companyName }}</option>
-                                                    {% endfor %}
-
-                                                </select>
-
-                                    </div>
+                                        {% if foo.type == 1 %}公开询价{% else %}邀请报价{% endif %}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">项目名称：</label>
                                 <div class="col-sm-8">
-                                    <input id="projectName" value="{{ foo.projectName }}" name="projectName" minlength="2" type="text" class="form-control" required="" aria-required="true">
+                                    {{ foo.projectName }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">项目编号：</label>
                                 <div class="col-sm-8">
-                                    <input id="projectNo" value="{{ foo.projectNo }}" type="text" class="form-control" name="projectNo" required="" aria-required="true">
+                                    {{ foo.projectNo }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">联系人：</label>
                                 <div class="col-sm-8">
-                                    <input id="contacts" value="{{ foo.contacts }}" type="text" class="form-control" name="contacts" required="" aria-required="true">
+                                    {{ foo.contacts }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">联系电话：</label>
                                 <div class="col-sm-8">
-                                    <input id="phone" type="text" value="{{ foo.phone }}" class="form-control" name="phone" required="" aria-required="true">
+                                    {{ foo.phone }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">开始日期：</label>
                                 <div class="col-sm-8">
-                                            <input class="form-control layer-date"  value="{{ foo.start_date.isoformat }}"  name="start_date" placeholder="YYYY-MM-DD hh:mm:ss" required=""  aria-required="true" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                                            <label class="laydate-icon"></label>
+                                            {{ foo.start_date.isoformat }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">结束日期：</label>
                                 <div class="col-sm-8">
-                                            <input class="form-control layer-date"  value="{{ foo.end_date.isoformat }}"  name="end_date" placeholder="YYYY-MM-DD hh:mm:ss" required=""  aria-required="true" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
-                                            <label class="laydate-icon"></label>
+                                           {{ foo.end_date.isoformat }}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">状态：</label>
                                 <div class="col-sm-6">
-
-                                    <select  class="chosen-select" name="state" required="" aria-required="true"  style="width:350px;">
-                                        <option value="0">询价中</option>
-                                        <option value="1"  {% if foo.state == 1 %}selected{% endif %}>比价中</option>
-                                        <option value="2" {% if foo.state == 2 %}selected{% endif %}>结果公示</option>
-                                    </select>
+                                    {% if foo.state == 0 %}
+                                          <span class="badge badge-info">询价中</span>
+                                       {% elif  foo.state == 1 %}
+                                           <span class="badge badge-warning">比价中</span>
+                                       {% elif foo.state == 2 %}
+                                           <span class="badge badge-primary">结果公示</span>
+                                       {% endif %}
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">备注：</label>
                                 <div class="col-sm-8">
-                                    <input id="projectId" type="hidden" value="{{ foo.projectId }}" class="form-control" name="projectId" >
-                                    <textarea id="notes" name="notes" class="form-control">{{ foo.notes }}</textarea>
+                                    {{ foo.notes }}
                                 </div>
                             </div>
                         {% endfor %}
@@ -177,7 +129,7 @@
                             <div class="form-group">
                                 <div class="col-sm-4 col-sm-offset-3">
 
-                                    <button class="btn btn-primary" type="submit">提交</button>
+                                    <button class="btn btn-primary" type="submit">报价</button>
                         <button type="button" class="btn btn-outline btn-default" onclick="javascript:history.back(-1);">返回</button>
                                 </div>
                             </div>
@@ -194,24 +146,7 @@
                                         <div class="panel-body">
 
 
-                        <form class="form-horizontal m-t" id="commentForm" action="/project/projectItemadd/" enctype="multipart/form-data" method="post">
-                            {% csrf_token %}
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">导入询价明细表：</label>
-                                    <div class="col-sm-8">
-                                        <table width="100%">
-                                            <tr>
-                                                <td>
-                                                    <input id="pid" type="hidden" value="{{ pid }}" class="form-control" name="pid" >
-                                                    <input type="file" id="up_file" name="up_file" class="form-control"></td>
-                                                <td> <button class="btn btn-primary" type="submit">上传导入</button> </td>
-                                                <td width="120"> 【 导入模板下载 】 </td>
-                                                <td> <a href="#" class="btn btn-w-m btn-success"  data-toggle="modal" data-target="#addItem">单个插入</a></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                        </form>
+                        
                         <table class="table table-striped table-bordered table-hover dataTables-example">
                             <thead>
                                 <tr>
@@ -428,5 +363,4 @@
     <script src="{% static 'js/demo/form-advanced-demo.js' %}"></script>
 
 </body>
-
 </html>

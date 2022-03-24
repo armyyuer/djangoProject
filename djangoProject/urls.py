@@ -28,4 +28,5 @@ urlpatterns = [
     path('users/', include('UserManage.urls')),
     path('project/', include('project.urls')),
     path('att/', include('Att.urls')),
+    path('orders/', include('orders.urls')),
 ]

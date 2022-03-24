@@ -105,9 +105,10 @@ def projectItemadd(request):
     if furl:
         print("返回附件路径：" + furl)
         wrdb(furl, pid)  # 附件明细插入数据库
-        response.write("<script>alert('明细表导入成功！');window.location.href='/project/edit/?id="+str(pid)+"';</script>")
+        response.write("<script>alert('明细表导入成功！');window.location.href='/project/edit/?id=" + str(pid) + "';</script>")
     else:
-        response.write("<script>alert('请选择需要导入的明细表！');window.location.href='/project/edit/?id="+str(pid)+"';</script>")
+        response.write(
+            "<script>alert('请选择需要导入的明细表！');window.location.href='/project/edit/?id=" + str(pid) + "';</script>")
 
     return response
 
@@ -203,7 +204,7 @@ def editsave(request):
             print("企业信息循环：" + name)
             companyDB = Company.objects.get(code=name)
             orderCompanyList.append(
-                OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.projectId,
+                OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=projectId,
                              state=0,
                              up_date=d1)
             )
@@ -244,6 +245,32 @@ def edititemsave(request):
     update.up_date = up_date
     update.save()
     response.write("<script>alert('修改成功！');window.location.href='/project/edit/?id=" + projectId + "';</script>")
+    return response
+
+
+def additemsave(request):
+    global updat
+    response = HttpResponse()
+    projectId = request.POST.get("projectId")
+    itemName = request.POST.get("itemName")
+    Count = request.POST.get("Count")
+    Unit = request.POST.get("Unit")
+    Specs = request.POST.get("Specs")
+    Brand = request.POST.get("Brand")
+    d1 = timezone.now()
+    up_date = d1
+
+    record = ProjectItem.objects.create(projectId=projectId,
+                                        itemName=itemName,
+                                        Count=Count,
+                                        Unit=Unit,
+                                        Specs=Specs,
+                                        Brand=Brand,
+                                        up_date=up_date,
+                                        add_date=up_date)
+
+    response.write("<script>alert('新增成功！ID："+str(record.itemID)+"。');window.location.href='/project/edit/?id="
+                   + projectId + "';</script>")
     return response
 
 

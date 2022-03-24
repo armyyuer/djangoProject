@@ -764,7 +764,7 @@
             octx = overlay.getContext("2d");
 
             // we include the canvas in the event holder too, because IE 7
-            // sometimes has trouble with the stacking order
+            // sometimes has trouble with the stacking orders
             eventHolder = $([overlay, canvas]);
 
             if (reused) {
@@ -1019,7 +1019,7 @@
                 });
 
                 // with all dimensions in house, we can compute the
-                // axis boxes, start from the outside (reverse order)
+                // axis boxes, start from the outside (reverse orders)
                 for (i = allocatedAxes.length - 1; i >= 0; --i)
                     allocateAxisBoxFirstPhase(allocatedAxes[i]);
 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'common.apps.CommonConfig',
     'UserManage',
     'project',
+    'orders',
 ]
 
 MIDDLEWARE = [

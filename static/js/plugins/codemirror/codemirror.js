@@ -2557,7 +2557,7 @@
       if (d.scroller.clientHeight) setScrollLeft(cm, d.scrollbarH.scrollLeft);
     });
 
-    // Listen to wheel events in order to try and update the viewport on time.
+    // Listen to wheel events in orders to try and update the viewport on time.
     on(d.scroller, "mousewheel", function(e){onScrollWheel(cm, e);});
     on(d.scroller, "DOMMouseScroll", function(e){onScrollWheel(cm, e);});
 
@@ -5200,7 +5200,7 @@
     }
   };
 
-  // Collapsed markers have unique ids, in order to be able to order
+  // Collapsed markers have unique ids, in orders to be able to orders
   // them, which is needed for uniquely determining an outer marker
   // when they overlap (they may nest, but not partially overlap).
   var nextMarkerId = 0;
@@ -6130,7 +6130,7 @@
   // DOCUMENT DATA STRUCTURE
 
   // By default, updates that start and end at the beginning of a line
-  // are treated specially, in order to make the association of line
+  // are treated specially, in orders to make the association of line
   // widgets and marker elements with the text behave more intuitive.
   function isWholeLineUpdate(doc, change) {
     return change.from.ch == 0 && change.to.ch == 0 && lst(change.text) == "" &&
@@ -7620,11 +7620,11 @@
     return pos;
   }
 
-  // This is needed in order to move 'visually' through bi-directional
+  // This is needed in orders to move 'visually' through bi-directional
   // text -- i.e., pressing left should make the cursor go left, even
   // when in RTL text. The tricky part is the 'jumps', where RTL and
   // LTR text touch each other. This often requires the cursor offset
-  // to move more than one unit, in order to visually move one unit.
+  // to move more than one unit, in orders to visually move one unit.
   function moveVisually(line, start, dir, byUnit) {
     var bidi = getOrder(line);
     if (!bidi) return moveLogically(line, start, dir, byUnit);
@@ -7676,7 +7676,7 @@
 
   // Returns null if characters are ordered as they appear
   // (left-to-right), or an array of sections ({from, to, level}
-  // objects) in the order in which they occur visually.
+  // objects) in the orders in which they occur visually.
   var bidiOrdering = (function() {
     // Character types for codepoints 0 to 0xff
     var lowTypes = "bbbbbbbbbtstwsbbbbbbbbbbbbbbssstwNN%%%NNNNNN,N,N1111111111NNNNNNNLLLLLLLLLLLLLLLLLLLLLLLLLLNNNNNNLLLLLLLLLLLLLLLLLLLLLLLLLLNNNNbbbbbbsbbbbbbbbbbbbbbbbbbbbbbbbbb,N%%%%NNNNLNNNNN%%11NLNNN1LNNNNNLLLLLLLLLLLLLLLLLLLLLLLNLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLN";
@@ -7781,10 +7781,10 @@
         }
       }
 
-      // Here we depart from the documented algorithm, in order to avoid
+      // Here we depart from the documented algorithm, in orders to avoid
       // building up an actual levels array. Since there are only three
       // levels (0, 1, 2) in an implementation that doesn't take
-      // explicit embedding into account, we can build up the order on
+      // explicit embedding into account, we can build up the orders on
       // the fly, without following the level-based algorithm.
       var order = [], m;
       for (var i = 0; i < len;) {

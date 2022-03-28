@@ -25,7 +25,7 @@ def register_views(request):
 def adduser(request):
     corporate_name = request.POST.get("corporate_name", '')
     corporate_code = request.POST.get("corporate_code", '')
-    password = make_password(request.POST.get("password", ''))
+    passWord = make_password(request.POST.get("password", ''))
     corporate_contacts = request.POST.get("corporate_contacts", '')
     corporate_phone = request.POST.get("corporate_phone", '')
     corporate_email = request.POST.get("corporate_email", '')
@@ -49,7 +49,7 @@ def adduser(request):
     else:
         record = User.objects.create(username=corporate_code,
                                      email=corporate_email,
-                                     password=password,
+                                     password=passWord,
                                      is_superuser=is_superuser,
                                      is_staff=is_staff,
                                      is_active=is_active,
@@ -189,7 +189,8 @@ def manageReset(request):
 def userReset(request):
     uid = request.GET.get('id')
     qs = User.objects.get(id=uid)
-    password = make_password('nfc!@#123')
+    # password = make_password('nfc!@123')
+    password = make_password('nfc!@123', None, 'pbkdf2_sha256')
     qs.password = password
     qs.save()
     print(uid, password)

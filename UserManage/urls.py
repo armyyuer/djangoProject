@@ -1,7 +1,7 @@
 # 菜鸟程序员：阿米
 from django.urls import path
 from UserManage.views import index_views, register_views, adduser, reg, listmanage, listcompany, editmanage, \
-    manageReset, deletemanage, deleteuser, manageadd_views, manageaddsave
+    manageReset, deletemanage, deleteuser, manageadd_views, manageaddsave, userReset
 
 urlpatterns = [
     path('', index_views, name='index'),
@@ -15,6 +15,7 @@ urlpatterns = [
     path('manageadd/', manageadd_views, name='manageadd_views'),
     path('manageaddsave/', manageaddsave, name='manageaddsave'),
     path('manageReset/', manageReset, name='manageReset'),
+    path('userReset/', userReset, name='userReset'),
     path('deletemanage/', deletemanage, name='deletemanage'),
     path('deleteuser/', deleteuser, name='deleteuser'),
 ]

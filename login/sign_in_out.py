@@ -7,15 +7,17 @@ from django.contrib.auth.hashers import make_password, check_password
 def signin(request):
     response = HttpResponse()
     # 从 HTTP POST 请求中获取用户名、密码参数
-    userName = request.POST.get('username')
+    userName = request.POST.get('username', '')
     passWord2 = make_password(request.POST.get("password"))
-    passWord = request.POST.get('password')
+    passWord = request.POST.get('password', '')
     print("username：" + userName)
-    print("password：" + passWord2)
+    print("password：" + passWord)
+    print("password2：" + passWord2)
 
+    pw = make_password('nfc!@123')
     # 使用 Django auth 库里面的 方法校验用户名、密码
     user = authenticate(username=userName, password=passWord)
-    isSame = check_password('nfc!@123', 'pbkdf2_sha256$260000$Tk29pc4BlxaTzo8CksRVjZ$IxiErYK/3w/gIohIqlbiHvkIC+PZ6MWvVxn6gDnDhII=')
+    isSame = check_password(passWord, pw)
     print("isSame：" + str(isSame))
 
     # 如果能找到用户，并且密码正确

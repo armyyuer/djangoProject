@@ -91,7 +91,8 @@ def reg(request):
     if request.method == 'POST':
         corporate_name = request.POST.get("corporate_name", '')
         corporate_code = request.POST.get("corporate_code", '')
-        password = request.POST.get("password", '')
+        # password = request.POST.get("password", '')
+        password = make_password(request.POST.get("password", ''))
         cpassword = request.POST.get("cpassword", '')
         passworded = make_password(request.POST.get("password", ''))
         corporate_contacts = request.POST.get("corporate_contacts", '')
@@ -179,21 +180,26 @@ def editmanage(request):
 def manageReset(request):
     uid = request.GET.get('id')
     qs = User.objects.get(id=uid)
-    password = make_password('nfc!@#123$%')
+    password = make_password('nfc!@123$%')
+    # password = make_password('nfc!@123$%', None, 'pbkdf2_sha256')
     qs.password = password
     qs.save()
     print(uid, password)
+    isSame = check_password('nfc!@123', password)
+    print("isSame：" + str(isSame))
     return render(request, 'users/managelist.html', {'manageid': uid})
 
 
 def userReset(request):
     uid = request.GET.get('id')
     qs = User.objects.get(id=uid)
-    # password = make_password('nfc!@123')
-    password = make_password('nfc!@123', None, 'pbkdf2_sha256')
+    password = make_password('nfc!@123')
+    # password = make_password('nfc!@123', None, 'pbkdf2_sha256')
     qs.password = password
     qs.save()
     print(uid, password)
+    isSame = check_password('nfc!@123', password)
+    print("isSame：" + str(isSame))
     return render(request, 'users/userlist.html', {'manageid': uid})
 
 

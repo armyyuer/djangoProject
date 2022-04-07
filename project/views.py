@@ -90,7 +90,7 @@ def projectaddsave(request):
         # 判断询价类型，如果是邀请报价则添加询价企业
         wrdb(furl, record.projectId)  # 附件明细插入数据库
         # print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
-        response.write("<script>alert('项目成功！');window.location.href='/project/index/';</script>")
+        response.write("<script>alert('项目添加成功成功！');window.location.href='/project/index/';</script>")
         return response
 
 

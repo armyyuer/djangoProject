@@ -124,3 +124,19 @@ class Items(models.Model):
     Notes = models.TextField(null=True)  # 备注
     add_date = models.DateTimeField(max_length=254, null=True)  # 添加日期
     up_date = models.DateTimeField(max_length=254, null=True)  # 更新日期
+
+
+class XCM(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    userName = models.CharField(max_length=254, default=0)  # 人名
+    img = models.CharField(max_length=254, default=0)  # 行程码图片
+    DD = models.CharField(max_length=254, null=True)  # 钉钉信息
+    add_date = models.DateTimeField(max_length=254, null=True)  # 添加日期
+
+
+class DDuser(models.Model):
+    DDuserID = models.AutoField(db_column='DDuserID', primary_key=True)  #
+    userName = models.CharField(max_length=254, default=0)  # 人名
+    dept = models.CharField(max_length=254, null=True)  # 部门
+    DD = models.CharField(max_length=254, null=True)  # 钉钉信息
+    tel = models.CharField(max_length=254, null=True)  # 钉钉信息

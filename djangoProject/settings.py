@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'UserManage',
     'project',
     'orders',
+    'api',
 ]
 
 MIDDLEWARE = [

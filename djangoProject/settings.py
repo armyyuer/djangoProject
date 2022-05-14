@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'common.apps.CommonConfig',
+    'django_crontab',  # 定时任务,需放置在应用之前
     'UserManage',
     'project',
     'orders',
@@ -79,38 +80,34 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
 DATABASES = {
-
     'default': {
-
-        'ENGINE': 'django.db.backends.mysql',
-
-        'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'gxnfc',  # 数据库名字
-        'USER': os.environ.get('DJANGO_MYSQL_USER') or 'gxnfc',  # 数据库用户名
-        'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'qweRasd@2022!@#',  # 数据库密码
-        'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',  # 数据库连接地址
-        'PORT': int(
-            os.environ.get('DJANGO_MYSQL_PORT') or 3306),  # 数据库端口
-        'OPTIONS': {
-            'charset': 'utf8mb4'},
-        # 'NAME': 'gxnfc',  # 你的数据库名称
-        #
-        # 'USER': 'root',  # 你的数据库用户名
-        #
-        # 'PASSWORD': 'qweRasd@2022!@#',  # 你的数据库密码
-        #
-        # 'HOST': '',  # 你的数据库主机，留空默认为localhost
-        #
-        # 'PORT': '3306',  # 你的数据库端口
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-
 }
+# DATABASES = {
+#
+#     'default': {
+#
+#         'ENGINE': 'django.db.backends.mysql',
+#         #
+#         # 'NAME': os.environ.get('DJANGO_MYSQL_DATABASE') or 'gxnfc',  # 数据库名字
+#         # 'USER': os.environ.get('DJANGO_MYSQL_USER') or 'gxnfc',  # 数据库用户名
+#         # 'PASSWORD': os.environ.get('DJANGO_MYSQL_PASSWORD') or 'qweRasd@2022!@#',  # 数据库密码
+#         # 'HOST': os.environ.get('DJANGO_MYSQL_HOST') or '127.0.0.1',  # 数据库连接地址
+#         # 'PORT': int(
+#         #     os.environ.get('DJANGO_MYSQL_PORT') or 3306),  # 数据库端口
+#         # 'OPTIONS': {
+#         #     'charset': 'utf8mb4'},
+#         'NAME': 'gxnfc',  # 你的数据库名称
+#         'USER': 'gxnfc',  # 你的数据库用户名
+#         'PASSWORD': 'qweRasd@2022!@#',  # 你的数据库密码
+#         'HOST': '',  # 你的数据库主机，留空默认为localhost
+#         'PORT': '3306',  # 你的数据库端口
+#     }
+#
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -157,3 +154,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # 文件上传配置
 UPLOAD_ROOT = os.path.join(BASE_DIR, 'upload')
+
+# 解决中文乱码问题
+CRONTAB_COMMAND_PREFIX = 'LANG_ALL=zh_cn.UTF-8'
+# 存放log的路径
+CRONJOBS_DIR = "/home/gxnfc/djangoProject/"
+# Log文件名
+CRONJOBS_FILE_NAME = "CRONJOBS.log"
+# 添加定时任务(函数中的输出语句,是输出在.log文件中的)
+CRONJOBS = (
+    # 每分钟执行一次TestCrontab App中crontabFun的timedExecution函数，执行后将打印结果存储在log文件中
+    #  '2>&1'每项工作执行后要做的事
+    ('*/1 * * * *', 'api.ccgp.seedtxt', '>>' + CRONJOBS_DIR + CRONJOBS_FILE_NAME + ' 2>&1'),
+    # 每分钟执行一次
+    ('00 11 * * *', 'api.ccgp.seedtxt', '>>' + CRONJOBS_DIR + CRONJOBS_FILE_NAME + ' 2>&1'),
+    # 每天11点执行
+    ('0 */4 * * *', 'api.ccgp.seedtxt', '>>' + CRONJOBS_DIR + CRONJOBS_FILE_NAME + ' 2>&1'),
+    # 每4小时执行一次
+    # * * * * *
+    # 分钟(0-59) 小时(0-23) 每个月的哪一天(1-31) 月份(1-12) 周几(0-6)
+
+)
+
+VERSION = '1.0'

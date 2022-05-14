@@ -1,10 +1,10 @@
 #!/bin/bash
 NAME="gxnfc"
-DJANGODIR=/www/wwwroot/gxnfc #Django project directory
+DJANGODIR=/root/python/gxnfc #Django project directory
 USER=root # the user to run as
 GROUP=root # the group to run as
 NUM_WORKERS=1 # how many worker processes should Gunicorn spawn
-DJANGO_SETTINGS_MODULE=gxnfc.settings # which settings file should Django use
+DJANGO_SETTINGS_MODULE=djangoProject.settings # which settings file should Django use
 DJANGO_WSGI_MODULE=gxnfc.wsgi # WSGI module name
 
 echo "Starting $NAME as `whoami`"

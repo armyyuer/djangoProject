@@ -3,17 +3,25 @@ import sys
 import re, requests
 import json
 import time
+import datetime
+from bs4 import BeautifulSoup
+from lxml import etree
+
+from django.http import HttpResponse
+
 import dingtalk.api
 
-userID = 27481131291224212
+userID = ["userid1", "userid2"]  # 27481131291224212
 deptID = 646245618
 
 
 # 获得access_token
 def access_token():
     request = dingtalk.api.OapiGettokenRequest("https://oapi.dingtalk.com/gettoken")
-    request.appkey = "dingew1bs4souannu3md"
-    request.appsecret = "t7TtbMeg-APC_37FKHRx2-2GSkwUeSWUoUSr687i9rOa6jUBF4OZcA7WHefPIGCJ"
+    request.appkey = "dingxnykdmqakiazo5kl"
+    request.appsecret = "ZBf89sJChrQB3jWSFKWJYZElC9Or7pmo0Vf1dyMHWh51fvLvBI_Zx3ThRBSvXDTh"
+    # request.appkey = "dingew1bs4souannu3md"
+    # request.appsecret = "t7TtbMeg-APC_37FKHRx2-2GSkwUeSWUoUSr687i9rOa6jUBF4OZcA7WHefPIGCJ"
     f = request.getResponse()
     print(f['access_token'], "access_token")  # 获取access_token
     return f['access_token']
@@ -51,12 +59,19 @@ def getChatid():
     # print(chatid, "chatid")
     # return chatid
     req = dingtalk.api.OapiChatCreateRequest("https://oapi.dingtalk.com/chat/create")
-    req.name = "IT部门"
+    # req.name = "市场部"
+    # req.owner = "274811312926324542"
+    # req.useridlist = ["274811312926324542", "0506120309953694", "020215561323463831", "022460230820913350",
+    #                   "144336582836424661", "16304563476535427", "01290214283733928788"]
+    req.name = "IT部"
     req.owner = "27481131291224212"
-    req.useridlist = "27481131291224212"
+    req.useridlist = ["27481131291224212"]
     try:
         resp = req.getResponse(access_token())
-        print(resp, "getChatid")
+        print(resp.get("chatid"), "getChatid")
+        return resp.get("chatid")
+        # for i in resp
+        #     return i["chatid"]
     except Exception as e:
         print(e, "getChatid_err")
 
@@ -134,7 +149,11 @@ def get_user_list():
 
 
 # if __name__ == '__main__':
-def seedtxt():
+def seedtxt(reuqest):
+    return HttpResponse(getCcgp() + getHc() + getyh() + getTsg())
+
+
+def getCcgp():
     access_token()
     get_department_list()
     get_user_list()
@@ -168,11 +187,12 @@ def seedtxt():
     n_list = b_list["hits"]["hits"]
     # print(n_list)
     # 遍历response
+    txts = ""
     for i in n_list:
         title = i["_source"]["title"]
         pathName = i["_source"]["pathName"]
         districtName = i["_source"]["districtName"]
-        url_n = "http://"+host+i["_source"]["url"]
+        url_n = "http://" + host + i["_source"]["url"]
         publishDate = i["_source"]["publishDate"]
         timeArray = time.localtime(int(publishDate / 1000))
         otherStyleTime = time.strftime("%Y-%m-%d", timeArray)
@@ -184,17 +204,260 @@ def seedtxt():
         print(url_n)
         print("-----------------------------------------------------")
 
-        chatid = getChatid()
-        req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
-        values = {
-            "title": districtName+pathName,
-            "messageUrl": url_n,
-            "text": title+"\n发布时间:"+otherStyleTime
-        }
-        values = json.dumps(values)
-        req.link = values
-        try:
-            resp = req.getResponse(access_token())
-            print(resp,"seedtxt")
-        except Exception as e:
-            print(e,"seedtxt_err")
+        dqtime = datetime.datetime.now().strftime('%Y-%m-%d')
+        if dqtime == otherStyleTime:
+
+            print(dqtime, "dqtime")
+            # chatid = getChatid()
+            # chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
+            chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
+            req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
+            values = {
+                "title": districtName + pathName,
+                "messageUrl": url_n,
+                "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                "text": title + "\n发布时间:" + otherStyleTime
+            }
+
+            msg = {
+                "link": {
+                    "messageUrl": url_n,
+                    "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                    "text": title + "\n发布时间:" + otherStyleTime,
+                    "title": districtName + pathName
+                },
+                "msgtype": "link"
+            }
+
+            txts = txts + title + "<br>"
+            values = json.dumps(values)
+            req.link = values
+            req.msgtype = "link"
+            print(chatid, "chatidssssssssssssss")
+
+            req.chatid = chatid
+            req.link = values
+            req.msgtype = "link"
+            req.msg = msg
+
+            try:
+                resp = req.getResponse(access_token())
+                # return HttpResponse(resp)
+                print(resp, "seedtxt")
+            except Exception as e:
+                print(e, "seedtxt_err")
+                # return HttpResponse(e)
+
+    return txts
+
+
+def getHc():
+    access_token()
+    get_department_list()
+    get_user_list()
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3880.400 QQBrowser/10.8.4554.400',
+    }
+    # 海城区批复公告
+    url = "http://www.bhhc.gov.cn/zwgk/fdzdgknr/zdxmpzhss/xmtzpzjgxx/"
+    turl = ""
+    resp = requests.get(url=url, headers=headers)
+    resp.encoding = 'utf-8'
+    html = resp.text
+    soup = BeautifulSoup(html, 'lxml')
+    ss = soup.find_all("div", class_="right_list")
+    # sss = ss[0].find("a").get("href")
+    dqtime = datetime.datetime.now().strftime('%Y-%m-%d')
+    txts = ""
+    for i in ss:
+        t = i.find_all("li")
+        for j in t:
+            # print(url+j.find("a").get("href"),j.find("a").get_text(),j.find("span").get_text())
+            if dqtime == j.find("span").get_text():
+
+                if j.find("a").get("href")[0] == ".":
+                    turl = url + j.find("a").get("href")
+                else:
+                    turl = j.find("a").get("href")
+                chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
+                # chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
+                req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
+                values = {
+                    "title": "海城区批复公告",
+                    "messageUrl": turl,
+                    "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                    "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text()
+                }
+
+                msg = {
+                    "link": {
+                        "messageUrl": turl,
+                        "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                        "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text(),
+                        "title": "海城区批复公告"
+                    },
+                    "msgtype": "link"
+                }
+
+                txts = txts + "[海城区批复公告]" + j.find("a").get_text() + "<br>"
+                values = json.dumps(values)
+                # req.link = values
+                # req.msgtype = "link"
+                # # print(chatid, "chatidssssssssssssss")
+
+                req.chatid = chatid
+                req.link = values
+                req.msgtype = "link"
+                req.msg = msg
+
+                try:
+                    resp = req.getResponse(access_token())
+                    # return HttpResponse(resp)
+                    print(resp, "seedtxt")
+                except Exception as e:
+                    print(e, "seedtxt_err")
+                    # return HttpResponse(e)
+        # print("-----------------------------------------------------")
+    print("海城区批复公告爬取结束。")
+    return txts
+
+
+def getyh():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3880.400 QQBrowser/10.8.4554.400',
+    }
+    # 银海区批复公告
+    url = "http://www.yinhai.gov.cn/zwgk/fdzdgk/zdjsxm_1/xmtzpzjgxx/"
+    turl = ""
+    resp = requests.get(url=url, headers=headers)
+    resp.encoding = 'utf-8'
+    html = resp.text
+    soup = BeautifulSoup(html, 'lxml')
+    ss = soup.find_all("ul", class_="list-cont")
+    dqtime = datetime.datetime.now().strftime('(%Y-%m-%d)')
+    # print(dqtime)
+    txts = ""
+    for i in ss:
+        t = i.find_all("li")
+        for j in t:
+            # print(url+j.find("a").get("href"),j.find("a").get_text(),j.find("span").get_text())
+            if dqtime == j.find("span").get_text():
+
+                if j.find("a").get("href")[0] == ".":
+                    turl = url + j.find("a").get("href")
+                else:
+                    turl = j.find("a").get("href")
+                chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
+                # chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
+                req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
+                values = {
+                    "title": "银海区批复公告",
+                    "messageUrl": turl,
+                    "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                    "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text()
+                }
+
+                msg = {
+                    "link": {
+                        "messageUrl": turl,
+                        "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                        "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text(),
+                        "title": "银海区批复公告"
+                    },
+                    "msgtype": "link"
+                }
+
+                txts = txts + "[银海区批复公告]" + j.find("a").get_text() + "<br>"
+                values = json.dumps(values)
+                # req.link = values
+                # req.msgtype = "link"
+                # # print(chatid, "chatidssssssssssssss")
+
+                req.chatid = chatid
+                req.link = values
+                req.msgtype = "link"
+                req.msg = msg
+
+                try:
+                    resp = req.getResponse(access_token())
+                    # return HttpResponse(resp)
+                    print(resp, "seedtxt")
+                except Exception as e:
+                    print(e, "seedtxt_err")
+                    # return HttpResponse(e)
+        # print("-----------------------------------------------------")
+
+    print("银海区批复公告爬取结束。")
+    return txts
+
+
+# if __name__ == '__main__':
+def getTsg():
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.25 Safari/537.36 Core/1.70.3880.400 QQBrowser/10.8.4554.400',
+    }
+    # 铁山港区批复公告
+    url = "http://www.bhtsg.gov.cn/zwgk/fdzdgk/zdjsxmpzhss/xmpzjg/"
+    turl = ""
+    resp = requests.get(url=url, headers=headers)
+    resp.encoding = 'utf-8'
+    html = resp.text
+    soup = BeautifulSoup(html, 'lxml')
+    div = soup.find_all("div", class_="content-left")
+    dqtime = datetime.datetime.now().strftime('%Y-%m-%d')
+    txts = ""
+    for ul in div:
+        tul = ul.find_all("ul")
+        for i in tul:
+            t = i.find_all("li")
+            for j in t:
+                # h=j.find("a").get("href")[0]
+                # print(url+j.find("a").get("href"),j.find("a").get_text(),j.find("span").get_text())
+                # print(h)
+                if dqtime == j.find("span").get_text():
+                    if j.find("a").get("href")[0] == ".":
+                        turl = url + j.find("a").get("href")
+                    else:
+                        turl = j.find("a").get("href")
+
+                    chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
+                    # chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
+
+                    req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
+                    values = {
+                        "title": "铁山港区批复公告",
+                        "messageUrl": turl,
+                        "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                        "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text()
+                    }
+
+                    msg = {
+                        "link": {
+                            "messageUrl": turl,
+                            "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                            "text": j.find("a").get_text() + "\n发布时间:" + j.find("span").get_text(),
+                            "title": "铁山港区批复公告"
+                        },
+                        "msgtype": "link"
+                    }
+
+                    txts = txts + "[铁山港区批复公告]" + j.find("a").get_text() + "<br>"
+                    values = json.dumps(values)
+                    # req.link = values
+                    # req.msgtype = "link"
+                    # # print(chatid, "chatidssssssssssssss")
+
+                    req.chatid = chatid
+                    req.link = values
+                    req.msgtype = "link"
+                    req.msg = msg
+
+                    try:
+                        resp = req.getResponse(access_token())
+                        # return HttpResponse(resp)
+                        print(resp, "seedtxt")
+                    except Exception as e:
+                        print(e, "seedtxt_err")
+                        # return HttpResponse(e)
+    print("铁山港批复公告爬取结束。")
+    return txts

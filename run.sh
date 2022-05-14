@@ -5,4 +5,4 @@ echo $DIR
 cd $DIR
 
 # ulimit -n 50000
-nohup gunicorn --config=gunicorn_conf.py bysms.wsgi &> /dev/null &
+nohup gunicorn --config=djangoProject/gunicorn_conf.py djangoProject.wsgi &> /dev/null &

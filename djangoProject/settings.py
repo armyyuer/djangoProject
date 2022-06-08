@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'UserManage',
     'project',
     'orders',
+    'Ser',
     'api',
 ]
 

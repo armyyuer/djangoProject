@@ -149,8 +149,13 @@ def get_user_list():
 
 
 # if __name__ == '__main__':
-def seedtxt(reuqest):
-    return HttpResponse(getCcgp() + getHc() + getyh() + getTsg())
+def seedtxt():
+    getCcgp()
+    getHc()
+    getyh()
+    getTsg()
+    # print(getCcgp() + getHc() + getyh() + getTsg())
+    # return HttpResponse(getCcgp() + getHc() + getyh() + getTsg())
 
 
 def getCcgp():
@@ -248,7 +253,8 @@ def getCcgp():
                 print(e, "seedtxt_err")
                 # return HttpResponse(e)
 
-    return txts
+    print(txts)
+    # return txts
 
 
 def getHc():
@@ -319,7 +325,8 @@ def getHc():
                     # return HttpResponse(e)
         # print("-----------------------------------------------------")
     print("海城区批复公告爬取结束。")
-    return txts
+    print(txts)
+    # return txts
 
 
 def getyh():
@@ -388,7 +395,8 @@ def getyh():
         # print("-----------------------------------------------------")
 
     print("银海区批复公告爬取结束。")
-    return txts
+    print(txts)
+    # return txts
 
 
 # if __name__ == '__main__':
@@ -460,4 +468,5 @@ def getTsg():
                         print(e, "seedtxt_err")
                         # return HttpResponse(e)
     print("铁山港批复公告爬取结束。")
-    return txts
+    print(txts)
+    # return txts

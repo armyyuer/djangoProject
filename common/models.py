@@ -27,7 +27,7 @@ class Company(models.Model):
 
 
 class Project(models.Model):
-    projectId = models.AutoField(db_column='projectId', primary_key=True)  # Field name made lowercase.
+    projectId = models.AutoField(db_column=' ', primary_key=True)  # Field name made lowercase.
     type = models.IntegerField(null=True, default=0)  # 项目类型，邀请or公开
     projectName = models.CharField(max_length=254, null=True)  # 项目名称
     projectNo = models.CharField(max_length=254, null=True)  # 项目编号
@@ -140,3 +140,45 @@ class DDuser(models.Model):
     dept = models.CharField(max_length=254, null=True)  # 部门
     DD = models.CharField(max_length=254, null=True)  # 钉钉信息
     tel = models.CharField(max_length=254, null=True)  # 钉钉信息
+
+
+class SerProject(models.Model):
+    projectID = models.AutoField(db_column='ProjectID', primary_key=True)  #
+    projectName = models.CharField(max_length=254, null=True)  # 项目名称
+    company = models.CharField(max_length=254, null=True)  # 所属公司名称
+    contact = models.CharField(max_length=254, null=True)  # 项目联系人
+    tel = models.CharField(max_length=254, null=True)  # 项目联系电话
+    retentionMoney = models.DecimalField(max_digits=4, decimal_places=4, null=True, default=0)  # 质保金
+    startTime = models.DateTimeField(max_length=254, null=True)  # 质保开始时间
+    endTime = models.DateTimeField(max_length=254, null=True)  # 质保结束时间
+    state = models.CharField(max_length=254, null=True)  # 状态,服务中----服务结束
+
+
+class SerOrders(models.Model):
+    orderID = models.AutoField(db_column='orderID', primary_key=True)  #
+    company = models.CharField(max_length=254, null=True)  # 单位名称
+    address = models.CharField(max_length=254, null=True)  # 地址
+    contact = models.CharField(max_length=254, null=True)  # 联系人
+    tel = models.CharField(max_length=254, null=True)  # 联系电话
+    content = models.CharField(max_length=254, null=True)  # 报修内容
+    hopeTime = models.CharField(max_length=254, null=True)  # 希望上门时间
+    remarks = models.CharField(max_length=254, null=True)  # 保修备注
+    projectID = models.IntegerField(null=True, default=0)  # 项目ID
+    projectName = models.CharField(max_length=254, null=True)  # 项目名称
+    agree = models.IntegerField(null=True, default=0)  # 是否同意客户维修申请
+    repairerID = models.IntegerField(null=True, default=0)  # 维修人员ID
+    repairerName = models.CharField(max_length=254, null=True)  # 维修人员姓名
+    seedTime = models.DateTimeField(max_length=254, null=True)  # 派单日期
+    goTime = models.DateTimeField(max_length=254, null=True)  # 上门日期
+    endTime = models.DateTimeField(max_length=254, null=True)  # 结单日期
+    workingHours = models.IntegerField(null=True, default=0)  # 维修工时
+    fault = models.CharField(max_length=254, null=True)  # 故障描述
+    record = models.CharField(max_length=254, null=True)  # 维修记录
+    cost = models.DecimalField(max_digits=4, decimal_places=4, null=True, default=0)  # 维修费用
+    confirm = models.CharField(max_length=254, null=True)  # 确认是否维修，维修、不维修
+    image = models.CharField(max_length=254, null=True)  # 维修单拍照
+    lc = models.IntegerField(null=True, default=0)  # 流程。0-报单，1-审核派单，-1-不派单，2-售后处理，3-正常结单
+    state = models.CharField(max_length=254, null=True)  # 状态
+    userID = models.IntegerField(null=True, default=0)  # 处理人ID
+    userName = models.CharField(max_length=254, null=True)  # 处理人
+    addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期

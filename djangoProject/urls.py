@@ -31,4 +31,5 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('api/', include('api.urls')),
     path('Ser/', include('Ser.urls')),
+    path('XCM/', include('XCM.urls')),
 ]

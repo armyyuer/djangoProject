@@ -3,49 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.13.42/dingtalk.open.js"></script>
-     <script>
-        dd.ready(function() {
-                dd.runtime.permission.requestAuthCode({
-                corpId: "dingfb2da230ae1160724ac5d6980864d335", // 企业id
-                onSuccess: function (info) {
-                    code = info.code // 通过该免登授权码可以获取用户身份
-                    alert(code);
-                }});
-        });
-    </script>
+
 </head>
 <body>
-	<div id="login_container">
-	</div>
-</body>
-<script src="//g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"></script>
-<script src="jquery.js"></script>
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
 <script type="text/javascript">
-	//二维码展示
-	var obj = DDLogin({
-		id:"login_container",//这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
-		goto: "https%3A%2F%2Foapi.dingtalk.com%2Fconnect%2Foauth2%2Fsns_authorize%3Fappid%3Ddingoa7vgbzxwuujhfv9lt%26response_type%3Dcode%26scope%3Dsnsapi_login%26state%3DSTATE%26redirect_uri%3Dhttp%3A%2F%2F117.122.225.40%2Fding%2Findex.php",
-		width : "365",
-		height: "400"
-	});
+    // 获取当前网页的url：http://ding-web.lnexin.cn/?corpid=ding46a9582af5b7541b35c2f4657eb6378f
+    var currentUrl = document.location.toString()
+    $("#url").append(currentUrl)
+    // 解析url中包含的corpId
+    var corpId = currentUrl.split("corpid=")[1];
+    $("#corpId").append(corpId)
 
-	//获取loginTmpCode
-	var hanndleMessage = function (event) {
-        var origin = event.origin;
-        console.log("origin", event.origin);
-        if( origin == "https://login.dingtalk.com" ) { //判断是否来自ddLogin扫码事件。
-            var loginTmpCode = event.data; //拿到loginTmpCode后就可以在这里构造跳转链接进行跳转了
-            //console.log("loginTmpCode", loginTmpCode);
-			location.href = "https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoa7vgbzxwuujhfv9lt&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://117.122.225.40/ding/index.php&loginTmpCode="+loginTmpCode;
-        }
-	};
+    // 钉钉sdk初始化：dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
+    dd.ready(function () {
+        // 使用SDK 获取免登授权码
+        dd.runtime.permission.requestAuthCode({
+            corpId: 'dingfb2da230ae1160724ac5d6980864d335',
+            onSuccess: function (result) {
+                alert(JSON.stringify(result));
+                var code = result.code;
+                //$.get("http://49.232.56.68:8006/get/user",'code='+info.code,function(response){
+                $.get("http://127.0.0.1:8000/dingding/get/?code=" + code, function (response) {
+                    var response = JSON.parse(response)
+                    // 下面的业务根据自己的需求来写
+                    if (response.user) {
+                        for (item in response.user) {
+                            $("#result").append("<li>\t[user 属性] " + item + " : " + response.user[item] + "</li>")
+                        }
+                    }
+                });
+            },
+            onFail: function(err) {
+                alert('fail: ' + JSON.stringify(err));   //处理失败的情况
+            },
+        });
+    });
 
-
-	if (typeof window.addEventListener != 'undefined') {
-		window.addEventListener('message', hanndleMessage, false);
-	} else if (typeof window.attachEvent != 'undefined') {
-		window.attachEvent('onmessage', hanndleMessage);
-	}
+    // 如果没有走ready方法的话会走error方法。
+    // dd.error(function(error){
+    dd.error((error) => {
+        alert('dd error: ' + JSON.stringify(error));
+        alert(`dd error: ${JSON.stringify(error)}`);
+    });
 </script>
+</body>
+
 </html>

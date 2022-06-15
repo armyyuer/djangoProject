@@ -30,6 +30,7 @@ urlpatterns = [
     path('att/', include('Att.urls')),
     path('orders/', include('orders.urls')),
     path('api/', include('api.urls')),
+    path('dingding/', include('dingding.urls')),
     path('Ser/', include('Ser.urls')),
     path('XCM/', include('XCM.urls')),
 ]

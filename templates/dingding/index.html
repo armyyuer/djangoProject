@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.13.42/dingtalk.open.js"></script>
+     <script>
+        dd.ready(function() {
+                dd.runtime.permission.requestAuthCode({
+                corpId: "dingfb2da230ae1160724ac5d6980864d335", // 企业id
+                onSuccess: function (info) {
+                    code = info.code // 通过该免登授权码可以获取用户身份
+                    alert(code);
+                }});
+        });
+    </script>
+</head>
+<body>
+	<div id="login_container">
+	</div>
+</body>
+<script src="//g.alicdn.com/dingding/dinglogin/0.0.5/ddLogin.js"></script>
+<script src="jquery.js"></script>
+<script type="text/javascript">
+	//二维码展示
+	var obj = DDLogin({
+		id:"login_container",//这里需要你在自己的页面定义一个HTML标签并设置id，例如<div id="login_container"></div>或<span id="login_container"></span>
+		goto: "https%3A%2F%2Foapi.dingtalk.com%2Fconnect%2Foauth2%2Fsns_authorize%3Fappid%3Ddingoa7vgbzxwuujhfv9lt%26response_type%3Dcode%26scope%3Dsnsapi_login%26state%3DSTATE%26redirect_uri%3Dhttp%3A%2F%2F117.122.225.40%2Fding%2Findex.php",
+		width : "365",
+		height: "400"
+	});
+
+	//获取loginTmpCode
+	var hanndleMessage = function (event) {
+        var origin = event.origin;
+        console.log("origin", event.origin);
+        if( origin == "https://login.dingtalk.com" ) { //判断是否来自ddLogin扫码事件。
+            var loginTmpCode = event.data; //拿到loginTmpCode后就可以在这里构造跳转链接进行跳转了
+            //console.log("loginTmpCode", loginTmpCode);
+			location.href = "https://oapi.dingtalk.com/connect/oauth2/sns_authorize?appid=dingoa7vgbzxwuujhfv9lt&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://117.122.225.40/ding/index.php&loginTmpCode="+loginTmpCode;
+        }
+	};
+
+
+	if (typeof window.addEventListener != 'undefined') {
+		window.addEventListener('message', hanndleMessage, false);
+	} else if (typeof window.attachEvent != 'undefined') {
+		window.attachEvent('onmessage', hanndleMessage);
+	}
+</script>
+</html>

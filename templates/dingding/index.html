@@ -3,51 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
 
+<script type="text/javascript">
+
+    dd.ready(function() {
+            dd.runtime.permission.requestAuthCode({
+                corpId : "dingfb2da230ae1160724ac5d6980864d335",
+                onSuccess : function(result) {
+                    var code = result.code;
+                    alert('获取成功，你的免登code为：' + code);　　　　　　　　　　　　//将code 发往后台处理
+                },
+                onFail : function(err) {
+                    alert('出错了, 你获取了一个自定义错误' + err);
+                }
+            });
+
+        });
+
+</script>
 </head>
 <body>
-<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
-<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-<script type="text/javascript">
-    // 获取当前网页的url：http://ding-web.lnexin.cn/?corpid=ding46a9582af5b7541b35c2f4657eb6378f
-    var currentUrl = document.location.toString()
-    $("#url").append(currentUrl)
-    // 解析url中包含的corpId
-    var corpId = currentUrl.split("corpid=")[1];
-    $("#corpId").append(corpId)
-
-    // 钉钉sdk初始化：dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
-    dd.ready(function () {
-        // 使用SDK 获取免登授权码
-        dd.runtime.permission.requestAuthCode({
-            corpId: 'dingfb2da230ae1160724ac5d6980864d335',
-            onSuccess: function (result) {
-                alert(JSON.stringify(result));
-                var code = result.code;
-                //$.get("http://49.232.56.68:8006/get/user",'code='+info.code,function(response){
-                $.get("http://127.0.0.1:8000/dingding/get/?code=" + code, function (response) {
-                    var response = JSON.parse(response)
-                    // 下面的业务根据自己的需求来写
-                    if (response.user) {
-                        for (item in response.user) {
-                            $("#result").append("<li>\t[user 属性] " + item + " : " + response.user[item] + "</li>")
-                        }
-                    }
-                });
-            },
-            onFail: function(err) {
-                alert('fail: ' + JSON.stringify(err));   //处理失败的情况
-            },
-        });
-    });
-
-    // 如果没有走ready方法的话会走error方法。
-    // dd.error(function(error){
-    dd.error((error) => {
-        alert('dd error: ' + JSON.stringify(error));
-        alert(`dd error: ${JSON.stringify(error)}`);
-    });
-</script>
+<button id="code" onclick="dd.ready()">获取授权码</button>
 </body>
 
 </html>

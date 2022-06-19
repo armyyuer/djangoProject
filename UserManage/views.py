@@ -140,7 +140,13 @@ def reg(request):
 def listmanage(request):
     qs = User.objects.filter(is_superuser=1)
 
+    print("ID：" + str(qs))
     return render(request, 'users/managelist.html', {'managelist': qs})
+
+
+def managdd(uid):
+    outStr = uid
+    return outStr
 
 
 def listcompany(request):

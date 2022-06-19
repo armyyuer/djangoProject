@@ -39,6 +39,7 @@
                             <thead>
                                 <tr>
                                     <th>用户名</th>
+                                    <th>钉钉绑定</th>
                                     <th>最后登录</th>
                                     <th>管理</th>
                                 </tr>
@@ -47,6 +48,7 @@
                             {% for foo in managelist %}
                                 <tr class="gradeU">
                                     <td>{{ foo.username }}</td>
+                                    <td></td>
                                     <td>{{ foo.last_login.year }}-{{ foo.last_login.month }}-{{ foo.last_login.day }} {{ foo.last_login.hour }}:{{ foo.last_login.minute }}:{{ foo.last_login.second }}</td>
                                     <td class="center"><a href="javascript:Reset({{ foo.id }})" >重置密码</a> | <a href="javascript:deleteRecord({{ foo.id }})" >删除</a></td>
                                 </tr>

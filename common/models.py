@@ -135,11 +135,13 @@ class XCM(models.Model):
 
 
 class DDuser(models.Model):
-    DDuserID = models.AutoField(db_column='DDuserID', primary_key=True)  #
-    userName = models.CharField(max_length=254, default=0)  # 人名
-    dept = models.CharField(max_length=254, null=True)  # 部门
-    DD = models.CharField(max_length=254, null=True)  # 钉钉信息
-    tel = models.CharField(max_length=254, null=True)  # 钉钉信息
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    name = models.CharField(max_length=254, default=0)  # 昵称
+    sys_level = models.CharField(max_length=254, null=True)  #
+    is_sys = models.CharField(max_length=254, null=True)  # 是否管理员
+    deviceId = models.CharField(max_length=254, null=True)  # 设备ID
+    userid = models.CharField(max_length=254, null=True)  # 钉钉userid
+    uid = models.CharField(max_length=254, null=True)  # 系统userid
 
 
 class SerProject(models.Model):

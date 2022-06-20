@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'common.apps.CommonConfig',
     'django_crontab',  # 定时任务,需放置在应用之前
-    'UserManage',
+    # 'UserManage',
+    'UserManage.templatetags.DD',
     'project',
     'orders',
     'Ser',
@@ -72,6 +73,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            # 写入libraries，格式为：<"过滤器名称": "位置">
+            'libraries': {
+                "managdd": "UserManage.templatetags.DD",
+            },
         },
     },
 ]

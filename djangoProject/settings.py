@@ -39,12 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'common.apps.CommonConfig',
     'django_crontab',  # 定时任务,需放置在应用之前
-    # 'UserManage',
-    'UserManage.templatetags.DD',
+    'UserManage',
     'project',
     'orders',
     'Ser',
     'api',
+    'qrcode',
 ]
 
 MIDDLEWARE = [
@@ -72,11 +72,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                # 'UserManage.templatetags.my_tags',
             ],
-            # 写入libraries，格式为：<"过滤器名称": "位置">
-            'libraries': {
-                "managdd": "UserManage.templatetags.DD",
-            },
+            # # 写入libraries，格式为：<"过滤器名称": "位置">
+            # 'libraries': {
+            #     "my_tags": "UserManage.templatetags.my_tags",
+            # },
         },
     },
 ]

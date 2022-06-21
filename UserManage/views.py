@@ -141,7 +141,7 @@ def listmanage(request):
     qs = User.objects.filter(is_superuser=1)
 
     print("ID：" + str(qs))
-    return render(request, 'users/managelist.html', {'managelist': qs}, {'managdd': managdd(0)})
+    return render(request, 'users/managelist.html', {'managelist': qs})
 
 
 def managdd(uid):

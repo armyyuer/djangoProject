@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
-
+from django.urls import path, include
+from ewm.views import generate_qrcode
 from main.views import index
 
 urlpatterns = [
@@ -33,4 +33,5 @@ urlpatterns = [
     path('dingding/', include('dingding.urls')),
     path('ser/', include('Ser.urls')),
     path('XCM/', include('XCM.urls')),
+    path('ewm/', include('qrcode.urls')),
 ]

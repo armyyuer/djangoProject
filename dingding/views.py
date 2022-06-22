@@ -40,16 +40,16 @@ def get(request):
     print(resp["name"], "name")
     print(resp["userid"], "userid")
     # for re in resp.keys():
-        # sys_level = re["sys_level"]
-        # is_sys = re["is_sys"]
-        # name = re["name"]
-        # deviceId = re["deviceId"]
-        # userid = re["userid"]
-        # print(sys_level, "sys_level")
-        # print(is_sys, "is_sys")
-        # print(name, "name")
-        # print(deviceId, "deviceId")
-        # print(userid, "userid")
+    # sys_level = re["sys_level"]
+    # is_sys = re["is_sys"]
+    # name = re["name"]
+    # deviceId = re["deviceId"]
+    # userid = re["userid"]
+    # print(sys_level, "sys_level")
+    # print(is_sys, "is_sys")
+    # print(name, "name")
+    # print(deviceId, "deviceId")
+    # print(userid, "userid")
 
     # 获取userInfo
     # url2 = "https://oapi.dingtalk.com/user/get?access_token={0}&userid={1}".format(access_token(),
@@ -63,3 +63,7 @@ def get(request):
     # return request.write(json.dumps({"status": "success", "userinfo": resp2}))
     response.write("<script language='javascript' type='text/javascript'>window.location.href='/ser/index/';</script>")
     return response
+
+
+def DDbd(request):
+    return s

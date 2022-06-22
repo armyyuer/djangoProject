@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'orders',
     'Ser',
     'api',
-    'qrcode',
+    'qr_code',
 ]
 
 MIDDLEWARE = [

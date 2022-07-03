@@ -1,5 +1,6 @@
 # 菜鸟程序员：阿米
 from django import template
+
 from common import models
 from django.utils.html import format_html
 from common.models import DDuser
@@ -19,11 +20,11 @@ def my_tag(value, value2=0):
     if len(users) > 0:
         # for u in users:
         #     ddid= u["userid"]
-        txt="已绑定，钉钉id："+users["ddid"]
+        txt="1"
     else:
-        text="现在绑定"
-        txt = "未绑定钉钉账号,"+format_html('<a href="#">{}</a>',text)
+        txt = "0"
     return value + txt
+
 
 
 @register.filter

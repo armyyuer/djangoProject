@@ -3,7 +3,7 @@ import requests
 import re
 import time
 #视频视频地址
-pathUrl = 'https://vip3.lbbf9.com/20220704/86iffX9w/700kb/hls/index.m3u8'
+pathUrl = 'https://vip3.lbbf9.com/20220706/JYq4ZUIg/700kb/hls/index.m3u8'
 #整个文件夹装
 dir = "./dpcq/"
 
@@ -22,6 +22,7 @@ def getVideo():
     # print(urlList)
     print(len(urlList))
     count = 0
+    count2 = "0"
     for item in urlList:
     #慢慢拿取，假装人为，一共395个文件，没加sleep，我只拿取了170个，加了全拿下来了
         if item[0]=="h":
@@ -35,7 +36,14 @@ def getVideo():
         res2.encoding = res2.apparent_encoding
         # print(item)
         print(res2.status_code)
-        with open(dir + 'demo{}.mp4'.format(str(count)), "wb") as mp4:
+        if count<100:
+            if count<10:
+                count2="00"
+            else:
+                count2="0"
+        else:
+            count2="0"
+        with open(dir + 'demo{}.mp4'.format(count2+str(count)), "wb") as mp4:
         #边拿边从内存写到硬盘里
             for chunk in res2.iter_content(chunk_size=1024 * 1024):
                 if chunk:

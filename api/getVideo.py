@@ -3,7 +3,7 @@ import requests
 import re
 import time
 #视频视频地址
-pathUrl = 'https://vip3.lbbf9.com/20220706/JYq4ZUIg/700kb/hls/index.m3u8'
+pathUrl = 'https://vip3.lbbf9.com/20220531/yhCfpgVt/700kb/hls/index.m3u8'
 #整个文件夹装
 dir = "./dpcq/"
 

@@ -15,3 +15,8 @@ def tologin_views(request):
 
 def login_views(request):
     return HttpResponse('登录系统信息！')
+
+
+def login_err(request):
+    txt = request.GET.get('txt')
+    return render(request, 'login/err.html', {'txt': txt})

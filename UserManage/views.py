@@ -6,11 +6,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
 from common import models
-from common.models import Company
+from common.models import Company, Group, UserGroups
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+
+from login.ck import auth
 
 
 def index_views(request):
@@ -190,7 +192,7 @@ def manageReset(request):
     qs.password = password
     qs.save()
     print(uid, password)
-    isSame = check_password('nfc!@123', password)
+    isSame = check_password('nfc!@123$%', password)
     print("isSame：" + str(isSame))
     return render(request, 'users/managelist.html', {'manageid': uid})
 
@@ -198,12 +200,12 @@ def manageReset(request):
 def userReset(request):
     uid = request.GET.get('id')
     qs = User.objects.get(id=uid)
-    password = make_password('nfc!@123')
+    password = make_password('nfc!@123$%')
     # password = make_password('nfc!@123', None, 'pbkdf2_sha256')
     qs.password = password
     qs.save()
     print(uid, password)
-    isSame = check_password('nfc!@123', password)
+    isSame = check_password('nfc!@123$%', password)
     print("isSame：" + str(isSame))
     return render(request, 'users/userlist.html', {'manageid': uid})
 
@@ -229,8 +231,21 @@ def deleteuser(request):
 
 
 def manageadd_views(request):
-    # return render(request, 'users/register.html')
-    return render(request, 'users/manageadd.html')
+    qs = Group.objects.all()
+    return render(request, 'users/manageadd.html', {'groupList': qs})
+
+
+def manageedit_views(request):
+    uid = request.GET.get('id')
+    print(uid)
+    gs = Group.objects.all()
+    print(gs)
+    us = User.objects.get(id=uid)
+    try:
+        ug = UserGroups.objects.get(userID=uid)
+    except Exception as e:
+        ug = ""
+    return render(request, 'users/manageedit.html', {'userinfo': us, 'groupList': gs, 'userGroups': ug})
 
 
 def manageaddsave(request):
@@ -238,6 +253,7 @@ def manageaddsave(request):
     corporate_code = request.POST.get("corporate_code", '')
     password = make_password(request.POST.get("password", ''))
     is_superuser = request.POST.get("is_superuser", '')
+    group_id = request.POST.get("group_id", '')
     is_staff = 1
     is_active = 0
     d1 = timezone.now()
@@ -266,6 +282,63 @@ def manageaddsave(request):
                                      last_name='',
                                      email='',
                                      date_joined=date_joined)
-        print("新增用户：" + record.username)
+        recroup = UserGroups.objects.create(userID=record.id,
+                                            groupID=group_id)
+        print("新增用户：" + record.username + ",所在用户组：" + recroup.ID)
         # return render(request, 'users/register.html')
     return HttpResponseRedirect('/users/managelist/')
+
+
+def manageeditsave(request):
+    global update
+    response = HttpResponse()
+    username = request.POST.get("username")
+    password = request.POST.get("password")
+
+    userid = request.POST.get("userid")
+    groupID = request.POST.get("groupID")  # 旧
+    group_id = request.POST.get("group_id")  # 新
+    try:
+        # 根据 id 从数据库中找到相应的户记录
+        update = User.objects.get(id=userid)
+        update.username = username
+        if request.POST.get("password"):
+            update.password = password
+        update.save()
+        try:
+            updateug = UserGroups.objects.get(userID=userid)
+            updateug.groupID = group_id
+            updateug.save()
+            print("用户组存在，进行修改操作")
+        except UserGroups.DoesNotExist:
+            print("用户组不存在，进行新增操作")
+            recroup = UserGroups.objects.create(userID=userid,
+                                                groupID=group_id)
+            print("用户组新增操作成功！")
+
+    except User.DoesNotExist:
+        print("用户不存在：" + str(username))
+    return HttpResponseRedirect('/users/managelist/')
+
+
+def myinfo(request):
+    username = request.session['username']
+    userid = request.session['userid']
+    print(userid)
+    qs = User.objects.get(id=userid)
+    print(qs)
+    return render(request, 'users/myinfo.html', {'myinfo': qs})
+
+
+def ddbd(request):
+    userid = 0
+    if request.GET.get('userID'):
+        userid = request.GET.get('userID')
+    else:
+        userid = request.session['userid']
+    return render(request, 'users/ddbd.html', {'userid': userid})
+
+
+def DDbdu(request):
+    userid = request.session['userid']
+    return render(request, 'users/ddbd.html', {'userid': userid})

@@ -1,0 +1,40 @@
+{% extends 'dingding/base.html' %}
+{% load static %}
+{% block title%}
+    广西新未来日常工作平台 - 疫情管控行
+{% endblock %}
+{% block content%}
+	<header class="mui-bar mui-bar-nav">
+	    <h1 class="mui-title">截图上传</h1>
+	</header>
+    <div class="mui-content">
+	    <div class="content-qianbao">
+	    	<div class="qianbao-nr">
+	    		<ul>
+                    <form class="form-horizontal m-t" id="commentForm"  action="/dingding/uppicsave/"  enctype="multipart/form-data" method="post">
+                            {% csrf_token %}
+                            <div class="ibox float-e-margins">
+                                <br />
+                                <p>
+		    				<input type="file" accept="image/*"  name="up_file" id="up_file" class="form-control">
+                            <input type="hidden" value="{{ type }}" name="type">
+                            <input type="hidden" value="{{ userid }}" name="userid">
+                            <input type="hidden" value="{{ username }}" name="username">
+                                </p>
+		    				<p>上传<font color=red>{{ lx }}</font>截图</p>
+                                        <p>
+                                        <button class="btn btn-block btn-outline btn-primary" type="submit"> 提 交 </button></p>
+                                        <p>
+                        <button type="button" class="btn btn-block btn-outline btn-primary" onclick="javascript:history.back(-1);">返 回</button>
+                                        </p>
+
+		    				<p><font color=red>{{ msg }}</font></p>
+                            </div>
+                    </form>
+	    		</ul>
+	    	</div>
+	    </div>
+
+	    <div style="height: 5em;"></div>
+	</div>
+{% endblock %}

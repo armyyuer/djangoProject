@@ -11,7 +11,7 @@ if not os.path.exists(dir):
     os.makedirs(dir)
 
 def getimg():
-    url = "https://www.kuaikanmanhua.com/web/comic/378762/"
+    url = "http://www.iimanhua.cc/comic/2500/203801.html"
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
     }
@@ -20,7 +20,7 @@ def getimg():
     re = session.get(url, headers=headers, verify=False).text
     html = etree.HTML(re)
     print(re)
-    r = html.xpath('/html/body/div/div/div/div/div/div/div/div/img/@src')
+    r = html.xpath('/html/body/div[9]/div/img/@src')
     i = 0
     for im in r:
         i += 1

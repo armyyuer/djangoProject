@@ -1,0 +1,68 @@
+{% extends 'dingding/base.html' %}
+{% load static %}
+{% block title%}
+    广西新未来日常工作平台 - 疫情防控
+{% endblock %}
+
+{% block content%}
+   	<header class="mui-bar mui-bar-nav">
+	    <h1 class="mui-title">疫情防控</h1>
+	</header>
+    <div class="mui-content">
+	    <div class="content-qianbao">
+	    	<div class="qianbao-nr">
+	    		<ul>
+	    			<a href="/dingding/uppic/?type=1">
+		    			<li style="width: 100px">
+                            <input width="80px"  type="image" src="{% static 'mui_img/jkm.jpg' %}">
+		    				<p>上传健康码</p>
+		    			</li>
+	    			</a>
+	    			<a href="/dingding/uppic/?type=2">
+		    			<li style="width: 100px">
+                            <input width="80px"  type="image" src="{% static 'mui_img/xcm.jpg' %}">
+		    				<p>上传行程码</p>
+		    			</li>
+	    			</a>
+	    			<a href="/dingding/uppic/?type=3">
+		    			<l style="width: 100px">
+                            <input width="80px"  type="image" src="{% static 'mui_img/hs.jpg' %}">
+		    				<p>上传核酸结果</p>
+		    			</li>
+	    			</a>
+	    		</ul>
+	    	</div>
+	    </div>
+	    <div class="qianbao-nr2">
+            {% for foo in kangyilist %}
+	    	<div class="content-2">
+				<ul>
+						<ul>
+                           {% if foo.TypeID == 1 %}
+							    <li style="width: 20%"><img src="{% static 'mui_img/jkm.jpg' %}"/></li>
+                           {% endif %}
+                           {% if foo.TypeID == 2 %}
+							    <li style="width: 20%"><img src="{% static 'mui_img/xcm.jpg' %}"/></li>
+                           {% endif %}
+                           {% if foo.TypeID == 3 %}
+							    <li style="width: 20%"><img src="{% static 'mui_img/hs.jpg' %}"/></li>
+                           {% endif %}
+							<li style="width: 80%"><span>
+                                {% if foo.TypeID == 1 %}
+							    健康码
+                                {% endif %}
+                                {% if foo.TypeID == 2 %}
+							    行程码
+                                {% endif %}
+                                {% if foo.TypeID == 3 %}
+							    核酸结果
+                                {% endif %}
+                                于[{{ foo.AddTime.year }}-{{ foo.AddTime.month }}-{{ foo.AddTime.day }} {{ foo.AddTime.hour }}:{{ foo.AddTime.minute }}:{{ foo.AddTime.second }}]上传。</span></li>
+						</ul>
+				</ul>
+			</div>
+            {% endfor %}
+	    </div>
+	    <div style="height: 5em;"></div>
+	</div>
+{% endblock %}

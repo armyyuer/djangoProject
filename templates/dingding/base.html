@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+    <title>广西新未来日常工作平台 - {% block title%}{% endblock %}</title>
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/muicss.css' %}"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body>
+    {% block content%}{% endblock %}
+	<nav class="mui-bar mui-bar-tab">
+	    <a class="mui-tab-item" href="/dingding/main/">
+	        <i class="iconfont"><img src="{% static 'mui_img/jrpjsy.png' %}"/></i>
+	        <p class="mui-tab-label">桌面</p>
+	    </a>
+	    <a class="mui-tab-item" href="/dingding/calendar/">
+	        <i class="iconfont"><img src="{% static 'mui_img/qiandao.png' %}"/></i>
+	        <p class="mui-tab-label">日程</p>
+	    </a>
+	    <a class="mui-tab-item" href="/dingding/project/">
+	        <i class="iconfont"><img src="{% static 'mui_img/qianbao2.png' %}"/></i>
+	        <p class="mui-tab-label">项目</p>
+	    </a>
+	    <a class="mui-tab-item" href="/dingding/kangyi/">
+	        <i class="iconfont"><img src="{% static 'mui_img/wode2.png' %}"/></i>
+	        <p class="mui-tab-label">疫情</p>
+	    </a>
+	</nav>
+	<script type="text/javascript">
+		mui('body').on('tap','a',function(){
+			document.location.href=this.href;
+		})
+	</script>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑目录菜单</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}?v=4.4.0" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <script src="{% static 'js/vue.js' %}"></script>
+</head>
+<body class="gray-bg">
+
+    <div class="wrapper wrapper-content animated fadeInRight">
+         <div class="row">
+
+             <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑目录菜单</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="commentForm" action="/menu/menueditsave/" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                    <label class="col-sm-3 control-label">上级菜单：</label>
+                    <div class="col-sm-3">
+                            <input type="hidden" name="menuID" class="form-control" placeholder="请输入" required="" aria-required="true" value="{{ menuInfo.menuID }}">
+                        <select class="form-control" name="parentID">
+                            <option value="0" {% if menuInfo.parentID == 0 %} selected{% endif %}>顶级菜单</option>
+                            {% for foo in list %}
+                                <option value="{{ foo.menuID }}" {% if menuInfo.parentID == foo.menuID %} selected{% endif %}>{{ foo.menuName}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">菜单名称：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="menuName" class="form-control" placeholder="请输入" required="" aria-required="true" value="{{ menuInfo.menuName }}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">图标：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="icon" class="form-control" placeholder="请输入" value="{{ menuInfo.icon }}"> <span class="help-block m-b-none">顶级菜单需要设置</span>
+
+                        </div>
+                    </div>
+{#                    <div class="form-group">#}
+{#                        <label class="col-sm-3 control-label">菜单logo：</label>#}
+{#                        <div class="col-sm-9">#}
+{#                            <input type="text" name="img" class="form-control" placeholder="请输入"> <span class="help-block m-b-none">说明文字</span>#}
+{##}
+{#                        </div>#}
+{#                    </div>#}
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">排序：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="od" class="form-control" placeholder="请输入数字" value="{{ menuInfo.od }}"> <span class="help-block m-b-none">数字越小越靠前</span>
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">URL路径：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="url" class="form-control" placeholder="请输入" required="" aria-required="true" value="{{ menuInfo.url }}">
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">code：</label>
+                        <div class="col-sm-3">
+                            <input type="text" name="code" class="form-control" placeholder="请输入" value="{{ menuInfo.code }}">
+
+                        </div>
+                    </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <button class="btn btn-primary" type="submit">编 辑</button>
+                                    <a  class="btn btn-outline btn-primary" href="/menu/index/">返 回</a>
+                                    <a  class="btn btn-outline btn-primary" href="/menu/menudel/?menuID={{ foo.menuID }}">删 除</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                 <div class="panel panel-default">
+                     <div class="panel-heading">
+                         菜单功能模块（与用户权限相关）
+                     </div>
+                     <div class="panel-body">
+                        <div class="form-group">
+
+                        <form class="form-horizontal m-t" id="commentForm" action="/menu/permissionadd/" method="post">
+                            {% csrf_token %}
+                            <label class="col-sm-1 control-label">名称：</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="title" class="form-control" placeholder="请输入">
+                            </div>
+                            <label class="col-sm-1 control-label">编码：</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="codeName" class="form-control" placeholder="请输入">
+                            </div>
+                            <input type="hidden" name="mID" class="form-control" placeholder="请输入" required="" aria-required="true" value="{{ menuInfo.menuID }}">
+                            <div class="col-sm-3">
+                                    <button class="btn btn-primary" type="submit">添加</button>
+                            </div>
+                        </form>
+                        </div>
+                        <div class="form-group">
+                         <p>
+                             {% for foo in permission %}
+                                 <span class="label">{{ foo.title }}（{{ foo.codeName }}） <a href="/menu/permissiondel/?permissionID={{ foo.permissionID }}" title="删除"><i class="fa fa-close"></i></a></span>
+                             {% endfor %}
+                        </p>
+                        </div>
+                     </div>
+
+                 </div>
+                </div>
+            </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+    <!-- 自定义js -->
+    <script src="{% static 'jjs/content.js' %}?v=1.0.0"></script>
+
+    <!-- jQuery Validation plugin javascript-->
+    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/plugins/validate/messages_zh.min.js' %}"></script>
+
+    <script src="{% static 'js/demo/form-validate-demo.js' %}"></script>
+</body>
+</html>

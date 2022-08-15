@@ -1,0 +1,95 @@
+{% load menu_s%}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>广西新未来日常工作平台 - 用户组权限管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="{% static 'css/plugins/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>用户组【{{ groupName }}】权限管理 <a href="/group/index/"  class="btn btn-primary" >返 回</a></h5>
+                    </div>
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="commentForm" action="/group/grouppermissionssave/" method="post">
+
+                            {% csrf_token %}
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <button class="btn btn-w-m btn-success" type="submit">编辑权限</button>
+                            </div>
+
+                        </div>
+                            <input type="hidden" name="groupID" class="form-control" placeholder="请输入" required="" aria-required="true" value="{{ groupID }}">
+                    {% for foo in menuList %}
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3>{{ foo.menuName }}</h3>
+                            </div>
+                            <div class="panel-body">
+                                <p>
+                                    {{ groupID|permissions:foo.menuID }}
+                                </p>
+                            </div>
+
+                        </div>
+                    {% endfor %}
+                        </form>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+    </div>
+
+
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+
+
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
+
+    <!-- Data Tables -->
+    <script src="{% static 'js/plugins/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap.js' %}"></script>
+
+    <!-- 自定义js -->
+    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

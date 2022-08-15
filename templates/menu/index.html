@@ -1,0 +1,79 @@
+{% load menu_s%}
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>广西新未来日常工作平台 - 目录菜单管理</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+
+    <link href="{% static 'css/plugins/jsTree/style.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <link href="{% static 'css/plugins/treeview/bootstrap-treeview.css' %}" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>目录菜单管理 </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="panel-body">
+                        <a href="/menu/menuadd/" class="btn btn-w-m btn-success">新增目录菜单</a>
+                            <div class="panel-group" id="accordion">
+                                {% for foo in MenuList %}
+                                    <div class="well">
+                                        <h3><a href="/menu/menuedit/?menuID={{ foo.menuID }}">{{ foo.menuName }}</a>&nbsp;&nbsp;[ <a href="/menu/menudel/?menuID={{ foo.menuID }}">删除</a> ]</h3>
+                                        {{ ''|menus:foo.menuID|safe }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+
+
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
+
+    <!-- Data Tables -->
+    <script src="{% static 'js/plugins/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap.js' %}"></script>
+
+    <!-- 自定义js -->
+    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

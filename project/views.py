@@ -64,31 +64,33 @@ def projectaddsave(request):
                                         notes=notes,
                                         add_date=add_date)
         # print(request.FILES.get('up_file'))
-        furl = upload(request.FILES.get("up_file"))
-        print("返回附件路径：" + furl)
-        print("项目ID：" + str(record.projectId))
-        # 判断询价类型，如果是邀请报价则添加询价企业
-        if type == "0":
-            print("询价类型：" + type)
-            for name in cid:
-                orderCompanyList = []
-                print("企业信息循环：" + name)
-                companyDB = Company.objects.get(code=name)
-                orderCompanyList.append(
-                    OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.projectId,
-                                 state=0,
-                                 up_date=d1)
-                )
-                print('orderCompanyList数据 ', orderCompanyList)
 
-                try:
-                    OrderCompany.objects.bulk_create(orderCompanyList)  # 使用bulk_create批量导入
-                    # msg = 'orderCompanyList数据成功'
-                except Exception as e:
-                    print('orderCompanyList数据异常', e)
-                    # msg = 'orderCompanyList数据失败'
-        # 判断询价类型，如果是邀请报价则添加询价企业
-        wrdb(furl, record.projectId)  # 附件明细插入数据库
+        if request.FILES.get("up_file"):
+            furl = upload(request.FILES.get("up_file"), 4, request)
+            print("返回附件路径：" + furl)
+            print("项目ID：" + str(record.projectId))
+            # 判断询价类型，如果是邀请报价则添加询价企业
+            if type == "0":
+                print("询价类型：" + type)
+                for name in cid:
+                    orderCompanyList = []
+                    print("企业信息循环：" + name)
+                    companyDB = Company.objects.get(code=name)
+                    orderCompanyList.append(
+                        OrderCompany(companyCode=name, companyName=companyDB.companyName, projectId=record.projectId,
+                                     state=0,
+                                     up_date=d1)
+                    )
+                    print('orderCompanyList数据 ', orderCompanyList)
+
+                    try:
+                        OrderCompany.objects.bulk_create(orderCompanyList)  # 使用bulk_create批量导入
+                        # msg = 'orderCompanyList数据成功'
+                    except Exception as e:
+                        print('orderCompanyList数据异常', e)
+                        # msg = 'orderCompanyList数据失败'
+            # 判断询价类型，如果是邀请报价则添加询价企业
+            wrdb(furl, record.projectId)  # 附件明细插入数据库
         # print("新增项目：" + record.projectName + ",编号：" + record.projectNo + ",ID：" + str(record.id))
         response.write("<script>alert('项目添加成功成功！');window.location.href='/project/index/';</script>")
         return response
@@ -269,7 +271,7 @@ def additemsave(request):
                                         up_date=up_date,
                                         add_date=up_date)
 
-    response.write("<script>alert('新增成功！ID："+str(record.itemID)+"。');window.location.href='/project/edit/?id="
+    response.write("<script>alert('新增成功！ID：" + str(record.itemID) + "。');window.location.href='/project/edit/?id="
                    + projectId + "';</script>")
     return response
 

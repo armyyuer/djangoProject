@@ -18,8 +18,8 @@ deptID = 646245618
 # 获得access_token
 def access_token():
     request = dingtalk.api.OapiGettokenRequest("https://oapi.dingtalk.com/gettoken")
-    request.appkey = "dingxnykdmqakiazo5kl"
-    request.appsecret = "ZBf89sJChrQB3jWSFKWJYZElC9Or7pmo0Vf1dyMHWh51fvLvBI_Zx3ThRBSvXDTh"
+    request.appkey = "dingws132rddwykvri4c"
+    request.appsecret = "eMawCb2ej9ypr6UfiN93BgH_VYicTAX5OIdjuLE21_sfEnJBO_4IIlJHrD9aJd3u"
     # request.appkey = "dingew1bs4souannu3md"
     # request.appsecret = "t7TtbMeg-APC_37FKHRx2-2GSkwUeSWUoUSr687i9rOa6jUBF4OZcA7WHefPIGCJ"
     f = request.getResponse()

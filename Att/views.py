@@ -1,7 +1,9 @@
+import datetime
 import os
 
 import uuid
 import xlrd
+import requests
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import FileResponse
@@ -112,7 +114,7 @@ def wrdb(file, projectId):
 
 
 # @csrf_exempt
-def upload(file):
+def upload(file, typeid, request):
     # 根name取 file 的值
     # file = request.FILES.get('file')
     # 取日期
@@ -137,8 +139,12 @@ def upload(file):
     print('uplaod:%s' % file)
     print('f_name:%s' % f_name)
     print('f_ext:%s' % f_ext)
-    # ip = request.META['REMOTE_ADDR']
-    ip = ""
+    ip = request.META['REMOTE_ADDR']
+    # import socket
+    # # 函数 gethostname() 返回当前正在执行 Python 的系统主机名
+    # res = socket.gethostbyname(socket.gethostname())
+    # print(res)
+    # ip = res
     print('ip:%s' % ip)
     # 创建upload文件夹
     if not os.path.exists(f_url):
@@ -154,17 +160,20 @@ def upload(file):
         f_size = os.path.getsize(f_url + "/" + f_name + "." + f_ext)
         out_url = "/" + str(d1.year) + "/" + str(d1.month) + "/" + f_name + "." + f_ext
         # 附件参数写入 mysql
-        record = Att.objects.create(TypeID=0,
+        now_time = datetime.datetime.now()
+        print(str(now_time))
+        record = Att.objects.create(TypeID=typeid,
                                     ParentID=0,
                                     FileUrl=out_url,
                                     Ext=f_ext,
-                                    UserID=0,
-                                    UserName="",
+                                    UserID=request.session['userid'],
+                                    UserName=request.session['username'],
                                     Des=file.name,
                                     Tag="",
                                     Size=f_size,
+                                    AddTime=now_time,
                                     Ip=ip)
-        print('附件信息写入数据库:' + record.Des)
+        print('附件信息写入数据库:' + record.AttID)
 
         # 表格明细写入 mysql
         # wrdb(file.name)

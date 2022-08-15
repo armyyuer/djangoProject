@@ -41,6 +41,7 @@
                             <thead>
                                 <tr>
                                     <th>用户名</th>
+                                    <th>用户组</th>
                                     <th>钉钉绑定</th>
                                     <th>最后登录</th>
                                     <th>管理</th>
@@ -49,19 +50,22 @@
                             <tbody>
                             {% for foo in managelist %}
                                 <tr class="gradeU">
-                                    <td>{{ foo.username }}</td>
+                                    <td><a href="/users/manageedit/?id={{ foo.id }}" >{{ foo.username }}</a></td>
+                                    <td>{{ ''|my_group:foo.id }}</td>
                                     <td>{{ ''|my_tag:foo.id }}
-{#                                        {% qr_from_text "http://www.536000.top/DDbd/?uid="|my_id:foo.id size="s" image_format="png" error_correction="L" %}#}
-                                        {% if ''|my_tag:foo.id == 0 %}
+{#                                        {% qr_from_text "http://www.536000.top/DDbd/?uid="|my_id:foo.id size="s" image_format="png" error_correction="S" %}#}
+{#                                        {% if ''|my_tag:foo.id == 0 %}#}
                                     </td>
                                     <td>{{ foo.last_login.year }}-{{ foo.last_login.month }}-{{ foo.last_login.day }} {{ foo.last_login.hour }}:{{ foo.last_login.minute }}:{{ foo.last_login.second }}</td>
-                                    <td class="center"><a href="javascript:Reset({{ foo.id }})" >重置密码</a> | <a href="javascript:deleteRecord({{ foo.id }})" >删除</a></td>
+                                    <td class="center"><a href="/users/manageedit/?id={{ foo.id }}" >编辑</a> | <a href="javascript:Reset({{ foo.id }})" >重置密码</a> | <a href="javascript:deleteRecord({{ foo.id }})" >删除</a></td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>用户名</th>
+                                    <th>用户组</th>
+                                    <th>钉钉绑定</th>
                                     <th>最后登录</th>
                                     <th>管理</th>
                                 </tr>

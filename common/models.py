@@ -27,7 +27,7 @@ class Company(models.Model):
 
 
 class Project(models.Model):
-    projectId = models.AutoField(db_column=' ', primary_key=True)  # Field name made lowercase.
+    projectId = models.AutoField(db_column='projectId', primary_key=True)  # Field name made lowercase.
     type = models.IntegerField(null=True, default=0)  # 项目类型，邀请or公开
     projectName = models.CharField(max_length=254, null=True)  # 项目名称
     projectNo = models.CharField(max_length=254, null=True)  # 项目编号
@@ -105,6 +105,7 @@ class Att(models.Model):
     Tag = models.CharField(max_length=254, null=True)  # 标签
     Size = models.IntegerField(null=True, default=0)  # 大小，KB
     Ip = models.CharField(max_length=254, null=True)  # 标签
+    AddTime = models.DateTimeField(max_length=254, null=True)  # 标签
 
 
 class Unit(models.Model):
@@ -184,3 +185,38 @@ class SerOrders(models.Model):
     userID = models.IntegerField(null=True, default=0)  # 处理人ID
     userName = models.CharField(max_length=254, null=True)  # 处理人
     addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期
+
+
+class Menu(models.Model):
+    menuID = models.AutoField(db_column='menuID', primary_key=True)  #
+    menuName = models.CharField(max_length=254, null=True)  #
+    parentID = models.IntegerField(null=True, default=0)  # 上级ID
+    od = models.IntegerField(null=True, default=0)  # 上级ID
+    img = models.CharField(max_length=254, null=True)  #
+    icon = models.CharField(max_length=254, null=True)  #
+    url = models.CharField(max_length=254, null=True)  #
+    code = models.CharField(max_length=254, null=True)  #
+
+
+class MenuPermission(models.Model):
+    permissionID = models.AutoField(db_column='permissionID', primary_key=True)  #
+    menuID = models.IntegerField(null=True, default=0)  #
+    codeName = models.CharField(max_length=254, null=True)  #
+    title = models.CharField(max_length=254, null=True)  #
+
+
+class Group(models.Model):
+    groupID = models.AutoField(db_column='groupID', primary_key=True)  #
+    groupName = models.CharField(max_length=254, null=True)  #
+
+
+class GroupPermissions(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)  #
+    groupID = models.CharField(max_length=254, null=True)  #
+    permissionID = models.CharField(max_length=254, null=True)  #
+
+
+class UserGroups(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    userID = models.IntegerField(null=True, default=0)  #
+    groupID = models.IntegerField(null=True, default=0)  #

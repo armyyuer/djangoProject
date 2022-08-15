@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录钉钉应用</title>
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.min.css' %}?v=4.4.0" rel="stylesheet">
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.7.13/dingtalk.open.js"></script>
+
+<script type="text/javascript">
+
+    dd.ready(function() {
+            dd.runtime.permission.requestAuthCode({
+                corpId : "ding3fb6ab0d24852531",
+                onSuccess : function(result) {
+                    var code = result.code;
+                    //alert('获取成功，你的免登code为：' + code);　　　　　　　　　　　　//将code 发往后台处理
+                    location.href="/dingding/pcget/?code=" + code;
+
+                    {##}
+                    {#    alert('返回值为：' + response)#}
+                    {#    location.href="index.html";#}
+                    {#$.get("/dingding/get/?code=" + code, function(response) {#}
+                    {#    alert('返回值为：' + response)#}
+                    {#    location.href="index.html";#}
+                    {#    var response = JSON.parse(response)#}
+                    {#    // 下面的业务根据自己的需求来写#}
+                    {#    if (response.user) {#}
+                    {#        for (item in response.user) {#}
+                    {#            $("#result").append("<li>\t[user 属性] " + item + " : " + response.user[item] + "</li>")#}
+                    {#        }#}
+                    {#    }#}
+                    {#);#}
+                },
+                onFail : function(err) {
+                    alert('出错了, 你获取了一个自定义错误' + err);
+                }
+            });
+
+        });
+
+</script>
+</head>
+<body  class="gray-bg">
+
+    <div class="wrapper wrapper-content  animated fadeInRight">
+        <div class="row">
+            <div class="ibox-content">
+                            <div class="spiner-example">
+                                <div class="sk-spinner sk-spinner-wave">
+                                    <div class="sk-rect1"></div>
+                                    <div class="sk-rect2"></div>
+                                    <div class="sk-rect3"></div>
+                                    <div class="sk-rect4"></div>
+                                    <div class="sk-rect5"></div>
+                                </div>
+                            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+    <!-- 自定义js -->
+    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+</body>
+
+</html>

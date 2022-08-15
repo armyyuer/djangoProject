@@ -44,7 +44,10 @@ INSTALLED_APPS = [
     'orders',
     'Ser',
     'api',
+    'dingding',
     'qr_code',
+    'menu',
+    'group',
 ]
 
 MIDDLEWARE = [
@@ -73,11 +76,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 # 'UserManage.templatetags.my_tags',
+                # 'menu.templatetags.menu_s',
             ],
             # # 写入libraries，格式为：<"过滤器名称": "位置">
-            # 'libraries': {
-            #     "my_tags": "UserManage.templatetags.my_tags",
-            # },
+            'libraries': {
+                "my_tags": "UserManage.templatetags.my_tags",
+                "menu_s": "menu.templatetags.menu_s",
+            },
         },
     },
 ]

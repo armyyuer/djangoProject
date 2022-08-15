@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>广西新未来日常工作平台 - 桌面</title>
+    <script src="{% static 'js/mui.min.js' %}"></script>
+    <link href="{% static 'css/mui.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/css.css' %}"/>
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+         <div class="row">
+             <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>工作日程</h5>
+                        <div class="ibox-tools">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="/dingding/calendar/">
+                                    更多 >>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">绑定钉钉账号：</label>
+                                <div class="col-sm-6">
+                                   <a href="/users/ddbd">【绑定钉钉账号】</a>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>我的流程</h5>
+                        <div class="ibox-tools">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="/dingding/flow/">
+                                    更多 >>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">我的相关流程</label>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+    <!-- 自定义js -->
+    <script src="{% static 'jjs/content.js' %}?v=1.0.0"></script>
+
+    <!-- jQuery Validation plugin javascript-->
+    <script src="{% static 'js/plugins/validate/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'js/plugins/validate/messages_zh.min.js' %}"></script>
+
+    <script src="{% static 'js/demo/form-validate-demo.js' %}"></script>
+</body>
+
+</html>

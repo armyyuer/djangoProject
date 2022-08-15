@@ -32,4 +32,8 @@ urlpatterns = [
     path('dingding/', include('dingding.urls')),
     path('ser/', include('Ser.urls')),
     path('XCM/', include('XCM.urls')),
+    path('menu/', include('menu.urls')),
+    path('group/', include('group.urls')),
+
+
 ]

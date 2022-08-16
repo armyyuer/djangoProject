@@ -7,29 +7,48 @@ from django.utils.safestring import mark_safe
 
 from login.ck import auth
 from common import models
-from common.models import Menu
+from common.models import Menu, GroupPermissions, MenuPermission
 
 
 @auth
 def index(request):
+    usergroup = request.session['usergroup']
+    # print(usergroup)
+    gp = GroupPermissions.objects.filter(groupID=usergroup)
+    glist = []
+    for g in gp:
+        glist.append(g.permissionID)
+        # print(str(g.permissionID))
+
+    print(glist)
+    mp = MenuPermission.objects.filter(permissionID__in=glist)
+
+    mlist = []
+    for m in mp:
+        mlist.append(m.menuID)
+    print(mlist, 'mp')
+    # l = [1, 1, 3, 2, 2, 3, 4, 2, 5]
+    new = []
+    for i in mlist:
+        if i not in new:
+            new.append(i)
+    print(new)
+
     html = ""
-    b_menus = Menu.objects.filter(parentID=0).order_by('od')
+    b_menus = Menu.objects.filter(parentID=0, menuID__in=new).order_by('od')
     for b in b_menus:
         html += "<li>"
         if menus_num(b.menuID) > 0:
             html += "<a href=\"" + b.url + "\"><i class=\"" + b.icon + "\"></i> <span class=\"nav-label\">" + b.menuName + " </span><span class=\"fa arrow\"></span></a>"
             html += "<ul class=\"nav nav-second-level\">"
-            html += "<li><a class=\"J_menuItem\" href=\"mailbox.html\">收件箱</a>"
-            html += "</li>"
-            html += "<li><a class=\"J_menuItem\" href=\"mail_detail.html\">查看邮件</a>"
-            html += "</li>"
-            html += "<li><a class=\"J_menuItem\" href=\"mail_compose.html\">写信</a>"
-            html += "</li>"
+            s_menus = Menu.objects.filter(parentID=b.menuID, menuID__in=glist)
+            for s in s_menus:
+                html += "<li><a class=\"J_menuItem\" href=\"" + s.url + "\">" + s.menuName + "</a>"
+                html += "</li>"
             html += "</ul>"
         else:
             html += "<a class=\"J_menuItem\" href=\"" + b.url + "\"><i class=\"" + b.icon + "\"></i> <span class=\"nav-label\">" + b.menuName + " </span></a>"
         html += "</li>"
-        print(html)
     return render(request, 'main/index.html', {'html': mark_safe(html)})
 
 

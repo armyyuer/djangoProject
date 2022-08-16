@@ -14,7 +14,7 @@ import dingtalk.api
 
 # Create your views here.
 from Att.views import upload
-from common.models import DDuser, Att
+from common.models import DDuser, Att, UserGroups
 from login.ck import auth, authDD_m
 from lxml import etree
 
@@ -103,6 +103,8 @@ def pcget(request):
             request.session['username'] = cu.username
             request.session['userid'] = cu.id
             request.session['useremail'] = cu.email
+            um = UserGroups.objects.get(userID=cu.id)
+            request.session['usergroup'] = um.groupID
             if cu.is_superuser:
                 login(request, cu)
                 request.session['usertype'] = '1'

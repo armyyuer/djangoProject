@@ -14,7 +14,7 @@ import dingtalk.api
 
 # Create your views here.
 from Att.views import upload
-from common.models import DDuser, Att, UserGroups
+from common.models import DDuser, Att, UserGroups, GroupPermissions, MenuPermission
 from login.ck import auth, authDD_m
 from lxml import etree
 
@@ -59,6 +59,19 @@ def get(request):
             request.session['username'] = cu.username
             request.session['userid'] = cu.id
             request.session['useremail'] = cu.email
+            um = UserGroups.objects.get(userID=cu.id)
+            request.session['usergroup'] = um.groupID
+            gl = GroupPermissions.objects.filter(groupID=um.groupID)
+            glist = []
+            for g in gl:
+                glist.append(g.permissionID)
+
+            mp = MenuPermission.objects.filter(permissionID__in=glist)
+
+            mlist = []
+            for m in mp:
+                mlist.append(m.codeName)
+            print(mlist, 'mcodeName')
             if cu.is_superuser:
                 login(request, cu)
                 request.session['usertype'] = '1'
@@ -105,6 +118,18 @@ def pcget(request):
             request.session['useremail'] = cu.email
             um = UserGroups.objects.get(userID=cu.id)
             request.session['usergroup'] = um.groupID
+            gl = GroupPermissions.objects.filter(groupID=um.groupID)
+            glist = []
+            for g in gl:
+                glist.append(g.permissionID)
+
+            mp = MenuPermission.objects.filter(permissionID__in=glist)
+
+            mlist = []
+            for m in mp:
+                mlist.append(m.codeName)
+            print(mlist, 'mcodeName')
+            request.session['permissions'] = mlist
             if cu.is_superuser:
                 login(request, cu)
                 request.session['usertype'] = '1'

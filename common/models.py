@@ -143,6 +143,20 @@ class DDuser(models.Model):
     deviceId = models.CharField(max_length=254, null=True)  # 设备ID
     userid = models.CharField(max_length=254, null=True)  # 钉钉userid
     uid = models.CharField(max_length=254, null=True)  # 系统userid
+    phone = models.CharField(max_length=254, default=0)  # 手机号码
+    address = models.CharField(max_length=254, default=0)  # 住址
+
+
+class Position(models.Model):
+    positionID = models.AutoField(db_column='positionID', primary_key=True)  #
+    positionName = models.CharField(max_length=254, default=0)  #
+    groupID = models.CharField(max_length=254, default=0)  #
+
+
+class UserPosition(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    userID = models.IntegerField(null=True, default=0)  #
+    positionID = models.IntegerField(null=True, default=0)  #
 
 
 class SerProject(models.Model):

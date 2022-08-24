@@ -38,7 +38,7 @@
                             <div class="panel-group" id="accordion">
                                 {% for foo in MenuList %}
                                     <div class="well">
-                                        <h3><a href="/menu/menuedit/?menuID={{ foo.menuID }}">{{ foo.menuName }}</a>&nbsp;&nbsp;[ <a href="/menu/menudel/?menuID={{ foo.menuID }}">删除</a> ]</h3>
+                                        <h3><a href="/menu/menuedit/?menuID={{ foo.menuID }}"><i class="{{ foo.icon }}"></i> {{ foo.menuName }}</a>&nbsp;&nbsp;[ <a href="/menu/menudel/?menuID={{ foo.menuID }}">删除</a> ]</h3>
                                         {{ ''|menus:foo.menuID|safe }}
                                     </div>
                                 {% endfor %}

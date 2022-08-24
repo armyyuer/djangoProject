@@ -19,7 +19,15 @@ def groupadd(request):
 
 
 def groupdel(request):
-    qs = Group.objects.all().order_by("groupID")
+    groupID = request.GET.get('groupID')
+    il = Group.objects.get(groupID=groupID).delete()
+    print("删除权限组")
+    try:
+        gp = GroupPermissions.objects.filter(groupID=groupID)
+        Perml = GroupPermissions.objects.filter(groupID=groupID).delete()
+        print("删除用户组下的权限数据")
+    except Menu.DoesNotExist:
+        print("本权限组下无权限数据")
     return HttpResponseRedirect('/group/index/')
 
 
@@ -39,11 +47,13 @@ def grouppermissionssave(request):
     if request.POST.getlist('permissions'):
         permissions = request.POST.getlist('permissions')
         print(permissions)
+        gpl = GroupPermissions.objects.filter(groupID=groupID).delete()
+        print("删除groupID=" + groupID)
         for p in permissions:
             print(p)
             record = GroupPermissions.objects.create(groupID=groupID,
                                                      permissionID=p)
-            print(record.permissionID+"添加成功！")
+            print(record.permissionID + "添加成功！")
         return HttpResponseRedirect('/group/index/')
     else:
         response.write(

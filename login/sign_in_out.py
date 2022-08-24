@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
-from common.models import Company, UserGroups
+from common.models import Company, UserGroups, MenuPermission, GroupPermissions
 
 
 # 登录处理
@@ -48,6 +48,18 @@ def signin(request):
             request.session['useremail'] = du.email
             um = UserGroups.objects.get(userID=user.id)
             request.session['usergroup'] = um.groupID
+            gl = GroupPermissions.objects.filter(groupID=um.groupID)
+            glist = []
+            for g in gl:
+                glist.append(g.permissionID)
+
+            mp = MenuPermission.objects.filter(permissionID__in=glist)
+
+            mlist = []
+            for m in mp:
+                mlist.append(m.codeName)
+            print(mlist, 'mcodeName')
+            request.session['permissions'] = mlist
             # dc = Company.objects.get(userId=du.id)
             # request.session['companyId'] = dc.companyId
             # request.session['companyName'] = dc.companyName

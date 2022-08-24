@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 
+from Att.views import wrdb, upload, userdb
 from common import models
 from common.models import Company, Group, UserGroups
 from django.contrib.auth.hashers import make_password, check_password
@@ -319,6 +320,19 @@ def manageeditsave(request):
     except User.DoesNotExist:
         print("用户不存在：" + str(username))
     return HttpResponseRedirect('/users/managelist/')
+
+
+def manageup(request):
+    response = HttpResponse()
+    if request.FILES.get("up_file"):
+        print("路径：" + str(request.FILES.get("up_file")))
+        furl = upload(request.FILES.get("up_file"), 0, request)
+        print("返回附件路径：" + str(furl))
+        userdb(furl)  # 附件明细插入数据库
+        return HttpResponseRedirect('/users/managelist/')
+        # response.write("<script>alert('导入成功！');window.location.href='/users/managelist/';</script>")
+    else:
+        return HttpResponse('请选择需要导入的表格！   [ <a href="javascript:history.go(-1)">返回</a> ]')
 
 
 def myinfo(request):

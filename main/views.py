@@ -20,28 +20,36 @@ def index(request):
         glist.append(g.permissionID)
         # print(str(g.permissionID))
 
-    print(glist)
+    print(glist, 'glist')
     mp = MenuPermission.objects.filter(permissionID__in=glist)
 
+    midlist = []
+    for m in mp:
+        midlist.append(m.menuID)
     mlist = []
     for m in mp:
-        mlist.append(m.menuID)
+        mlist.append(m.codeName)
     print(mlist, 'mp')
     # l = [1, 1, 3, 2, 2, 3, 4, 2, 5]
     new = []
+    newid = []
     for i in mlist:
         if i not in new:
             new.append(i)
-    print(new)
+    print(new, 'new')
+    for i in midlist:
+        if i not in newid:
+            newid.append(i)
+    print(newid, 'newid')
 
     html = ""
-    b_menus = Menu.objects.filter(parentID=0, menuID__in=new).order_by('od')
+    b_menus = Menu.objects.filter(parentID=0, menuID__in=newid).order_by('od')
     for b in b_menus:
         html += "<li>"
         if menus_num(b.menuID) > 0:
             html += "<a href=\"" + b.url + "\"><i class=\"" + b.icon + "\"></i> <span class=\"nav-label\">" + b.menuName + " </span><span class=\"fa arrow\"></span></a>"
             html += "<ul class=\"nav nav-second-level\">"
-            s_menus = Menu.objects.filter(parentID=b.menuID, menuID__in=glist)
+            s_menus = Menu.objects.filter(parentID=b.menuID, url__in=new)
             for s in s_menus:
                 html += "<li><a class=\"J_menuItem\" href=\"" + s.url + "\">" + s.menuName + "</a>"
                 html += "</li>"

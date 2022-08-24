@@ -234,3 +234,57 @@ class UserGroups(models.Model):
     ID = models.AutoField(db_column='ID', primary_key=True)  #
     userID = models.IntegerField(null=True, default=0)  #
     groupID = models.IntegerField(null=True, default=0)  #
+
+
+class Deptment(models.Model):
+    deptID = models.AutoField(db_column='deptID', primary_key=True)  #
+    deptName = models.CharField(max_length=254, null=True)  #
+    parentID = models.IntegerField(null=True, default=0)  #
+    chief = models.CharField(max_length=254, null=True)  # 部门负责人
+
+
+class DeptmentUser(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    deptID = models.IntegerField(null=True, default=0)  #
+    userID = models.IntegerField(null=True, default=0)  #
+
+
+class WorkflowType(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    typeName = models.CharField(max_length=254, null=True)  #
+
+
+class Workflow(models.Model):
+    workflowID = models.AutoField(db_column='workflowID', primary_key=True)  #
+    name = models.CharField(max_length=254, null=True)  #
+    typeID = models.IntegerField(null=True, default=0)  #
+    typeName = models.CharField(max_length=254, null=True)  #
+
+
+class WorkflowDef(models.Model):  # 流程节点
+    workFlowID = models.AutoField(db_column='workFlowID', primary_key=True)  #
+    title = models.CharField(max_length=254, null=True)  #
+    od = models.IntegerField(null=True, default=0)  #
+    code = models.CharField(max_length=254, null=True)  # 自定义代码
+    notes = models.CharField(max_length=254, null=True)  #
+
+
+class WorkflowSteps(models.Model):
+    stepsID = models.AutoField(db_column='stepsID', primary_key=True)  #
+    title = models.CharField(max_length=254, null=True)  #
+    userID = models.IntegerField(null=True, default=0)  #
+    userName = models.CharField(max_length=254, null=True)  # 流程提交人
+    workFlowID = models.IntegerField(null=True, default=0)  #
+    notes = models.CharField(max_length=254, null=True)  #
+    ip = models.CharField(max_length=254, null=True)  #
+    itemID = models.IntegerField(null=True, default=0)  # 流程根节点ID
+    parentID = models.IntegerField(null=True, default=0)  # 父节点id
+    nextID = models.IntegerField(null=True, default=0)  # 子节点id
+    od = models.IntegerField(null=True, default=0)  # 次序
+    operatorName = models.CharField(max_length=254, null=True)  # 当前操作人
+    operatorID = models.IntegerField(null=True, default=0)  # 当前操作人ID
+    checkerName = models.CharField(max_length=254, null=True)  # 审核人员
+    checkerID = models.IntegerField(null=True, default=0)  # 审核人员ID
+    status = models.CharField(max_length=254, null=True)  # 状态
+    typeID = models.IntegerField(null=True, default=0)  #
+    addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期

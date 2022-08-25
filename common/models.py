@@ -247,6 +247,8 @@ class DeptmentUser(models.Model):
     ID = models.AutoField(db_column='ID', primary_key=True)  #
     deptID = models.IntegerField(null=True, default=0)  #
     userID = models.IntegerField(null=True, default=0)  #
+    userName = models.CharField(max_length=254, null=True)  #
+    isChief = models.IntegerField(null=True, default=0)  #
 
 
 class WorkflowType(models.Model):

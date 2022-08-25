@@ -34,6 +34,7 @@ urlpatterns = [
     path('XCM/', include('XCM.urls')),
     path('menu/', include('menu.urls')),
     path('group/', include('group.urls')),
+    path('workflow/', include('workflow.urls')),
 
 
 ]

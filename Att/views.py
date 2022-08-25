@@ -14,7 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from Att import models
 from common import models
-from common.models import Project, Att, ProjectItem, DDuser, Group, UserGroups, UserPosition, Position
+from common.models import Project, Att, ProjectItem, DDuser, Group, UserGroups, UserPosition, Position, Deptment, \
+    DeptmentUser
 
 # Create your views here.
 from djangoProject import settings
@@ -158,11 +159,15 @@ def userdb(file):
                 userP = data[position]
             ##插入用户信息到账号表
             uid = 0
+            uname = ''
             ph = data[phone].split('-')
             try:
                 password = make_password('nfc!@123$%')
                 try:
                     ul = User.objects.get(username=ph[1])
+                    uid = ul.id  # 获取新用户ID
+                    dul = DDuser.objects.get(uid=ul.id)
+                    uname = dul.name
                     print("用户账号存在跳过新增")
                 except User.DoesNotExist:
                     uadd = User.objects.create(username=ph[1],
@@ -175,10 +180,40 @@ def userdb(file):
                                                date_joined=d1,
                                                first_name='')
                     uid = uadd.id  # 获取新用户ID
+                    uname = data[name]
                     print("新增用户账号表成功。用户名：" + str(uadd.username))
             except User.DoesNotExist:
                 print("新增用户账号表失败。")
             ## 插入用户信息到账号表
+
+
+            did = 0
+            try:
+                dn = Deptment.objects.get(deptName=data[groupName])
+                print("部门存在,开始写入")
+                try:
+                    udc = DeptmentUser.objects.get(userID=uid, deptID=dn.deptID)
+                    did = udc.deptID
+                    print("该用户已存在部门中跳过新增" + str(udc.userName))
+                except DeptmentUser.DoesNotExist:
+                    dcord = DeptmentUser.objects.create(userID=uid, userName=uname, deptID=dn.deptID)
+                    did = dcord.deptID
+                    print("写入成功：" + str(dcord.userName))
+            except Deptment.DoesNotExist:
+                print("部门不存在，插入该部门。")
+                dcord = Deptment.objects.create(deptName=data[groupName])
+                did = dcord.deptID
+                print("部门写入成功：" + str(dcord.deptName))
+                try:
+                    udc = DeptmentUser.objects.get(userID=uid, deptID=dcord.deptID)
+                    did = udc.deptID
+                    print("该用户已存在部门中跳过新增" + str(udc.userName))
+                except DeptmentUser.DoesNotExist:
+                    dcord = DeptmentUser.objects.create(userID=uid, userName=uname, deptID=dcord.deptID)
+                    did = dcord.deptID
+                    print("写入成功：" + str(dcord.userName))
+
+
             gid = 0
             try:
                 gn = Group.objects.get(groupName=data[groupName])

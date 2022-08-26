@@ -290,3 +290,12 @@ class WorkflowSteps(models.Model):
     status = models.CharField(max_length=254, null=True)  # 状态
     typeID = models.IntegerField(null=True, default=0)  #
     addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期
+
+
+class CCGP(models.Model):  # 流程节点
+    CCGPID = models.AutoField(db_column='CCGPID', primary_key=True)  #
+    messageUrl = models.CharField(max_length=254, null=True)  #
+    districtName = models.CharField(max_length=254, null=True)  #
+    pathName = models.CharField(max_length=254, null=True)  #
+    title = models.CharField(max_length=254, null=True)  #
+    publishDate = models.CharField(max_length=254, null=True)  #

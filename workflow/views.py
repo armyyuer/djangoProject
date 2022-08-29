@@ -52,6 +52,21 @@ def def_views(request):
     return render(request, 'workflow/def.html')
 
 
+def wf(request):
+    wft = WorkflowType.objects.all()
+    return render(request, 'workflow/wf.html', {'typeList': wft})
+
+
+def wfinfo(request):
+    x = ''
+    return render(request, 'workflow/wfinfo.html')
+
+
+def wfdel(request):
+    x = ''
+    return render(request, 'workflow/wf.html')
+
+
 def list(request):
     x = ''
     return render(request, 'workflow/list.html')

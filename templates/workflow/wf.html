@@ -41,34 +41,37 @@
                             </div>
                         </div>
                         <div class="row">
+                            {% for foo in typeList %}
                             <div class="col-sm-4">
                                 <div class="panel panel-primary">
                                     <div class="panel-heading">
-                                        流程类别
+                                        {{ foo.typeName }}
                                     </div>
                                     <div class="panel-body">
                                         <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>流程名称</th>
-                                    <th>管理</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>张三</td>
-                                    <td class="text-navy">
-                                        <i class="fa fa-pencil"></i>
-                                        <i class="fa fa-trash-o"></i>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>流程名称</th>
+                                                    <th>管理</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>张三</td>
+                                                    <td class="text-navy">
+                                                        <a href="/workflow/wfinfo/?ID=1" ><i class="fa fa-pencil"></i>编辑</a> |
+                                                        <a href="javascript:deleteRecord(1)" ><i class="fa fa-trash-o"></i>删除</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
+                            {% endfor %}
+
                         </div>
 
                     </div>
@@ -104,7 +107,7 @@
             }, function () {
                 $.ajax({
                     type: 'get',
-                    url: '/workflow/typedel/?ID='+id,
+                    url: '/workflow/wfdel/?ID='+id,
                 })
                 swal("账号删除成功！", " ", "success");
                      window.location.reload()

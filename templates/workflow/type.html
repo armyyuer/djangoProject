@@ -1,10 +1,117 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>广西新未来日常工作平台 - 流程类型</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="{% static 'css/plugins/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+
 </head>
-<body>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>流程类型管理 </h5>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="panel-body">
+                            <div class="form-group">
+
+                        <form class="form-horizontal m-t" id="commentForm" action="/workflow/typeadd/" method="post">
+                            {% csrf_token %}
+                            <label class="col-sm-1 control-label">名称：</label>
+                            <div class="col-sm-3">
+                                <input type="text" name="typeName" class="form-control" placeholder="请输入">
+                            </div>
+                            <div class="col-sm-3">
+                                    <button class="btn btn-primary" type="submit">新增流程类型</button>
+                            </div>
+                        </form>
+                        </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="row show-grid">
+{#                                                <div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12 .col-sm-6 .col-md-8</div>#}
+                                    {% for foo in TypeList %}
+                                        <div class="col-xs-6 col-md-3">【(ID:{{ foo.ID }}){{ foo.typeName }}】 <a href="/workflow/typeedit/?ID={{ foo.ID }}" title="编辑">编辑</a> | <a href="javascript:deleteRecord({{ foo.ID }})" >删除</a></div>
+                                    {% endfor %}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+
+
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
+
+
+    <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        function deleteRecord(id) {
+            swal({
+                title: "您确定要删除这条信息吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dd6b55",
+                confirmButtonText: "确认删除",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: 'get',
+                    url: '/workflow/typedel/?ID='+id,
+                })
+                swal("账号删除成功！", " ", "success");
+                     window.location.reload()
+            });
+        }
+    </script>
+
+
+    <!-- 自定义js -->
+    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
+
+
+
+
+
+
+
 
 </body>
 </html>

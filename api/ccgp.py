@@ -151,14 +151,15 @@ def get_user_list():
 # if __name__ == '__main__':
 def seedtxt():
     getCcgp()
-    # getCcgp_ygs()
+    getCcgp_gg()
+    getCcgp_ygs()
     getHc()
     getyh()
     getTsg()
     # print(getCcgp() + getHc() + getyh() + getTsg())
     # return HttpResponse(getCcgp() + getHc() + getyh() + getTsg())
 
-# if __name__ == '__main__':
+
 def getCcgp():
     access_token()
     get_department_list()
@@ -167,19 +168,18 @@ def getCcgp():
     print(today)
     host = "www.ccgp-guangxi.gov.cn"
     url = 'http://www.ccgp-guangxi.gov.cn/front/search/category'
-    # url = 'http://www.ccgp-guangxi.gov.cn/ZcyAnnouncement/ZcyAnnouncement1/index.html'
     # url = 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
     headers = {
-        # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-        #               'Chrome/86.0.4240.198 Safari/537.36',
-        # 'cookie': 'acw_tc=ac11000116607138483634388e013c9706945572bd6c4d52e9ce7245c0f1f6',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/86.0.4240.198 Safari/537.36',
+        'cookie': 'acw_tc=ac11000116607138483634388e013c9706945572bd6c4d52e9ce7245c0f1f6',
         # 'Referer': 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
 
         'Host': 'www.ccgp-guangxi.gov.cn',
         'Content-Type': 'application/json',
     }
     data = {
-        'categoryCode': 'ZcyAnnouncement3001',
+        'categoryCode': 'ZcyAnnouncement1',
         'pageSize': '15',
         'pageNo': 1,
         'districtCode': ["450500"]
@@ -192,7 +192,7 @@ def getCcgp():
     response = requests.post(url=url, data=json.dumps(data), headers=headers)
     b_list = response.json()
     n_list = b_list["hits"]["hits"]
-    print(response.status_code)
+    # print(n_list)
     # 遍历response
     txts = ""
     for i in n_list:
@@ -359,104 +359,104 @@ def getCcgp_gg():
     # return txts
 
 
-# def getCcgp_ygs():
-#     access_token()
-#     get_department_list()
-#     get_user_list()
-#     today = time.strftime('%Y-%m-%d', time.localtime())
-#     print(today)
-#     host = "www.ccgp-guangxi.gov.cn"
-#     url = 'http://www.ccgp-guangxi.gov.cn/front/search/category'
-#     # url = 'http://www.ccgp-guangxi.gov.cn/ZcyAnnouncement/ZcyAnnouncement1/index.html'
-#     # url = 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
-#     headers = {
-#         # 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
-#         #               'Chrome/86.0.4240.198 Safari/537.36',
-#         # 'cookie': 'acw_tc=ac11000116607138483634388e013c9706945572bd6c4d52e9ce7245c0f1f6',
-#         # 'Referer': 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
-#
-#         'Host': 'www.ccgp-guangxi.gov.cn',
-#         'Content-Type': 'application/json',
-#     }
-#     data = {
-#         'categoryCode': 'ZcyAnnouncement5',
-#         'pageSize': '15',
-#         'pageNo': 1,
-#         'districtCode': ["450500"]
-#     }
-#     title = ""  # 标题
-#     pathName = ""  # 类型
-#     districtName = ""  # 区域
-#     url_n = ""  # 链接
-#     publishDate = ""  # 发布时间
-#     response = requests.post(url=url, data=json.dumps(data), headers=headers)
-#     b_list = response.json()
-#     n_list = b_list["hits"]["hits"]
-#     print(response.status_code)
-#     # 遍历response
-#     txts = ""
-#     for i in n_list:
-#         title = i["_source"]["title"]
-#         pathName = i["_source"]["pathName"]
-#         districtName = i["_source"]["districtName"]
-#         url_n = "http://" + host + i["_source"]["url"]
-#         publishDate = i["_source"]["publishDate"]
-#         timeArray = time.localtime(int(publishDate / 1000))
-#         otherStyleTime = time.strftime("%Y-%m-%d", timeArray)
-#         print(title)
-#         print(publishDate)
-#         print(pathName)
-#         print(districtName)
-#         print("日期", otherStyleTime)
-#         print(url_n)
-#         print("-----------------------------------------------------")
-#
-#         dqtime = datetime.datetime.now().strftime('%Y-%m-%d')
-#         if dqtime == otherStyleTime:
-#
-#             print(dqtime, "dqtime")
-#             # chatid = getChatid()
-#             chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
-#             # chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
-#             req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
-#             values = {
-#                 "title": districtName + pathName,
-#                 "messageUrl": url_n,
-#                 "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
-#                 "text": title + "\n发布时间:" + otherStyleTime
-#             }
-#
-#             msg = {
-#                 "link": {
-#                     "messageUrl": url_n,
-#                     "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
-#                     "text": title + "\n发布时间:" + otherStyleTime,
-#                     "title": districtName + pathName
-#                 },
-#                 "msgtype": "link"
-#             }
-#
-#             txts = txts + title + "<br>"
-#             values = json.dumps(values)
-#             req.link = values
-#             req.msgtype = "link"
-#             print(chatid, "chatidssssssssssssss")
-#
-#             req.chatid = chatid
-#             req.link = values
-#             req.msgtype = "link"
-#             req.msg = msg
-#
-#             try:
-#                 resp = req.getResponse(access_token())
-#                 # return HttpResponse(resp)
-#                 print(resp, "seedtxt")
-#             except Exception as e:
-#                 print(e, "seedtxt_err")
-#                 # return HttpResponse(e)
-#
-#     print(txts)
-#     # return txts
+def getCcgp_ygs():
+    access_token()
+    get_department_list()
+    get_user_list()
+    today = time.strftime('%Y-%m-%d', time.localtime())
+    print(today)
+    host = "www.ccgp-guangxi.gov.cn"
+    url = 'http://www.ccgp-guangxi.gov.cn/front/search/category'
+    # url = 'http://www.ccgp-guangxi.gov.cn/ZcyAnnouncement/ZcyAnnouncement1/index.html'
+    # url = 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/86.0.4240.198 Safari/537.36',
+        'cookie': 'acw_tc=ac11000116607138483634388e013c9706945572bd6c4d52e9ce7245c0f1f6',
+        # 'Referer': 'http://www.ccgp-guangxi.gov.cn/reformColumn/index.html'
+
+        'Host': 'www.ccgp-guangxi.gov.cn',
+        'Content-Type': 'application/json',
+    }
+    data = {
+        'categoryCode': 'ZcyAnnouncement5',
+        'pageSize': '15',
+        'pageNo': 1,
+        'districtCode': ["450500"]
+    }
+    title = ""  # 标题
+    pathName = ""  # 类型
+    districtName = ""  # 区域
+    url_n = ""  # 链接
+    publishDate = ""  # 发布时间
+    response = requests.post(url=url, data=json.dumps(data), headers=headers)
+    b_list = response.json()
+    n_list = b_list["hits"]["hits"]
+    print(response.status_code)
+    # 遍历response
+    txts = ""
+    for i in n_list:
+        title = i["_source"]["title"]
+        pathName = i["_source"]["pathName"]
+        districtName = i["_source"]["districtName"]
+        url_n = "http://" + host + i["_source"]["url"]
+        publishDate = i["_source"]["publishDate"]
+        timeArray = time.localtime(int(publishDate / 1000))
+        otherStyleTime = time.strftime("%Y-%m-%d", timeArray)
+        print(title)
+        print(publishDate)
+        print(pathName)
+        print(districtName)
+        print("日期", otherStyleTime)
+        print(url_n)
+        print("-----------------------------------------------------")
+
+        dqtime = datetime.datetime.now().strftime('%Y-%m-%d')
+        if dqtime == otherStyleTime:
+
+            print(dqtime, "dqtime")
+            # chatid = getChatid()
+            chatid = "chat979d2785fe780e114e3efdb71b909c1b"#市场部
+            # chatid = "chatb735f7b0581925234db11ab3a125a54f"  # 测试
+            req = dingtalk.api.OapiChatSendRequest("https://oapi.dingtalk.com/chat/send")
+            values = {
+                "title": districtName + pathName,
+                "messageUrl": url_n,
+                "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                "text": title + "\n发布时间:" + otherStyleTime
+            }
+
+            msg = {
+                "link": {
+                    "messageUrl": url_n,
+                    "picUrl": "http://www.gxnfc.com/static/img/logo2.png",
+                    "text": title + "\n发布时间:" + otherStyleTime,
+                    "title": districtName + pathName
+                },
+                "msgtype": "link"
+            }
+
+            txts = txts + title + "<br>"
+            values = json.dumps(values)
+            req.link = values
+            req.msgtype = "link"
+            print(chatid, "chatidssssssssssssss")
+
+            req.chatid = chatid
+            req.link = values
+            req.msgtype = "link"
+            req.msg = msg
+
+            try:
+                resp = req.getResponse(access_token())
+                # return HttpResponse(resp)
+                print(resp, "seedtxt")
+            except Exception as e:
+                print(e, "seedtxt_err")
+                # return HttpResponse(e)
+
+    print(txts)
+    # return txts
 
 
 def getHc():

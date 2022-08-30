@@ -264,7 +264,8 @@ class Workflow(models.Model):
 
 
 class WorkflowDef(models.Model):  # 流程节点
-    workFlowID = models.AutoField(db_column='workFlowID', primary_key=True)  #
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    workFlowID = models.IntegerField(null=True, default=0)  #
     title = models.CharField(max_length=254, null=True)  #
     od = models.IntegerField(null=True, default=0)  #
     code = models.CharField(max_length=254, null=True)  # 自定义代码

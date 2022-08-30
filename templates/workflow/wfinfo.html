@@ -18,18 +18,25 @@
     <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+    <link href="{% static 'css/plugins/colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
 
 </head>
 
 <body class="gray-bg">
     <div class="row">
+                            <div class="col-sm-12">
+            <div class="wrapper wrapper-content">
+                                <button type="button" class="btn btn-outline btn-primary" onclick="javascript:history.back(-1);"> 返 回 </button>
+
+            </div>
+                            </div>
         <div class="col-sm-12">
             <div class="wrapper wrapper-content">
                 <div class="row animated fadeInRight">
                     <div class="col-sm-8">
                         <div class="ibox float-e-margins">
                             <div class="text-center float-e-margins p-md">
-                                <span>流程名称及节点</span>
+                                <span>流程：{{ wfinfo.name }} </span>
 
                             </div>
                             <div class="" id="ibox-content">
@@ -37,73 +44,27 @@
                                 <div id="vertical-timeline" class="vertical-container dark-timeline">
                                     <div class="vertical-timeline-block">
                                         <div class="vertical-timeline-icon navy-bg">
-                                            <i class="fa fa-briefcase"></i>
+                                            <i class="fa fa-th-large"></i>
                                         </div>
 
                                         <div class="vertical-timeline-content">
-                                            <h2>会议</h2>
-                                            <p>上一年的销售业绩发布会。总结产品营销和销售趋势及销售的现状。
-                                            </p>
-                                            <a href="#" class="btn btn-sm btn-primary"> 更多信息</a>
-                                            <span class="vertical-date">
-                                        今天 <br>
-                                        <small>2月3日</small>
-                                    </span>
+                                            <h2>发起流程</h2>
                                         </div>
                                     </div>
 
                                     <div class="vertical-timeline-block">
                                         <div class="vertical-timeline-icon blue-bg">
-                                            <i class="fa fa-file-text"></i>
+                                            <i class="fa fa-arrow-down"></i>
                                         </div>
 
                                         <div class="vertical-timeline-content">
-                                            <h2>给张三发送文档</h2>
-                                            <p>发送上年度《销售业绩报告》</p>
-                                            <a href="#" class="btn btn-sm btn-success"> 下载文档 </a>
-                                            <span class="vertical-date">
-                                        今天 <br>
-                                        <small>2月3日</small>
-                                    </span>
+                                            <h2>节点1：给张三发送文档</h2>
+                                            <p>节点审批：三生三世</p>
+                                            <a href="#" class="btn btn-sm btn-info"> 编 辑 </a>
                                         </div>
                                     </div>
 
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon lazur-bg">
-                                            <i class="fa fa-coffee"></i>
-                                        </div>
 
-                                        <div class="vertical-timeline-content">
-                                            <h2>喝咖啡休息</h2>
-                                            <p>喝咖啡啦，啦啦啦~~</p>
-                                            <a href="#" class="btn btn-sm btn-info">更多</a>
-                                            <span class="vertical-date"> 昨天 <br><small>2月2日</small></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon yellow-bg">
-                                            <i class="fa fa-phone"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>给李四打电话</h2>
-                                            <p>给李四打电话分配本月工作任务</p>
-                                            <span class="vertical-date">昨天 <br><small>2月2日</small></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="vertical-timeline-block">
-                                        <div class="vertical-timeline-icon lazur-bg">
-                                            <i class="fa fa-user-md"></i>
-                                        </div>
-
-                                        <div class="vertical-timeline-content">
-                                            <h2>公司年会</h2>
-                                            <p>发年终奖啦，啦啦啦~~</p>
-                                            <span class="vertical-date">前天 <br><small>2月1日</small></span>
-                                        </div>
-                                    </div>
                                 </div>
 
                             </div>
@@ -116,12 +77,32 @@
 
                             </div>
                             <div class="" id="ibox-content">
-                                <form class="form-horizontal m-t" id="commentForm" action="/workflow/typeeditsave/" method="post">
+                                <form class="form-horizontal m-t" id="commentForm" action="/workflow/defaddsave/" method="post">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label class="col-sm-3 control-label">名称：</label>
+                                        <label class="col-sm-3 control-label">节点名称：</label>
                                         <div class="col-sm-6">
-                                            <input id="typeName" name="typeName" minlength="2" type="text" class="form-control" required="" aria-required="true" value="{{ typeinfo.typeName }}">
+                                            <input type="hidden" name="workFlowID" value="{{ wfinfo.workflowID }}" class="form-control" placeholder="请输入" required="" aria-required="true">
+                                            <input id="title" name="title" minlength="2" type="text" class="form-control" required="" aria-required="true">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">节点排序：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
+                                            <small>*数字越小越靠前</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">审批类型：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 control-label">审批人：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -150,6 +131,8 @@
     <!-- 自定义js -->
     <script src="{% static 'js/content.js' %}?v=1.0.0"></script>
 
+    <!-- Input Mask-->
+    <script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
 
     <script>
         $(document).ready(function () {

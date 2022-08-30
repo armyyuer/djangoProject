@@ -4,9 +4,8 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-
 # Create your views here.
-from common.models import WorkflowType
+from common.models import WorkflowType, Workflow
 
 
 def type_views(request):
@@ -43,7 +42,7 @@ def typeeditsave(request):
         update.save()
     except WorkflowType.DoesNotExist:
         print("不存在" + str(ID))
-    print("修改流程类型：" + str(ID)+"，"+typeName)
+    print("修改流程类型：" + str(ID) + "，" + typeName)
     return HttpResponseRedirect('/workflow/type/')
 
 
@@ -57,14 +56,38 @@ def wf(request):
     return render(request, 'workflow/wf.html', {'typeList': wft})
 
 
+def wfadd(request):
+    wft = WorkflowType.objects.all()
+    return render(request, 'workflow/wfadd.html', {'typeList': wft})
+
+
+def wfaddsave(request):
+    typeID = request.POST.get("typeID", '')
+    type = WorkflowType.objects.get(ID=typeID)
+    typeName = type.typeName
+    name = request.POST.get("name", '')
+    record = Workflow.objects.create(typeID=typeID,
+                                     typeName=typeName,
+                                     name=name)
+    print("新增流程配置：" + record.name)
+    return HttpResponseRedirect('/workflow/wf/')
+
+
 def wfinfo(request):
+    ID = request.GET.get("ID", '')
+    wf = Workflow.objects.get(workflowID=ID)
+    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf})
+
+
+def wfinfosave(request):
     x = ''
     return render(request, 'workflow/wfinfo.html')
 
 
 def wfdel(request):
-    x = ''
-    return render(request, 'workflow/wf.html')
+    ID = request.GET.get("ID", '')
+    il = Workflow.objects.get(workflowID=ID).delete()
+    return HttpResponseRedirect('/workflow/wf/')
 
 
 def list(request):

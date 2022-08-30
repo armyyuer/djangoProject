@@ -270,6 +270,10 @@ class WorkflowDef(models.Model):  # 流程节点
     od = models.IntegerField(null=True, default=0)  #
     code = models.CharField(max_length=254, null=True)  # 自定义代码
     notes = models.CharField(max_length=254, null=True)  #
+    splx = models.IntegerField(null=True, default=0)  #
+    userid = models.IntegerField(null=True, default=0)  #
+    deptid = models.IntegerField(null=True, default=0)  #
+    Positionid = models.IntegerField(null=True, default=0)  #
 
 
 class WorkflowSteps(models.Model):

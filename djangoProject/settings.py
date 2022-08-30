@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'qr_code',
     'menu',
     'group',
+    'workflow',
 ]
 
 MIDDLEWARE = [

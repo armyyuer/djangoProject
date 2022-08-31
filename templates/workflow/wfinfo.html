@@ -19,7 +19,29 @@
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
     <link href="{% static 'css/plugins/colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
 
+    <script>
+        $(function() {
+            //隐藏div
+
+            $("#ulist").show();
+            $("#plist").hide();
+            //给div添加change事件
+            $("#type").change(function() {
+                if($(this).val() == 0 ) {
+                    $("#ulist").show();
+                    $("#plist").hide();
+                } else if($(this).val() == 1 ) {
+                    $("#ulist").hide();
+                    $("#plist").show();
+                }
+                else if($(this).val() == null ) {
+                    $("#plist").hide();
+                }
+            })
+        })
+    </script>
 </head>
 
 <body class="gray-bg">
@@ -36,7 +58,7 @@
                     <div class="col-sm-8">
                         <div class="ibox float-e-margins">
                             <div class="text-center float-e-margins p-md">
-                                <span>流程：{{ wfinfo.name }} </span>
+                                <h1><span>流程：{{ wfinfo.name }} </span></h1>
 
                             </div>
                             <div class="" id="ibox-content">
@@ -96,13 +118,58 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">审批类型：</label>
                                         <div class="col-sm-6">
-                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
+                                            <select name="splx" id="type" class="form-control" required="" aria-required="true">
+                                                <option value="0">指定审批人</option>
+                                                <option value="1">指定部门职务</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 control-label">审批人：</label>
+                                    <div class="form-group" id="ulist">
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">选择部门：</label>
                                         <div class="col-sm-6">
-                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
+                                            <select id="deptID" name="deptID" class="form-control" required="" aria-required="true">
+                                                <option value="">选择部门</option>
+                                                {% for doo in depList %}
+                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">指定人：</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control custom-select"  id="empower_user" name="empower_user" multiple="">
+                                                <option value="">选择审批人</option>
+                                            </select>
+                                            <script>
+                                                $("#deptID").change(function () {
+                                                    var dnsname = $(this).val();
+                                                    {#alert("welcome");#}
+                                                    $.ajax({
+                                                        url: '{% url 'ulist' %}',
+                                                        data: {"deptID": $(this).val()},
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        success: function (data) {
+                                                            var content = '';
+                                                            $.each(data, function (i, item) {
+
+                                                                content += '<option value=' +  item.fields.userID + '>' + item.fields.userName + '</option>'
+                                                            });
+                                                            $('#empower_user').html(content)
+                                                        },
+
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="plist">
+                                        <label class="col-sm-3 control-label">指定职务：</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" id="od" name="od" class="form-control">
                                         </div>
                                     </div>
                                     <div class="form-group">

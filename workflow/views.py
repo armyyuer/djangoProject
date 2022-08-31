@@ -1,3 +1,4 @@
+from django.core.serializers import serialize
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
@@ -5,7 +6,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-from common.models import WorkflowType, Workflow
+from common.models import WorkflowType, Workflow, Deptment, DeptmentUser
 
 
 def type_views(request):
@@ -46,11 +47,6 @@ def typeeditsave(request):
     return HttpResponseRedirect('/workflow/type/')
 
 
-def def_views(request):
-    x = ''
-    return render(request, 'workflow/def.html')
-
-
 def wf(request):
     wft = WorkflowType.objects.all()
     return render(request, 'workflow/wf.html', {'typeList': wft})
@@ -76,7 +72,25 @@ def wfaddsave(request):
 def wfinfo(request):
     ID = request.GET.get("ID", '')
     wf = Workflow.objects.get(workflowID=ID)
-    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf})
+    depList = Deptment.objects.all()
+    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf, 'depList': depList})
+
+
+def ulist(request):
+    deptID = request.GET.get('deptID')
+    if deptID:
+        users = DeptmentUser.objects.filter(deptID=deptID)
+        print(users, 'users')
+        result = serialize("json", users)
+        print(result, 'result')
+        return HttpResponse(result)
+    procedure_choices = [i[1] for i in ulist.choices]
+    projects = Deptment.objects.all()
+
+    content = {"username": request.user, "username_data": request.user}
+    content['projects'] = projects
+    content['procedure_choices'] = procedure_choices
+    return render(request, 'workflow/wfinfo.html', content)
 
 
 def wfinfosave(request):
@@ -93,3 +107,20 @@ def wfdel(request):
 def list(request):
     x = ''
     return render(request, 'workflow/list.html')
+
+
+def def_views(request):
+    x = ''
+    return render(request, 'workflow/def.html')
+
+
+def defaddsave(request):
+    workFlowID = request.POST.get("workFlowID", '')
+    title = request.POST.get("title", '')
+    od = request.POST.get("od", '')
+    splx = request.POST.get("splx", '')
+    deptID = request.POST.get("deptID", '')
+    empower_user = request.POST.getlist("empower_user", '')
+
+    print(empower_user, 'empower_user')
+    return render(request, 'workflow/wfinfo.html')

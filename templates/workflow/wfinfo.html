@@ -1,3 +1,4 @@
+{% load workflow_s %}
 <!DOCTYPE html>
 {% load static %}
 <html>
@@ -35,8 +36,10 @@
                 } else if($(this).val() == 1 ) {
                     $("#ulist").hide();
                     $("#plist").show();
-                }
-                else if($(this).val() == null ) {
+                } else if($(this).val() == 2 ) {
+                    $("#ulist").hide();
+                    $("#plist").hide();
+                } else if($(this).val() == null ) {
                     $("#plist").hide();
                 }
             })
@@ -73,6 +76,7 @@
                                             <h2>发起流程</h2>
                                         </div>
                                     </div>
+                                {% for foo in defList %}
 
                                     <div class="vertical-timeline-block">
                                         <div class="vertical-timeline-icon blue-bg">
@@ -80,11 +84,15 @@
                                         </div>
 
                                         <div class="vertical-timeline-content">
-                                            <h2>节点1：给张三发送文档</h2>
-                                            <p>节点审批：三生三世</p>
+                                            <h2>节点{{ foo.od }}：{{ foo.title }}</h2>
+                                            <p>审批类型：{{ foo.splxName }}</p>
+                                            <p>审批人：{{ foo.deptName }} - {{ ''|splist:foo.ID }}</p>
                                             <a href="#" class="btn btn-sm btn-info"> 编 辑 </a>
                                         </div>
                                     </div>
+
+                                {% endfor %}
+
 
 
                                 </div>
@@ -121,6 +129,7 @@
                                             <select name="splx" id="type" class="form-control" required="" aria-required="true">
                                                 <option value="0">指定审批人</option>
                                                 <option value="1">指定部门职务</option>
+                                                <option value="2">表单内指定</option>
                                             </select>
                                         </div>
                                     </div>
@@ -192,7 +201,7 @@
                                     <div class="form-group">
                                         <div class="col-sm-4 col-sm-offset-3">
                                             <input id="ID" type="hidden" class="form-control" name="ID" value="{{ typeinfo.ID }}">
-                                            <button class="btn btn-primary" type="submit"> 编 辑 </button>
+                                            <button class="btn btn-primary" type="submit"> 新 增 </button>
                                         </div>
                                     </div>
                                 </form>

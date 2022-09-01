@@ -74,7 +74,15 @@ def wfinfo(request):
     wf = Workflow.objects.get(workflowID=ID)
     depList = Deptment.objects.all()
     positionList = Position.objects.all()
-    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf, 'depList': depList, 'positionList': positionList})
+    defList = ''
+    try:
+        defList = WorkflowDef.objects.order_by('od').filter(workFlowID=ID)
+        print(defList)
+    except WorkflowDef.DoesNotExist:
+        defList = None
+        print(defList)
+    return render(request, 'workflow/wfinfo.html',
+                  {'wfinfo': wf, 'depList': depList, 'positionList': positionList, 'defList': defList})
 
 
 def ulist(request):
@@ -133,38 +141,45 @@ def defaddsave(request):
         deptID = request.POST.get("deptID", '')
         dep = Deptment.objects.get(deptID=deptID)
         empower_user = request.POST.getlist("empower_user", '')
-        us = DDuser.objects.get(uid=empower_user)
+        us = DDuser.objects.filter(uid__in=empower_user)
         print(empower_user, 'empower_user')
+        print(workFlowID, 'workFlowID')
+        print(dep.deptName, 'deptName')
+        # print(us, 'us')
         splxName = '指定审批人'
         record = WorkflowDef.objects.create(workFlowID=workFlowID,
                                             title=title,
                                             od=od,
                                             splx=splx,
                                             splxName=splxName,
-                                            deptID=deptID,
+                                            deptid=deptID,
                                             deptName=dep.deptName)
-        print("新增流程指定人审批节点：" + od+"---"+record.title)
-        resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
-                                            spName=us.name,
-                                            spID=empower_user)
-        print("新增节点指定审批人：" + +resp.spName)
+        print("新增流程指定人审批节点：" + od + "---" + record.title)
+
+        for u in us:
+            resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
+                                                spName=u.name,
+                                                spID=u.uid)
+            print("新增节点指定审批人：" + resp.spName)
     elif splx == "1":
         splxName = '指定部门职务'
         deptID = request.POST.get("deptID_", '')
         dep = Deptment.objects.get(deptID=deptID)
-        positionID = request.POST.get("positionID", '')
-        position = Position.objects.get(positionID=positionID)
+        positionID = request.POST.getlist("positionID", '')
+        us = Position.objects.filter(positionID__in=positionID)
         print(positionID, 'positionID')
         record = WorkflowDef.objects.create(workFlowID=workFlowID,
                                             title=title,
                                             od=od,
                                             splx=splx,
                                             splxName=splxName,
-                                            deptID=deptID,
+                                            deptid=deptID,
                                             deptName=dep.deptName)
-        print("新增流程职务审批节点：" + od+"---"+record.title)
-        resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
-                                            spName=position.positionName,
-                                            spID=empower_user)
-        print("新增节点指定审批人：" + +resp.spName)
+        print("新增流程职务审批节点：" + od + "---" + record.title)
+
+        for u in us:
+            resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
+                                                spName=u.positionName,
+                                                spID=u.positionID)
+            print("新增节点指定审批职务：" + resp.spName)
     return HttpResponseRedirect('/workflow/wfinfo/?ID=' + workFlowID + '')

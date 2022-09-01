@@ -111,8 +111,8 @@
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">节点排序：</label>
                                         <div class="col-sm-6">
-                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="0">
-                                            <small>*数字越小越靠前</small>
+                                            <input type="text" id="od" name="od" class="form-control" data-mask="9" value="1">
+                                            <small>*数字越小越靠前，从1开始</small>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -128,7 +128,7 @@
                                         <div class="col-sm-12">
                                         <label class="col-sm-3 control-label">选择部门：</label>
                                         <div class="col-sm-6">
-                                            <select id="deptID" name="deptID" class="form-control" required="" aria-required="true">
+                                            <select id="deptID" name="deptID" class="form-control">
                                                 <option value="">选择部门</option>
                                                 {% for doo in depList %}
                                                     <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
@@ -167,9 +167,26 @@
                                         </div>
                                     </div>
                                     <div class="form-group" id="plist">
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">选择部门：</label>
+                                        <div class="col-sm-6">
+                                            <select id="deptID_" name="deptID_" class="form-control">
+                                                {% for doo in depList %}
+                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12">
                                         <label class="col-sm-3 control-label">指定职务：</label>
                                         <div class="col-sm-6">
-                                            <input type="text" id="od" name="od" class="form-control">
+                                            <select class="form-control custom-select"  id="positionID" name="positionID" multiple="" >
+                                                {% for doo in positionList %}
+                                                    <option value="{{ doo.positionID }}">{{ doo.positionName }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
                                         </div>
                                     </div>
                                     <div class="form-group">

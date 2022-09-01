@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
-from common.models import WorkflowType, Workflow, Deptment, DeptmentUser
+from common.models import WorkflowType, Workflow, Deptment, DeptmentUser, Position, WorkflowDef, WorkflowDefSP, DDuser
 
 
 def type_views(request):
@@ -73,7 +73,8 @@ def wfinfo(request):
     ID = request.GET.get("ID", '')
     wf = Workflow.objects.get(workflowID=ID)
     depList = Deptment.objects.all()
-    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf, 'depList': depList})
+    positionList = Position.objects.all()
+    return render(request, 'workflow/wfinfo.html', {'wfinfo': wf, 'depList': depList, 'positionList': positionList})
 
 
 def ulist(request):
@@ -94,8 +95,13 @@ def ulist(request):
 
 
 def wfinfosave(request):
-    x = ''
-    return render(request, 'workflow/wfinfo.html')
+    workFlowID = request.POST.get("workFlowID", '')
+    title = request.POST.get("title", '')
+    od = request.POST.get("od", '')
+    splx = request.POST.get("splx", '')
+    deptID = request.POST.get("deptID", '')
+    empower_user = request.POST.getlist("empower_user", '')
+    return HttpResponseRedirect('/workflow/wfinfo/?ID=1')
 
 
 def wfdel(request):
@@ -119,8 +125,46 @@ def defaddsave(request):
     title = request.POST.get("title", '')
     od = request.POST.get("od", '')
     splx = request.POST.get("splx", '')
-    deptID = request.POST.get("deptID", '')
-    empower_user = request.POST.getlist("empower_user", '')
-
-    print(empower_user, 'empower_user')
-    return render(request, 'workflow/wfinfo.html')
+    deptID = "0"
+    empower_user = '0'
+    positionID = '0'
+    splxName = '指定审批人'
+    if splx == "0":
+        deptID = request.POST.get("deptID", '')
+        dep = Deptment.objects.get(deptID=deptID)
+        empower_user = request.POST.getlist("empower_user", '')
+        us = DDuser.objects.get(uid=empower_user)
+        print(empower_user, 'empower_user')
+        splxName = '指定审批人'
+        record = WorkflowDef.objects.create(workFlowID=workFlowID,
+                                            title=title,
+                                            od=od,
+                                            splx=splx,
+                                            splxName=splxName,
+                                            deptID=deptID,
+                                            deptName=dep.deptName)
+        print("新增流程指定人审批节点：" + od+"---"+record.title)
+        resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
+                                            spName=us.name,
+                                            spID=empower_user)
+        print("新增节点指定审批人：" + +resp.spName)
+    elif splx == "1":
+        splxName = '指定部门职务'
+        deptID = request.POST.get("deptID_", '')
+        dep = Deptment.objects.get(deptID=deptID)
+        positionID = request.POST.get("positionID", '')
+        position = Position.objects.get(positionID=positionID)
+        print(positionID, 'positionID')
+        record = WorkflowDef.objects.create(workFlowID=workFlowID,
+                                            title=title,
+                                            od=od,
+                                            splx=splx,
+                                            splxName=splxName,
+                                            deptID=deptID,
+                                            deptName=dep.deptName)
+        print("新增流程职务审批节点：" + od+"---"+record.title)
+        resp = WorkflowDefSP.objects.create(workFlowDefID=record.ID,
+                                            spName=position.positionName,
+                                            spID=empower_user)
+        print("新增节点指定审批人：" + +resp.spName)
+    return HttpResponseRedirect('/workflow/wfinfo/?ID=' + workFlowID + '')

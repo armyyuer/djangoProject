@@ -271,9 +271,18 @@ class WorkflowDef(models.Model):  # 流程节点
     code = models.CharField(max_length=254, null=True)  # 自定义代码
     notes = models.CharField(max_length=254, null=True)  #
     splx = models.IntegerField(null=True, default=0)  #
+    splxName = models.CharField(max_length=254, null=True)  #
     userid = models.IntegerField(null=True, default=0)  #
     deptid = models.IntegerField(null=True, default=0)  #
-    Positionid = models.IntegerField(null=True, default=0)  #
+    deptName = models.CharField(max_length=254, null=True)  #
+    positionid = models.IntegerField(null=True, default=0)  #
+
+
+class WorkflowDefSP(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    workFlowDefID = models.IntegerField(null=True, default=0)  #
+    spName = models.CharField(max_length=254, null=True)  #
+    spID = models.IntegerField(null=True, default=0)  #
 
 
 class WorkflowSteps(models.Model):

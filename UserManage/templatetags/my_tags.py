@@ -37,6 +37,11 @@ def my_id(value, value2=0):
 @register.filter
 def my_group(value, value2=0):
     print(str(value2), 'userID')
-    qs = UserGroups.objects.get(userID=value2)
-    group = Group.objects.get(groupID=qs.groupID)
-    return value + str(group.groupName)
+    ot = ''
+    try:
+        qs = UserGroups.objects.get(userID=value2)
+        group = Group.objects.get(groupID=qs.groupID)
+        ot = group.groupName
+    except UserGroups.DoesNotExist:
+        ot = '用户组数据异常'
+    return value + ot

@@ -235,7 +235,7 @@ def userdb(file):
                 print("写入成功。ID：" + str(gncord.ID))
 
             try:
-                pn = Position.objects.get(groupID=gid, positionName=userP)
+                pn = Position.objects.get(positionName=userP)
                 try:
                     upc = UserPosition.objects.get(userID=uid, positionID=pn.positionID)
                     print("账号的职务数据存在跳过新增")
@@ -245,8 +245,7 @@ def userdb(file):
 
             except Position.DoesNotExist:
                 print("职务不存在，新增职务。")
-                padd = Position.objects.create(positionName=userP,
-                                               groupID=gid)
+                padd = Position.objects.create(positionName=userP)
                 print("新增职务：" + userPosition + ",ID:" + str(padd.positionID))
                 try:
                     upc = UserPosition.objects.get(userID=uid, positionID=padd.positionID)

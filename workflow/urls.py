@@ -1,7 +1,7 @@
 # 菜鸟程序员：阿米
 from django.urls import path
 from workflow.views import type_views, def_views, list, typeadd, typeedit, typeeditsave, typedel, wf, wfinfo, wfdel, \
-    wfadd, wfaddsave, wfinfosave, ulist, defaddsave
+    wfadd, wfaddsave, wfinfosave, ulist, defaddsave, defdel
 
 urlpatterns = [
     path('index/', type_views, name='type_views'),
@@ -12,6 +12,7 @@ urlpatterns = [
     path('typeeditsave/', typeeditsave, name='typeeditsave'),
     path('def/', def_views, name='def_views'),
     path('defaddsave/', defaddsave, name='defaddsave'),
+    path('defdel/', defdel, name='defdel'),
     path('wf/', wf, name='wf'),
     path('wfadd/', wfadd, name='wfadd'),
     path('wfaddsave/', wfaddsave, name='wfaddsave'),

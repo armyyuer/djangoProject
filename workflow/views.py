@@ -183,3 +183,11 @@ def defaddsave(request):
                                                 spID=u.positionID)
             print("新增节点指定审批职务：" + resp.spName)
     return HttpResponseRedirect('/workflow/wfinfo/?ID=' + workFlowID + '')
+
+
+def defdel(request):
+    ID = request.GET.get("ID", '')
+    il = WorkflowDef.objects.get(ID=ID)
+    workFlowID = il.workFlowID
+    il.delete()
+    return HttpResponseRedirect('/workflow/wfinfo/?id='+workFlowID)

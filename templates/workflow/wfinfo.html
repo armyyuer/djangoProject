@@ -20,6 +20,7 @@
     <link href="{% static 'css/animate.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
     <link href="{% static 'css/plugins/colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
     <script src="{% static 'js/jquery.min.js' %}"></script>
 
     <script>
@@ -87,7 +88,8 @@
                                             <h2>节点{{ foo.od }}：{{ foo.title }}</h2>
                                             <p>审批类型：{{ foo.splxName }}</p>
                                             <p>审批人：{{ foo.deptName }} - {{ ''|splist:foo.ID }}</p>
-                                            <a href="#" class="btn btn-sm btn-info"> 编 辑 </a>
+                                            <a href="#" > 编 辑 </a> |
+                                            <a href="javascript:deleteRecord({{ foo.ID }})" >删除</a>
                                         </div>
                                     </div>
 
@@ -253,7 +255,28 @@
 
         });
     </script>
-
+    <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
+    <script type="text/javascript">
+        function deleteRecord(id) {
+            swal({
+                title: "您确定要删除这个节点吗",
+                text: "删除后将无法恢复，请谨慎操作！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dd6b55",
+                confirmButtonText: "确认删除",
+                closeOnConfirm: false
+            }, function () {
+                $.ajax({
+                    type: 'get',
+                    url: '/workflow/defdel/?ID='+id,
+                })
+                swal("节点删除成功！", " ", "success");
+                     window.location.reload()
+            });
+        }
+    </script>
 
 
 </body>

@@ -29,6 +29,8 @@
 
             $("#ulist").show();
             $("#plist").hide();
+            $("#ulist_e").show();
+            $("#plist_e").hide();
             //给div添加change事件
             $("#type").change(function() {
                 if($(this).val() == 0 ) {
@@ -42,6 +44,21 @@
                     $("#plist").hide();
                 } else if($(this).val() == null ) {
                     $("#plist").hide();
+                }
+            })
+            //给div添加change事件
+            $("#type_e").change(function() {
+                if($(this).val() == 0 ) {
+                    $("#ulist_e").show();
+                    $("#plist_e").hide();
+                } else if($(this).val() == 1 ) {
+                    $("#ulist_e").hide();
+                    $("#plist_e").show();
+                } else if($(this).val() == 2 ) {
+                    $("#ulist_e").hide();
+                    $("#plist_e").hide();
+                } else if($(this).val() == null ) {
+                    $("#plist_e").hide();
                 }
             })
         })
@@ -88,8 +105,8 @@
                                             <h2>节点{{ foo.od }}：{{ foo.title }}</h2>
                                             <p>审批类型：{{ foo.splxName }}</p>
                                             <p>审批人：{{ foo.deptName }} - {{ ''|splist:foo.ID }}</p>
-                                            <a href="#" > 编 辑 </a> |
-                                            <a href="javascript:deleteRecord({{ foo.ID }})" >删除</a>
+                                            <a href="#"  data-toggle="modal" data-target="#editdef{{ foo.ID }}"> 编 辑 </a> |
+                                            <a href="javascript:deleteRecord({{ foo.ID }})" > 删 除 </a>
                                         </div>
                                     </div>
 
@@ -216,6 +233,105 @@
 
         </div>
     </div>
+{% for foo in defList %}
+    <div class="modal inmodal fade" id="editdef{{ foo.ID }}" tabindex="-1" role="dialog"  aria-hidden="true">
+    <form class="form-horizontal m-t" id="commentForm" action="/workflow/defeditsave/" method="post">
+        {% csrf_token %}
+            <div class="modal-dialog">
+                <div class="modal-content animated flipInY">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">修改节点信息</h4>
+                        <small class="font-bold"></small>
+                    </div>
+                    <div class="modal-body">
+                            <div class="form-group"><label>节点名称</label>
+                                    <input id="title_e" type="text" class="form-control" name="title_e" required="" aria-required="true" value="{{ foo.title }}"></div>
+                            <div class="form-group"><label>节点排序</label>
+                                    <input id="od_e" type="text" class="form-control" name="od_e" required="" aria-required="true" value="{{ foo.od }}"></div>
+                            <div class="form-group"><label>审批类型</label>
+                                            <select name="splx_e" id="type_e" class="form-control" required="" aria-required="true">
+                                                <option value="0">指定审批人</option>
+                                                <option value="1">指定部门职务</option>
+                                                <option value="2">表单内指定</option>
+                                            </select>
+                            </div>
+                            <div class="form-group" id="ulist_e">
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">选择部门：</label>
+                                        <div class="col-sm-6">
+                                            <select id="deptID_e" name="deptID_e" class="form-control">
+                                                <option value="">选择部门</option>
+                                                {% for doo in depList %}
+                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">指定人：</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control custom-select"  id="empower_user_e" name="empower_user_e" multiple="">
+                                                <option value="">选择审批人</option>
+                                            </select>
+                                            <script>
+                                                $("#deptID_e").change(function () {
+                                                    var dnsname = $(this).val();
+                                                    {#alert("welcome");#}
+                                                    $.ajax({
+                                                        url: '{% url 'ulist' %}',
+                                                        data: {"deptID": $(this).val()},
+                                                        type: 'GET',
+                                                        dataType: 'json',
+                                                        success: function (data) {
+                                                            var content = '';
+                                                            $.each(data, function (i, item) {
+
+                                                                content += '<option value=' +  item.fields.userID + '>' + item.fields.userName + '</option>'
+                                                            });
+                                                            $('#empower_user_e').html(content)
+                                                        },
+
+                                                    });
+                                                });
+                                            </script>
+                                        </div>
+                                        </div>
+                                    </div>
+                            <div class="form-group" id="plist_e">
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">选择部门：</label>
+                                        <div class="col-sm-6">
+                                            <select id="deptID_e_" name="deptID_e_" class="form-control">
+                                                {% for doo in depList %}
+                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                        <label class="col-sm-3 control-label">指定职务：</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control custom-select"  id="positionID_e" name="positionID_e" multiple="" >
+                                                {% for doo in positionList %}
+                                                    <option value="{{ doo.positionID }}">{{ doo.positionName }}</option>
+                                                {% endfor %}
+                                            </select>
+
+                                        </div>
+                                        </div>
+                                    </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input id="ID" value="{{ foo.ID }}" type="hidden"  name="ID">
+                        <button type="submit" class="btn btn-white" >提交</button>
+                        <button type="button" class="btn btn-group" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+    </form>
+    </div>
+{% endfor %}
 
     <!-- 全局js -->
     <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>

@@ -93,13 +93,13 @@ def ulist(request):
         result = serialize("json", users)
         print(result, 'result')
         return HttpResponse(result)
-    procedure_choices = [i[1] for i in ulist.choices]
-    projects = Deptment.objects.all()
-
-    content = {"username": request.user, "username_data": request.user}
-    content['projects'] = projects
-    content['procedure_choices'] = procedure_choices
-    return render(request, 'workflow/wfinfo.html', content)
+    # procedure_choices = [i[1] for i in ulist.choices]
+    # projects = Deptment.objects.all()
+    #
+    # content = {"username": request.user, "username_data": request.user}
+    # content['projects'] = projects
+    # content['procedure_choices'] = procedure_choices
+    # return render(request, 'workflow/wfinfo.html', content)
 
 
 def wfinfosave(request):
@@ -182,7 +182,121 @@ def defaddsave(request):
                                                 spName=u.positionName,
                                                 spID=u.positionID)
             print("新增节点指定审批职务：" + resp.spName)
+    else:
+        splxName = '表单内指定'
+        deptID = 0
+        positionID = 0
+        record = WorkflowDef.objects.create(workFlowID=workFlowID,
+                                            title=title,
+                                            od=od,
+                                            splx=splx,
+                                            splxName=splxName,
+                                            deptid=deptID)
+        print("新增流程表单内指定审批节点：" + od + "---" + record.title)
     return HttpResponseRedirect('/workflow/wfinfo/?ID=' + workFlowID + '')
+
+
+def defeditsave(request):
+    ID_e = request.POST.get("ID_e", '')
+    workFlowID_e = request.POST.get("workFlowID_e", '')
+    title_e = request.POST.get("title_e", '')
+    od_e = request.POST.get("od_e", '')
+    splx_e = request.POST.get("splx_e", '')
+    deptID_e = "0"
+    empower_user_e = '0'
+    positionID_e = '0'
+    splxName_e = '指定审批人'
+    if splx_e == "0":
+        deptID_e = request.POST.get("deptID_e", '')
+        dep = Deptment.objects.get(deptID=deptID_e)
+        empower_user_e = request.POST.getlist("empower_user_e", '')
+        us = DDuser.objects.filter(uid__in=empower_user_e)
+        print(empower_user_e, 'empower_user_e')
+        print(workFlowID_e, 'workFlowID_e')
+        print(dep.deptName, 'deptName_e')
+        # print(us, 'us')
+        splxName_e = '指定审批人'
+
+        try:
+            # 根据 id 从数据库中找到相应的户记录
+            update = WorkflowDef.objects.get(ID=ID_e)
+            update.workFlowID = workFlowID_e
+            update.title = title_e
+            update.od = od_e
+            update.splx = splx_e
+            update.splxName = splxName_e
+            update.deptid = deptID_e
+            update.deptName = dep.deptName
+            update.save()
+        except WorkflowType.DoesNotExist:
+            print("不存在" + str(ID_e))
+        print("修改流程指定人审批节点：" + od_e + "---" + title_e)
+
+        try:
+            il = WorkflowDefSP.objects.filter(workFlowDefID=ID_e).delete()
+        except WorkflowDefSP.DoesNotExist:
+            print("不存在" + str(ID_e))
+        for u in us:
+            resp = WorkflowDefSP.objects.create(workFlowDefID=ID_e,
+                                                spName=u.name,
+                                                spID=u.uid)
+            print("修改节点指定审批人：" + resp.spName)
+    elif splx_e == "1":
+        splxName_e = '指定部门职务'
+        deptID_e = request.POST.get("deptID_e_", '')
+        dep = Deptment.objects.get(deptID=deptID_e)
+        positionID_e = request.POST.getlist("positionID_e", '')
+        us = Position.objects.filter(positionID__in=positionID_e)
+        print(positionID_e, 'positionID_e')
+        try:
+            # 根据 id 从数据库中找到相应的户记录
+            update = WorkflowDef.objects.get(ID=ID_e)
+            update.workFlowID = workFlowID_e
+            update.title = title_e
+            update.od = od_e
+            update.splx = splx_e
+            update.splxName = splxName_e
+            update.deptid = deptID_e
+            update.deptName = dep.deptName
+            update.save()
+        except WorkflowType.DoesNotExist:
+            print("不存在" + str(ID_e))
+        print("修改流程指定人审批节点：" + od_e + "---" + title_e)
+
+        try:
+            il = WorkflowDefSP.objects.filter(workFlowDefID=ID_e).delete()
+        except WorkflowDefSP.DoesNotExist:
+            print("不存在" + str(ID_e))
+
+        for u in us:
+            resp = WorkflowDefSP.objects.create(workFlowDefID=ID_e,
+                                                spName=u.positionName,
+                                                spID=u.positionID)
+            print("修改节点指定审批职务：" + resp.spName)
+    else:
+        splxName_e = '表单内指定'
+        deptID_e = 0
+        positionID_e = 0
+        try:
+            # 根据 id 从数据库中找到相应的户记录
+            update = WorkflowDef.objects.get(ID=ID_e)
+            update.workFlowID = workFlowID_e
+            update.title = title_e
+            update.od = od_e
+            update.splx = splx_e
+            update.splxName = splxName_e
+            update.deptid = deptID_e
+            update.save()
+        except WorkflowType.DoesNotExist:
+            print("不存在" + str(ID_e))
+        print("修改流程指定人审批节点：" + od_e + "---" + title_e)
+
+        try:
+            il = WorkflowDefSP.objects.filter(workFlowDefID=ID_e).delete()
+        except WorkflowDefSP.DoesNotExist:
+            print("不存在" + str(ID_e))
+
+    return HttpResponseRedirect('/workflow/wfinfo/?ID=' + workFlowID_e + '')
 
 
 def defdel(request):
@@ -190,4 +304,4 @@ def defdel(request):
     il = WorkflowDef.objects.get(ID=ID)
     workFlowID = il.workFlowID
     il.delete()
-    return HttpResponseRedirect('/workflow/wfinfo/?id='+workFlowID)
+    return HttpResponseRedirect('/workflow/wfinfo/?id=' + workFlowID)

@@ -29,8 +29,6 @@
 
             $("#ulist").show();
             $("#plist").hide();
-            $("#ulist_e").show();
-            $("#plist_e").hide();
             //给div添加change事件
             $("#type").change(function() {
                 if($(this).val() == 0 ) {
@@ -44,21 +42,6 @@
                     $("#plist").hide();
                 } else if($(this).val() == null ) {
                     $("#plist").hide();
-                }
-            })
-            //给div添加change事件
-            $("#type_e").change(function() {
-                if($(this).val() == 0 ) {
-                    $("#ulist_e").show();
-                    $("#plist_e").hide();
-                } else if($(this).val() == 1 ) {
-                    $("#ulist_e").hide();
-                    $("#plist_e").show();
-                } else if($(this).val() == 2 ) {
-                    $("#ulist_e").hide();
-                    $("#plist_e").hide();
-                } else if($(this).val() == null ) {
-                    $("#plist_e").hide();
                 }
             })
         })
@@ -94,19 +77,49 @@
                                             <h2>发起流程</h2>
                                         </div>
                                     </div>
-                                {% for foo in defList %}
+                                {% for def in defList %}
 
+                                    <script>
+                                        $(function() {
+                                            //隐藏div
+                                            {% if def.splx == 0 %}
+                                            $("#ulist_{{ def.ID }}").show();
+                                            $("#plist_{{ def.ID }}").hide();
+                                            {% elif def.splx == 1  %}
+                                            $("#ulist_{{ def.ID }}").hide();
+                                            $("#plist_{{ def.ID }}").show();
+                                            {% elif def.splx == 2  %}
+                                            $("#ulist_{{ def.ID }}").hide();
+                                            $("#plist_{{ def.ID }}").hide();
+                                            {% endif %}
+                                            //给div添加change事件
+                                            $("#type_{{ def.ID }}").change(function() {
+                                                if($(this).val() == 0 ) {
+                                                    $("#ulist_{{ def.ID }}").show();
+                                                    $("#plist_{{ def.ID }}").hide();
+                                                } else if($(this).val() == 1 ) {
+                                                    $("#ulist_{{ def.ID }}").hide();
+                                                    $("#plist_{{ def.ID }}").show();
+                                                } else if($(this).val() == 2 ) {
+                                                    $("#ulist_{{ def.ID }}").hide();
+                                                    $("#plist_{{ def.ID }}").hide();
+                                                } else if($(this).val() == null ) {
+                                                    $("#plist_{{ def.ID }}").hide();
+                                                }
+                                            })
+                                        })
+                                    </script>
                                     <div class="vertical-timeline-block">
                                         <div class="vertical-timeline-icon blue-bg">
                                             <i class="fa fa-arrow-down"></i>
                                         </div>
 
                                         <div class="vertical-timeline-content">
-                                            <h2>节点{{ foo.od }}：{{ foo.title }}</h2>
-                                            <p>审批类型：{{ foo.splxName }}</p>
-                                            <p>审批人：{{ foo.deptName }} - {{ ''|splist:foo.ID }}</p>
-                                            <a href="#"  data-toggle="modal" data-target="#editdef{{ foo.ID }}"> 编 辑 </a> |
-                                            <a href="javascript:deleteRecord({{ foo.ID }})" > 删 除 </a>
+                                            <h2>节点{{ def.od }}：{{ def.title }}</h2>
+                                            <p>审批类型：{{ def.splxName }}</p>
+                                            <p>审批人：{{ def.deptName }} - {{ def.splx|splist:def.ID }}</p>
+                                            <a href="#"  data-toggle="modal" data-target="#editdef{{ def.ID }}"> 编 辑 </a> |
+                                            <a href="javascript:deleteRecord({{ def.ID }})" > 删 除 </a>
                                         </div>
                                     </div>
 
@@ -248,22 +261,25 @@
                             <div class="form-group"><label>节点名称</label>
                                     <input id="title_e" type="text" class="form-control" name="title_e" required="" aria-required="true" value="{{ foo.title }}"></div>
                             <div class="form-group"><label>节点排序</label>
-                                    <input id="od_e" type="text" class="form-control" name="od_e" required="" aria-required="true" value="{{ foo.od }}"></div>
+                                    <input id="od_e" type="text" class="form-control" name="od_e" required="" aria-required="true" data-mask="9" value="{{ foo.od }}">
+                                            <small>*数字越小越靠前，从1开始</small>
+
+                            </div>
                             <div class="form-group"><label>审批类型</label>
-                                            <select name="splx_e" id="type_e" class="form-control" required="" aria-required="true">
-                                                <option value="0">指定审批人</option>
-                                                <option value="1">指定部门职务</option>
-                                                <option value="2">表单内指定</option>
+                                            <select name="splx_e" id="type_{{ foo.ID }}" class="form-control" required="" aria-required="true">
+                                                <option value="0" {% if foo.splx == 0 %} selected {% endif %}>指定审批人</option>
+                                                <option value="1" {% if foo.splx == 1 %} selected {% endif %}>指定部门职务</option>
+                                                <option value="2" {% if foo.splx == 2 %} selected {% endif %}>表单内指定</option>
                                             </select>
                             </div>
-                            <div class="form-group" id="ulist_e">
+                            <div class="form-group" id="ulist_{{ foo.ID }}">
                                         <div class="col-sm-12">
                                         <label class="col-sm-3 control-label">选择部门：</label>
                                         <div class="col-sm-6">
-                                            <select id="deptID_e" name="deptID_e" class="form-control">
+                                            <select id="deptID_{{ foo.ID }}" name="deptID_e" class="form-control">
                                                 <option value="">选择部门</option>
                                                 {% for doo in depList %}
-                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                    <option value="{{ doo.deptID }}" {% if foo.deptid == doo.deptID %} selected {% endif %}>{{ doo.deptName }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -271,12 +287,13 @@
                                         <div class="col-sm-12">
                                         <label class="col-sm-3 control-label">指定人：</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control custom-select"  id="empower_user_e" name="empower_user_e" multiple="">
-                                                <option value="">选择审批人</option>
+                                            <select class="form-control custom-select"  id="empower_user_{{ foo.ID }}" name="empower_user_e" multiple="">
+{#                                                <option value="">选择审批人</option>#}
+                                                {{ foo.deptid|ulist_e:foo.ID }}
                                             </select>
                                             <script>
-                                                $("#deptID_e").change(function () {
-                                                    var dnsname = $(this).val();
+                                                $("#deptID_{{ foo.ID }}").change(function () {
+                                                    var dnsname_e = $(this).val();
                                                     {#alert("welcome");#}
                                                     $.ajax({
                                                         url: '{% url 'ulist' %}',
@@ -289,7 +306,7 @@
 
                                                                 content += '<option value=' +  item.fields.userID + '>' + item.fields.userName + '</option>'
                                                             });
-                                                            $('#empower_user_e').html(content)
+                                                            $('#empower_user_{{ foo.ID }}').html(content)
                                                         },
 
                                                     });
@@ -298,13 +315,13 @@
                                         </div>
                                         </div>
                                     </div>
-                            <div class="form-group" id="plist_e">
+                            <div class="form-group" id="plist_{{ foo.ID }}">
                                         <div class="col-sm-12">
                                         <label class="col-sm-3 control-label">选择部门：</label>
                                         <div class="col-sm-6">
                                             <select id="deptID_e_" name="deptID_e_" class="form-control">
                                                 {% for doo in depList %}
-                                                    <option value="{{ doo.deptID }}">{{ doo.deptName }}</option>
+                                                    <option value="{{ doo.deptID }}" {% if foo.deptid == doo.deptID %} selected {% endif %}>{{ doo.deptName }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -314,7 +331,7 @@
                                         <div class="col-sm-6">
                                             <select class="form-control custom-select"  id="positionID_e" name="positionID_e" multiple="" >
                                                 {% for doo in positionList %}
-                                                    <option value="{{ doo.positionID }}">{{ doo.positionName }}</option>
+                                                    <option value="{{ doo.positionID }}" {{ foo.ID|plist_e:doo.positionID }}>{{ doo.positionName }}</option>
                                                 {% endfor %}
                                             </select>
 
@@ -323,7 +340,8 @@
                                     </div>
                     </div>
                     <div class="modal-footer">
-                        <input id="ID" value="{{ foo.ID }}" type="hidden"  name="ID">
+                        <input id="ID_e" value="{{ foo.ID }}" type="hidden"  name="ID_e">
+                        <input id="workFlowID_e" value="{{ foo.workFlowID }}" type="hidden"  name="workFlowID_e">
                         <button type="submit" class="btn btn-white" >提交</button>
                         <button type="button" class="btn btn-group" data-dismiss="modal">关闭</button>
                     </div>

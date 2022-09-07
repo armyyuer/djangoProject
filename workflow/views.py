@@ -74,6 +74,20 @@ def wfinfo(request):
     wf = Workflow.objects.get(workflowID=ID)
     depList = Deptment.objects.all()
     positionList = Position.objects.all()
+    od = 1
+    dl = WorkflowDef.objects.filter(workFlowID=ID).order_by('od')
+    for d in dl:
+        # od = od + 1
+        print(od, 'od')
+        print(d.od, 'd.od')
+        if d.od == od:
+            od = od + 1
+            print(od, 'od2')
+        else:
+            # od = od + 1
+            print(od, 'od2')
+            # continue
+            break
     defList = ''
     try:
         defList = WorkflowDef.objects.order_by('od').filter(workFlowID=ID)
@@ -82,7 +96,7 @@ def wfinfo(request):
         defList = None
         print(defList)
     return render(request, 'workflow/wfinfo.html',
-                  {'wfinfo': wf, 'depList': depList, 'positionList': positionList, 'defList': defList})
+                  {'wfinfo': wf, 'depList': depList, 'positionList': positionList, 'defList': defList, 'od': od})
 
 
 def ulist(request):

@@ -313,3 +313,13 @@ class CCGP(models.Model):  # 流程节点
     pathName = models.CharField(max_length=254, null=True)  #
     title = models.CharField(max_length=254, null=True)  #
     publishDate = models.CharField(max_length=254, null=True)  #
+
+
+class UserFlowDef(models.Model):
+    ID = models.AutoField(db_column='ID', primary_key=True)  #
+    workFlowDefID = models.IntegerField(null=True, default=0)  #
+    stepsID = models.IntegerField(null=True, default=0)  #
+    deptID = models.IntegerField(null=True, default=0)  #
+    deptName = models.CharField(max_length=254, null=True)  #
+    spName = models.CharField(max_length=254, null=True)  #
+    spID = models.IntegerField(null=True, default=0)  #

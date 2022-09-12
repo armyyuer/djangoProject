@@ -199,6 +199,7 @@ class SerOrders(models.Model):
     userID = models.IntegerField(null=True, default=0)  # 处理人ID
     userName = models.CharField(max_length=254, null=True)  # 处理人
     addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期
+    WorkflowStepsID = models.IntegerField(null=True, default=0)  # 流程列表ID
 
 
 class Menu(models.Model):

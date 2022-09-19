@@ -157,6 +157,7 @@ class UserPosition(models.Model):
     ID = models.AutoField(db_column='ID', primary_key=True)  #
     userID = models.IntegerField(null=True, default=0)  #
     positionID = models.IntegerField(null=True, default=0)  #
+    deptID = models.IntegerField(null=True, default=0)  #
 
 
 class SerProject(models.Model):
@@ -324,3 +325,4 @@ class UserFlowDef(models.Model):
     deptName = models.CharField(max_length=254, null=True)  #
     spName = models.CharField(max_length=254, null=True)  #
     spID = models.IntegerField(null=True, default=0)  #
+    status = models.CharField(max_length=254, null=True)  # 状态

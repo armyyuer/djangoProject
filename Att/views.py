@@ -186,7 +186,6 @@ def userdb(file):
                 print("新增用户账号表失败。")
             ## 插入用户信息到账号表
 
-
             did = 0
             try:
                 dn = Deptment.objects.get(deptName=data[groupName])
@@ -206,13 +205,18 @@ def userdb(file):
                 print("部门写入成功：" + str(dcord.deptName))
                 try:
                     udc = DeptmentUser.objects.get(userID=uid, deptID=dcord.deptID)
-                    did = udc.deptID
+
+                    if udc:
+                        print("账号的用户组数据存在跳过新增" + str(udc.ID))
+                        did = udc.deptID
+                    else:
+                        dncord = DeptmentUser.objects.create(userID=uid, deptID=udc.deptID)
+                        did = dncord.deptID
                     print("该用户已存在部门中跳过新增" + str(udc.userName))
                 except DeptmentUser.DoesNotExist:
                     dcord = DeptmentUser.objects.create(userID=uid, userName=uname, deptID=dcord.deptID)
                     did = dcord.deptID
                     print("写入成功：" + str(dcord.userName))
-
 
             gid = 0
             try:
@@ -220,8 +224,12 @@ def userdb(file):
                 print("用户组存在,开始写入")
                 try:
                     ugc = UserGroups.objects.get(userID=uid, groupID=gn.groupID)
-                    gid = ugc.ID
-                    print("账号的用户组数据存在跳过新增" + str(ugc.ID))
+                    if ugc:
+                        print("账号的用户组数据存在跳过新增" + str(ugc.ID))
+                        gid = ugc.ID
+                    else:
+                        gncord = UserGroups.objects.create(userID=uid, groupID=gn.groupID)
+                        gid = gncord.ID
                 except UserGroups.DoesNotExist:
                     gncord = UserGroups.objects.create(userID=uid, groupID=gn.groupID)
                     gid = gncord.ID
@@ -238,9 +246,13 @@ def userdb(file):
                 pn = Position.objects.get(positionName=userP)
                 try:
                     upc = UserPosition.objects.get(userID=uid, positionID=pn.positionID)
-                    print("账号的职务数据存在跳过新增")
+                    if upc:
+                        print("账号的职务数据存在跳过新增")
+                    else:
+                        pncord = UserPosition.objects.create(userID=uid, positionID=pn.positionID, deptID=did)
+                        print("写入成功。ID：" + str(pncord.positionID))
                 except UserPosition.DoesNotExist:
-                    pncord = UserPosition.objects.create(userID=uid, positionID=pn.positionID)
+                    pncord = UserPosition.objects.create(userID=uid, positionID=pn.positionID, deptID=did)
                     print("写入成功。ID：" + str(pncord.positionID))
 
             except Position.DoesNotExist:

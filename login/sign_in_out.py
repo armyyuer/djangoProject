@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
-from common.models import Company, UserGroups, MenuPermission, GroupPermissions
+from common.models import Company, UserGroups, MenuPermission, GroupPermissions, DDuser
 
 
 # 登录处理
@@ -43,7 +43,8 @@ def signin(request):
         if isSame:
             print("userID：" + str(user.id))
             du = User.objects.get(username=userName)
-            request.session['username'] = userName
+            ddu = DDuser.objects.get(uid=du.id)
+            request.session['username'] = ddu.name
             request.session['userid'] = du.id
             request.session['useremail'] = du.email
             um = UserGroups.objects.get(userID=user.id)

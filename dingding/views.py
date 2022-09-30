@@ -113,7 +113,7 @@ def pcget(request):
         print("用户" + resp["name"] + "已绑定过,下一步验证用户数据" + str(type))
         cu = User.objects.get(id=u.uid)
         if cu.is_active:
-            request.session['username'] = cu.username
+            request.session['username'] = u.name
             request.session['userid'] = cu.id
             request.session['useremail'] = cu.email
             um = UserGroups.objects.get(userID=cu.id)

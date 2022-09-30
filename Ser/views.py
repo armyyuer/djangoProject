@@ -5,8 +5,11 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 
 # Create your views here.
-from common.models import SerOrders, WorkflowSteps, WorkflowDef, WorkflowDefSP, UserFlowDef, DDuser, DeptmentUser, \
-    UserPosition
+import workflow.views
+from Att.views import upload
+from common.models import SerOrders, Att, WorkflowSteps, Workflow, WorkflowDef, WorkflowDefSP, UserFlowDef, DDuser, \
+    DeptmentUser, \
+    UserPosition, SerProject
 
 response = HttpResponse()
 
@@ -83,7 +86,6 @@ def addflowsave(request):
                             print('部门' + d.deptName + '无人员信息。')
                     except DeptmentUser.DoesNotExist:
                         print('部门' + d.deptName + '无人员信息。')
-
 
                     # print(checkerName[0:-1])
                     # print(checkerID)
@@ -178,6 +180,7 @@ def addflowsave(request):
                                        lc=1,
                                        state=status,
                                        userID=0,
+                                       userName=checkerName[0:-1],
                                        WorkflowStepsID=record.stepsID,
                                        addTime=now_time)
     try:
@@ -194,5 +197,139 @@ def addflowsave(request):
 
 
 def myorder(request):
-    steplist = SerOrders.objects.all()
+    username = request.session['username']
+    print(username)
+    steplist = SerOrders.objects.filter(userName__icontains=username).order_by('-orderID')
+    # steplist = SerOrders.objects.all().order_by('-orderID')
+    print(steplist)
     return render(request, 'ser/myorder.html', {'steplist': steplist})
+
+
+def myorderinfo(request):
+    # working = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+    working = range(1, 25)
+    print(working, 'working')
+    orderID = request.GET.get('orderID')
+    Order = SerOrders.objects.get(orderID=orderID)
+
+    deptUser = DeptmentUser.objects.filter(deptID=3)
+    print(Order.company)
+    try:
+        project = SerProject.objects.filter(company=Order.company)
+        if project.count() > 0:
+            project = SerProject.objects.filter(company=Order.company)
+        else:
+            project = SerProject.objects.all()
+    except SerProject.DoesNotExist:
+        project = SerProject.objects.all()
+    # print(Order)
+    return render(request, 'ser/myorderinfo.html',
+                  {'Order': Order, 'project': project, 'deptUser': deptUser, 'working': working})
+
+
+def myorderinfosave(request):
+    now_time = datetime.datetime.now()
+    orderID = request.POST.get('orderID')
+    lc = request.POST.get('lc')
+    if request.POST.get('deptUser'):
+        deptUser = request.POST.get('deptUser')
+    else:
+        deptUser = None
+    agree = request.POST.get('agree')
+    projectID = request.POST.get('projectID')
+    goTime = request.POST.get('goTime')
+    workingHours = request.POST.get('workingHours')
+    cost = request.POST.get('cost')
+    fault = request.POST.get('fault')
+    record = request.POST.get('record')
+    nextlc = 0
+    checkerName = ''
+    checkerID = 0
+    checkerList = []
+    try:
+        update = SerOrders.objects.get(orderID=orderID)
+    except SerOrders.DoesNotExist:
+        print('参数异常！')
+    else:
+        update = SerOrders.objects.get(orderID=orderID)
+        WorkflowStepsID = update.WorkflowStepsID
+        ws = WorkflowSteps.objects.get(stepsID=update.WorkflowStepsID)
+        print(update.WorkflowStepsID)
+        odl = WorkflowDef.objects.filter(workFlowID=ws.workFlowID).order_by('od').last()
+        allod = odl.od  # 最后一步
+        print(allod, lc, 'yyyyyyyyy')
+
+        if int(lc) == int(allod):  # 如果当前节点是最后一步
+            nextlc = -999
+            update.lc = nextlc
+            update.state = '流程结束'
+        else:
+            nextlc = int(lc) + 1
+            update.lc = nextlc
+            print(nextlc, "nextlc")
+
+            checkerName = workflow.views.getspUser(request, ws.workFlowID, lc, nextlc, deptUser, WorkflowStepsID)
+            wds = WorkflowDef.objects.get(workFlowID=ws.workFlowID, od=nextlc)
+            # update.state = wds.title
+            print(checkerName, '下一步审批人!')
+            if lc == '1':
+                uid = DDuser.objects.get(name=deptUser)
+                if agree == '0':
+                    nextlc = -1
+                    update.lc = nextlc
+                    update.state = '不派单'
+                    update.agree = agree
+                    update.userID = 0
+                    update.userName = ''
+                    update.seedTime = now_time
+                    ws = WorkflowSteps.objects.get(stepsID=WorkflowStepsID)
+                    ws.nextID = -1
+                    ws.checkerName = ''
+                    ws.status = '流程退回'
+                    ws.save()
+                else:
+                    print(lc, "lc == 1")
+                    update.repairerID = uid.uid
+                    update.repairerName = deptUser  # 维修人员
+                    if projectID == 0:
+                        update.projectID = 0
+                        update.projectName = '无关联项目'
+                    else:
+                        project = SerProject.objects.get(projectID=projectID)
+                        update.projectID = int(projectID)
+                        update.projectName = project.projectName
+                    update.userID = 0
+                    update.userName = checkerName
+                    update.seedTime = now_time
+                    update.agree = agree
+                    update.state = wds.title
+
+            elif lc == '2':
+                print(lc, "lc == 2")
+                update.goTime = goTime
+                update.workingHours = workingHours
+                update.cost = cost
+                update.endTime = now_time
+                update.fault = fault
+                update.record = record
+                furl = ''
+                if request.FILES.get("image"):
+                    furl = upload(request.FILES.get("image"), type, request)
+                    txt = "上传成功。"
+                else:
+                    txt = "*清选择要上传的图片!"
+                    print(txt)
+                update.image = furl
+                if int(cost) > 0:
+                    update.confirm = 1  # 确认是否维修
+                update.userID = 0
+                update.userName = checkerName
+                update.state = wds.title
+            else:
+                print(lc, "lc == 其他")
+
+        update.save()
+
+    print(now_time)
+    # return render(request, 'ser/myorder.html')
+    return HttpResponseRedirect('/ser/myorder/')

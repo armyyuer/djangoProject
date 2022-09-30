@@ -195,7 +195,7 @@ class SerOrders(models.Model):
     cost = models.DecimalField(max_digits=4, decimal_places=4, null=True, default=0)  # 维修费用
     confirm = models.CharField(max_length=254, null=True)  # 确认是否维修，维修、不维修
     image = models.CharField(max_length=254, null=True)  # 维修单拍照
-    lc = models.IntegerField(null=True, default=0)  # 流程。0-报单，1-审核派单，-1-不派单，2-售后处理，3-正常结单
+    lc = models.IntegerField(null=True, default=0)  # 流程。0-报单，1-审核派单，-1-不派单，2-售后处理，3-流程结束
     state = models.CharField(max_length=254, null=True)  # 状态
     userID = models.IntegerField(null=True, default=0)  # 处理人ID
     userName = models.CharField(max_length=254, null=True)  # 处理人
@@ -306,6 +306,7 @@ class WorkflowSteps(models.Model):
     status = models.CharField(max_length=254, null=True)  # 状态
     typeID = models.IntegerField(null=True, default=0)  #
     addTime = models.DateTimeField(max_length=254, null=True)  # 提交日期
+    projectID = models.IntegerField(null=True, default=0)  # 所属项目
 
 
 class CCGP(models.Model):  # 流程节点

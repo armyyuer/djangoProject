@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
+
+
+    <title>广西新未来日常工作平台 - 售后报修流程</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}">
+    <link href="{% static 'css/bootstrap.min.css' %}?v=3.3.6" rel="stylesheet">
+    <link href="{% static 'css/font-awesome.css' %}?v=4.4.0" rel="stylesheet">
+
+    <!-- Data Tables -->
+    <link href="{% static 'css/plugins/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/colorpicker/css/bootstrap-colorpicker.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+
+    <link href="{% static 'css/animate.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}?v=4.1.0" rel="stylesheet">
+
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+
+                        <div class="ibox-content m-b-sm border-bottom">
+                            <div class="p-xs">
+                                <div class="pull-left m-r-md">
+                                    <i class="fa fa-globe text-navy mid-icon"></i>
+                                </div>
+                                <h2>处理工单</h2>
+                                <span>广西新未来信息产业股份有限公司</span>
+                            </div>
+                        </div>
+
+                    <div class="ibox-content">
+                        <div class="panel-body">
+                        <form class="form-horizontal m-t">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">单位名称：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.company }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">地址：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.address }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">联系人：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.contact }}</p>
+                                </div>
+                                <label class="col-sm-3 control-label">联系电话：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.tel }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">报修内容：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.content }}</p>
+                                </div>
+                                <label class="col-sm-3 control-label">希望上门时间：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.hopeTime }}</p>
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">备注：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.remarks }}</p>
+                                </div>
+                            </div>
+                        </form>
+                        {% if Order.lc == 1 %}
+                        <form class="form-horizontal m-t" id="commentForm" enctype="multipart/form-data" action="/ser/myorderinfosave/" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">关联项目：</label>
+                                <div class="col-sm-9">
+                                    <select class="form-control m-b" name="projectID" id="projectID"  required="" aria-required="true">
+                                        <option value="0" selected>无关联项目</option>
+                                        {% for foo in project %}
+                                            <option value="{{ foo.projectID }}">{{ foo.projectName }}({{ foo.company }})</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">是否同意维修：</label>
+                                <div class="col-sm-3">
+                                    <label class="radio-inline">
+                                        <input type="radio" value="1" id="agree" name="agree" checked="">是</label>
+                                    <label class="radio-inline">
+                                        <input type="radio" value="0" id="agree" name="agree">否</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">指定维修人员：</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control m-b" name="deptUser" id="deptUser" required="" aria-required="true">
+                                        <option value="" selected>选择维修人员</option>
+                                        {% for foo in deptUser %}
+                                            <option value="{{ foo.userName }}">{{ foo.userName }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <input type="hidden" name="lc" class="form-control" value="{{ Order.lc }}">
+                                    <input type="hidden" name="orderID" class="form-control" value="{{ Order.orderID }}">
+                                    <button class="btn btn-primary" type="submit"> 审 批 </button>
+                                    <button type="button" class="btn btn-outline btn-primary" onclick="javascript:history.back(-1);"> 返 回 </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        {% elif Order.lc == 2 %}
+                        <form class="form-horizontal m-t" id="commentForm" enctype="multipart/form-data" action="/ser/myorderinfosave/" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">所属项目：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.projectName }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">上门日期：</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control layer-date"  name="goTime" placeholder="YYYY-MM-DD hh:mm:ss" required=""  aria-required="true" onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+
+                                </div>
+                                <label class="col-sm-3 control-label">维修工时：</label>
+                                <div class="col-sm-3">
+                                    <select name="workingHours" id="workingHours" class="form-control" required="" aria-required="true">
+                                        {% for h in working %}
+                                            <option value="{{ h }}">{{ h }}小时</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修费用：</label>
+                                <div class="col-sm-3">
+                                    <input class="form-control layer-date"  name="cost"    required=""  aria-required="true" value="0">
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">故障描述：</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="fault" class="form-control" placeholder="故障描述">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修记录：</label>
+                                <div class="col-sm-9">
+                                    <input type="text" name="record" class="form-control" placeholder="维修记录">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修单拍照：</label>
+                                <div class="col-sm-9">
+                                    <input type="file" name="image" class="form-control" placeholder="维修单拍照">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <input type="hidden" name="lc" class="form-control" value="{{ Order.lc }}">
+                                    <input type="hidden" name="orderID" class="form-control" value="{{ Order.orderID }}">
+                                    <button class="btn btn-primary" type="submit"> 提 交 </button>
+                                    <button type="button" class="btn btn-outline btn-primary" onclick="javascript:history.back(-1);"> 返 回 </button>
+                                </div>
+                            </div>
+                        </form>
+                        {% else %}
+                        <form class="form-horizontal m-t" id="commentForm" enctype="multipart/form-data" action="/ser/myorderinfosave/" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">所属项目：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.projectName }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">上门日期：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.goTime }}</p>
+                                </div>
+                                <label class="col-sm-3 control-label">维修工时：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.workingHours }} 小时</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修费用：</label>
+                                <div class="col-sm-3">
+                                    <p class="form-control-static">{{ Order.cost }} 元</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">故障描述：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.fault }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修记录：</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ Order.record }}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">维修单拍照：</label>
+                                <div class="col-sm-9">
+                                    <a href="/att/file_down/?attid=3">下载</a>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-4 col-sm-offset-3">
+                                    <input type="hidden" name="lc" class="form-control" value="{{ Order.lc }}">
+                                    <input type="hidden" name="orderID" class="form-control" value="{{ Order.orderID }}">
+                                    <button class="btn btn-primary" type="submit"> 提 交 </button>
+                                    <button type="button" class="btn btn-outline btn-primary" onclick="javascript:history.back(-1);"> 返 回 </button>
+                                </div>
+                            </div>
+                        </form>
+                        {% endif %}
+
+
+                        </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="panel-group" id="accordion">
+                                <div class="row show-grid">
+{#                                                <div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12 .col-sm-6 .col-md-8</div>#}
+                                    {% for foo in TypeList %}
+                                        <div class="col-xs-6 col-md-3">【(ID:{{ foo.ID }}){{ foo.typeName }}】 <a href="/workflow/typeedit/?ID={{ foo.ID }}" title="编辑">编辑</a> | <a href="javascript:deleteRecord({{ foo.ID }})" >删除</a></div>
+                                    {% endfor %}
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- 全局js -->
+    <script src="{% static 'js/jquery.min.js' %}?v=2.1.4"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}?v=3.3.6"></script>
+
+
+
+    <script src="{% static 'js/plugins/jeditable/jquery.jeditable.js' %}"></script>
+
+    <!-- Input Mask-->
+    <script src="{% static 'js/plugins/jasny/jasny-bootstrap.min.js' %}"></script>
+
+    <!-- Data Tables -->
+    <script src="{% static 'js/plugins/dataTables/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'js/plugins/dataTables/dataTables.bootstrap.js' %}"></script>
+    <!-- layerDate plugin javascript -->
+    <script src="{% static 'js/plugins/layer/laydate/laydate.js' %}"></script>
+    <script>
+        //外部js调用
+        laydate({
+            elem: '#hello', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+            event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+        });
+
+        //日期范围限制
+        var start = {
+            elem: '#start',
+            format: 'YYYY/MM/DD hh:mm:ss',
+            min: laydate.now(), //设定最小日期为当前日期
+            max: '2099-06-16 23:59:59', //最大日期
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                end.min = datas; //开始日选好后，重置结束日的最小日期
+                end.start = datas //将结束日的初始值设定为开始日
+            }
+        };
+        var end = {
+            elem: '#end',
+            format: 'YYYY/MM/DD hh:mm:ss',
+            min: laydate.now(),
+            max: '2099-06-16 23:59:59',
+            istime: true,
+            istoday: false,
+            choose: function (datas) {
+                start.max = datas; //结束日选好后，重置开始日的最大日期
+            }
+        };
+        laydate(start);
+        laydate(end);
+    </script>
+
+    <!-- Sweet alert -->
+    <script src="{% static 'js/plugins/sweetalert/sweetalert.min.js' %}"></script>
+    <!-- Page-Level Scripts -->
+    <script>
+        $(document).ready(function () {
+            $('.dataTables-example').dataTable();
+
+            /* Init DataTables */
+            var oTable = $('#editable').dataTable();
+
+            /* Apply the jEditable handlers to the table */
+            oTable.$('td').editable('../example_ajax.php', {
+                "callback": function (sValue, y) {
+                    var aPos = oTable.fnGetPosition(this);
+                    oTable.fnUpdate(sValue, aPos[0], aPos[1]);
+                },
+                "submitdata": function (value, settings) {
+                    return {
+                        "row_id": this.parentNode.getAttribute('id'),
+                        "column": oTable.fnGetPosition(this)[2]
+                    };
+                },
+
+                "width": "90%",
+                "height": "100%"
+            });
+
+
+        });
+
+    </script>
+
+    <!-- 自定义js -->
+{#    <script src="{% static 'js/content.js' %}?v=1.0.0"></script>#}
+
+
+
+
+
+
+
+
+</body>
+</html>

@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.safestring import mark_safe
 
 # Create your views here.
-from common.models import WorkflowType, Workflow, Deptment, DeptmentUser, Position, WorkflowDef, WorkflowDefSP, DDuser
+from common.models import WorkflowType, Workflow, Deptment, DeptmentUser, Position, WorkflowDef, WorkflowDefSP, DDuser, \
+    UserPosition, WorkflowSteps, UserFlowDef
 
 
 def type_views(request):
@@ -319,3 +321,57 @@ def defdel(request):
     workFlowID = il.workFlowID
     il.delete()
     return HttpResponseRedirect('/workflow/wfinfo/?id=' + workFlowID)
+
+
+def getspUser(request, wfdid, nowlc, nextlc, deptUser, stepsID):
+    username = request.session['username']
+    userid = request.session['userid']
+    checkerName = ''
+    cName = ''
+    nowl = WorkflowDef.objects.get(workFlowID=wfdid, od=nowlc)
+    print(nowl.ID, stepsID, userid, '545454545')
+    ud = UserFlowDef.objects.get(workFlowDefID=nowl.ID, stepsID=stepsID, spID=userid)
+    print(ud, 'ud')
+    ud.status = '已执行'
+    ud.save()
+    nl = WorkflowDef.objects.get(workFlowID=wfdid, od=nextlc)
+    print(str(nl.ID))
+    if nl.splx == 2:  # 表单内指定
+        if deptUser == None:
+            checkerName = ''
+        else:
+            checkerName = deptUser
+            try:
+                DDu = DeptmentUser.objects.get(userName=deptUser)
+                deptn = Deptment.objects.get(deptID=DDu.deptID)
+                record = UserFlowDef.objects.create(workFlowDefID=nl.ID,
+                                                    stepsID=stepsID,
+                                                    deptID=DDu.deptID,
+                                                    deptName=deptn.deptName,
+                                                    spName=deptUser,
+                                                    spID=DDu.userID,
+                                                    status='未执行')
+            except DeptmentUser.DoesNotExist:
+                print("deptUser为空")
+
+        print(checkerName, "表单内指定")
+    else:
+        spl = WorkflowDefSP.objects.filter(workFlowDefID=nl.ID)
+        for sp in spl:
+            try:
+                ul = DDuser.objects.get(uid=sp.spID)
+                cName += ul.name + ','
+                print(checkerName[0:-1], 'DDuser')
+            except DDuser.DoesNotExist:
+                print('用户数据异常')
+                cName = ''
+        checkerName = cName[0:-1]
+        print(checkerName, '下一步审批人')
+
+    ws = WorkflowSteps.objects.get(stepsID=stepsID)
+    ws.nextID = nl.ID
+    ws.checkerName = checkerName
+    ws.status = nl.title
+    ws.save()
+
+    return checkerName

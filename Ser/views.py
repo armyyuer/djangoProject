@@ -58,6 +58,15 @@ def addflowsave(request):
         deptName = d.deptName
         if d.splx == 2:  # 表单内指定
             print('表单内指定不生成审批人')
+
+            udcord = UserFlowDef.objects.create(workFlowDefID=d.ID,
+                                                status='未执行',
+                                                stepsID=0,
+                                                deptID=deptID,
+                                                deptName=deptName,
+                                                spName='',
+                                                spID=0)
+            UserFlowDefID.append(udcord.ID)
         else:  # 指定审批人
             if d.splx == 1:
                 spl = WorkflowDefSP.objects.filter(workFlowDefID=d.ID)

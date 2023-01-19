@@ -10,7 +10,7 @@ def auth(func):
         ck = request.session.get("username")
         '''如果没有登陆返回到login.html'''
         if not ck:
-            response.write("<script>alert('清登录账号！');window.location.href='/login';</script>")
+            response.write("<script>alert('请登录账号！');window.location.href='/login';</script>")
             return response
         return func(request, *args, **kwargs)
 
